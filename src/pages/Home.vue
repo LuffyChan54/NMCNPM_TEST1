@@ -1,7 +1,15 @@
-<template>
-  <h1>HOME PAGE</h1>
-</template>
+<template><SSHeader></SSHeader></template>
 
 <script>
-export default {};
+import SSHeader from "../components/Sections/SSHeader.vue";
+
+export default {
+  components: {
+    SSHeader,
+  },
+  data() {
+    return {};
+  },
+  methods: {},
+};
 </script>

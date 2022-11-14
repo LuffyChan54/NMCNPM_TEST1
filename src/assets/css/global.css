@@ -12,10 +12,32 @@
   --stt-yellow: #ffc107;
   --stt-purple: #6f42c1;
   --stt-red: #dc3545;
+
+  /* RADIUS */
+  --radius: 7px;
+
+  /* BORDER */
+
+  --border_md: 2px;
+  --border_lg: 4px;
 }
 
 * {
   box-sizing: border-box;
   margin: 0;
   padding: 0;
+}
+
+body {
+  font-family: "Inter", sans-serif;
+  font-size: 16px;
+  width: 100vw;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  background-color: #fff;
+}
+
+#app {
+  margin-top: 2rem;
 }
