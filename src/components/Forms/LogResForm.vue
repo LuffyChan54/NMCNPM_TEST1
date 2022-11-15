@@ -17,12 +17,16 @@
       <label for="inputEmail">Email</label>
       <input id="inputEmail" type="email" />
     </div>
+    <div v-if="this.status === 'register'" class="inputCTN">
+      <label for="inputFullName">Họ Tên</label>
+      <input id="inputFullName" type="text" />
+    </div>
     <div v-if="this.status !== 'forgetPW'" class="inputCTN">
-      <label for="inputPassword">Password</label>
+      <label for="inputPassword">Mật Khẩu</label>
       <input id="inputPassword" type="password" />
     </div>
     <div v-if="this.status === 'register'" class="inputCTN">
-      <label for="inputPasswordAgain">PasswordAgain</label>
+      <label for="inputPasswordAgain">Xác Nhận Mật Khẩu</label>
       <input id="inputPasswordAgain" type="password" />
     </div>
 
@@ -98,6 +102,7 @@ export default {
   background: var(--dark);
 }
 .inputCTN > label {
+  font-size: 1.2rem;
   font-family: inherit;
   font-weight: bold;
   margin-bottom: 0.2rem;
