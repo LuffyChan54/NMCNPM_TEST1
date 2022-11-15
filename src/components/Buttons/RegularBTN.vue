@@ -1,6 +1,6 @@
 <template>
-  <button id="RegularBTN">
-    <p id="contentRBTN">
+  <button class="RegularBTN">
+    <p class="contentRBTN">
       <slot></slot>
     </p>
   </button>
@@ -11,7 +11,7 @@ export default {};
 </script>
 
 <style scoped>
-#RegularBTN {
+.RegularBTN {
   /* width: 12.5rem; */
   padding: 1rem 2rem;
   /* height: 4rem; */
@@ -24,11 +24,11 @@ export default {};
   transition: all 0.25s ease-in-out;
 }
 
-#RegularBTN.active {
+.RegularBTN.active {
   background: var(--blue);
 }
 
-#contentRBTN {
+.contentRBTN {
   font-size: 1.5rem;
   color: var(--dark);
   font-weight: bold;

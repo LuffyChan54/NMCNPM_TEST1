@@ -1,11 +1,25 @@
 <template>
   <container>
     <div class="background">
+      <!-- TELEPORT MODEL -->
+      <Teleport to="body">
+        <BaseModel v-if="this.isShowModal" @closeModel="closeModel">
+          <LogResForm
+            :status="this.status"
+            @onChangeBTN="onChangeBTN"
+          ></LogResForm>
+        </BaseModel>
+      </Teleport>
+
+      <!-- ICON AND BTN LOGIN -->
       <div class="header--submenu">
         <i class="fa fa-cutlery cantinIcon" aria-hidden="true"></i>
-        <RegularBTN class="BTNDangnhap">Đăng Nhập</RegularBTN>
+        <RegularBTN @click="openModal('login')" class="BTNDangnhap"
+          >Đăng Nhập</RegularBTN
+        >
       </div>
 
+      <!-- Titles and BTN register -->
       <div class="header--content">
         <div class="content--text">
           <h1 class="header--mainTitle">
@@ -18,14 +32,19 @@
         </div>
 
         <div>
-          <RegularBTN class="BTNDangKy">Đăng ký ngay!</RegularBTN>
+          <RegularBTN @click="openModal('register')" class="BTNDangKy"
+            >Đăng ký ngay!</RegularBTN
+          >
         </div>
       </div>
 
+      <!-- Content images -->
       <div class="header--contentIMG"></div>
       <div class="header--CTNIMG">
         <img src="../../assets/imgs/Dish1.png" alt="MonAn" />
       </div>
+
+      <!-- Image cards reviews -->
       <ImageCard class="header--imgcard imgcard1">
         <img src="../../assets/imgs/bgCanteen1.jpg" alt="" />
       </ImageCard>
@@ -43,12 +62,34 @@
 import Container from "../Containers/Container.vue";
 import RegularBTN from "../Buttons/RegularBTN.vue";
 import ImageCard from "../Cards/ImageCard.vue";
+import BaseModel from "../Models/BaseModel.vue";
+import LogResForm from "../Forms/LogResForm.vue";
 
 export default {
   components: {
     Container,
     RegularBTN,
     ImageCard,
+    BaseModel,
+    LogResForm,
+  },
+  data() {
+    return {
+      isShowModal: false,
+      status: "",
+    };
+  },
+  methods: {
+    closeModel() {
+      this.isShowModal = false;
+    },
+    openModal(val) {
+      this.isShowModal = true;
+      this.status = val;
+    },
+    onChangeBTN(val) {
+      this.status = val;
+    },
   },
 };
 </script>

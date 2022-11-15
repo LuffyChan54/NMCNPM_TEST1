@@ -1,10 +1,10 @@
 :root {
   /* COLORS COMPONENTS */
 
-  --yellow: #fdc446;
-  --blue: #7bb4fe;
-  --white: #f7f7f0;
-  --dark: #2f2f2f;
+  --yellow: rgb(253, 196, 70);
+  --blue: rgb(123, 180, 254);
+  --white: rgb(247, 247, 240);
+  --dark: rgb(47, 47, 47);
 
   /* COLORS STATUS */
 
