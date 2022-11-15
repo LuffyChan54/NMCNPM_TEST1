@@ -21,7 +21,7 @@ export default {};
   background-color: var(--white);
   text-align: center;
   cursor: pointer;
-  transition: all 0.25s ease-in-out;
+  transition: all 0.25s ease-in;
 }
 
 .RegularBTN.active {
