@@ -10,7 +10,7 @@
       <div class="section-btns">
         <SSButton
           :class="{ active: this.foodStatus === 'rice' }"
-          :quantity="this.quantity.rice"
+          :quantity="this.quantity('rice')"
           @click="onClickFoodBTN($event, 'rice')"
         >
           <template #img>
@@ -20,7 +20,7 @@
         </SSButton>
         <SSButton
           :class="{ active: this.foodStatus === 'noodles' }"
-          :quantity="this.quantity.noodles"
+          :quantity="this.quantity('noodles')"
           @click="onClickFoodBTN($event, 'noodles')"
         >
           <template #img>
@@ -30,7 +30,7 @@
         >
         <SSButton
           :class="{ active: this.foodStatus === 'cake' }"
-          :quantity="this.quantity.cake"
+          :quantity="this.quantity('cake')"
           @click="onClickFoodBTN($event, 'cake')"
         >
           <template #img>
@@ -43,12 +43,12 @@
       <div class="section-cards">
         <div class="ctn-cards">
           <food-card
-            v-for="(food, idx) in this.foods"
-            :key="idx"
-            :quantity="this.buyFoods[idx]"
-            @resetQuantity="resetQuantity(idx)"
-            @icrQuantity="icrQuantity(idx)"
-            @dcrQuantity="dcrQuantity(idx)"
+            v-for="food in products"
+            :key="food.id"
+            :quantity="currSelected(food.id)"
+            @resetQuantity="resetQuantity(food.id)"
+            @icrQuantity="icrQuantity(food.id)"
+            @dcrQuantity="dcrQuantity(food.id)"
           >
             <template #img>
               <img
@@ -84,126 +84,35 @@ export default {
   },
   data() {
     return {
-      quantity: {
-        rice: 0,
-        noodles: 0,
-        cake: 0,
-      },
       foodStatus: "rice",
-      foods: [
-        {
-          type: "rice",
-          img: "comchien.jpg",
-          total: 10,
-          name: "Cơm Chiên",
-          price: 25000,
-        },
-        {
-          type: "rice",
-          img: "comchien.jpg",
-          total: 10,
-          name: "Cơm Chiên",
-          price: 25000,
-        },
-        {
-          type: "rice",
-          img: "comchien.jpg",
-          total: 10,
-          name: "Cơm Chiên",
-          price: 25000,
-        },
-        {
-          type: "rice",
-          img: "comchien.jpg",
-          total: 10,
-          name: "Cơm Chiên",
-          price: 25000,
-        },
-        {
-          type: "rice",
-          img: "comchien.jpg",
-          total: 10,
-          name: "Cơm Chiên",
-          price: 25000,
-        },
-        {
-          type: "rice",
-          img: "comchien.jpg",
-          total: 10,
-          name: "Cơm Chiên",
-          price: 25000,
-        },
-        {
-          type: "rice",
-          img: "comchien.jpg",
-          total: 10,
-          name: "Cơm Chiên",
-          price: 25000,
-        },
-        {
-          type: "rice",
-          img: "comchien.jpg",
-          total: 10,
-          name: "Cơm Chiên",
-          price: 25000,
-        },
-      ],
-      buyFoods: [0],
     };
   },
   methods: {
-    icrTypeQuantity(type) {
-      if (type === "rice") {
-        this.quantity.rice++;
-      } else if (type === "noodles") {
-        this.quantity.noodles++;
-      } else {
-        this.quantity.cake++;
-      }
-    },
-    dcrTypeQuantity(type) {
-      if (type === "rice") {
-        if (this.quantity.rice > 0) this.quantity.rice--;
-      } else if (type === "noodles") {
-        if (this.quantity.noodles > 0) this.quantity.noodles--;
-      } else {
-        if (this.quantity.cake > 0) this.quantity.cake--;
-      }
-    },
-    resetTypeQuantity(type, idx) {
-      if (type === "rice") {
-        this.quantity.rice -= this.buyFoods[idx];
-      } else if (type === "noodles") {
-        this.quantity.noodles -= this.buyFoods[idx];
-      } else {
-        this.quantity.cake -= this.buyFoods[idx];
-      }
-    },
     onClickFoodBTN(event, val) {
       event.preventDefault();
       this.foodStatus = val;
     },
-    icrQuantity(idx) {
-      this.icrTypeQuantity(this.foods[idx].type);
-
-      if (this.buyFoods[idx] === this.foods[idx].total) {
-        //do nothing
-      } else {
-        this.buyFoods[idx]++;
-      }
+    icrQuantity(id) {
+      this.$store.commit("icrQSelected", id);
     },
-    dcrQuantity(idx) {
-      this.dcrTypeQuantity(this.foods[idx].type);
-
-      if (this.buyFoods[idx] === 0) {
-        //do nothing
-      } else {
-        this.buyFoods[idx]--;
-      }
+    dcrQuantity(id) {
+      this.$store.commit("dcrQSelected", id);
     },
-    resetQuantity(idx) {
-      this.resetTypeQuantity(this.foods[idx].type, idx);
-      this.buyFoods[idx] = 0;
+    resetQuantity(id) {
+      this.$store.commit("resetQSelected", id);
+    },
+  },
+  computed: {
+    products() {
+      return this.$store.getters.getTypeArr(this.foodStatus);
+    },
+    currSelected() {
+      return (id) => {
+        return this.$store.getters.getqSelected(id);
+      };
+    },
+    quantity() {
+      return (val) => this.$store.state.qTypeSelected[val];
     },
   },
 };
