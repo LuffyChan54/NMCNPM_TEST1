@@ -33,6 +33,10 @@ export default {
   position: relative;
 }
 
+.SectionBTN > h1 {
+  font-size: 2rem;
+}
+
 .SectionBTN.active {
   background: var(--blue);
 }

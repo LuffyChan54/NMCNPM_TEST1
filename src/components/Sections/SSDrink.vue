@@ -14,7 +14,7 @@
           @click="onClickFoodBTN($event, 'gas')"
         >
           <template #img>
-            <img class="RiceIcon" src="../../assets/imgs/riceIcon.png" />
+            <img class="RiceIcon" src="../../assets/imgs/gasIcon.png" />
           </template>
           Có Gas
         </SSButton>
@@ -24,7 +24,7 @@
           @click="onClickFoodBTN($event, 'noGas')"
         >
           <template #img>
-            <img class="RiceIcon" src="../../assets/imgs/noodlesIcon.png" />
+            <img class="RiceIcon" src="../../assets/imgs/noGasIcon.png" />
           </template>
           Không Có Gas</SSButton
         >
