@@ -41,30 +41,32 @@
       </div>
       <!--FOOD CARDS -->
       <div class="section-cards">
-        <food-card
-          v-for="(food, idx) in this.foods"
-          :key="idx"
-          :quantity="this.buyFoods[idx]"
-          @resetQuantity="resetQuantity(idx)"
-          @icrQuantity="icrQuantity(idx)"
-          @dcrQuantity="dcrQuantity(idx)"
-        >
-          <template #img>
-            <img
-              :src="require(`../../assets/imgs/${food.img}`)"
-              :alt="food.name"
-            />
-          </template>
-          <template #h1Name>
-            <h1>{{ food.name }}</h1>
-          </template>
-          <template #h1Total>
-            <h1>Còn lại: {{ food.total }}</h1>
-          </template>
-          <template #h1Price>
-            <h1>{{ food.price }}</h1>
-          </template>
-        </food-card>
+        <div class="ctn-cards">
+          <food-card
+            v-for="(food, idx) in this.foods"
+            :key="idx"
+            :quantity="this.buyFoods[idx]"
+            @resetQuantity="resetQuantity(idx)"
+            @icrQuantity="icrQuantity(idx)"
+            @dcrQuantity="dcrQuantity(idx)"
+          >
+            <template #img>
+              <img
+                :src="require(`../../assets/imgs/${food.img}`)"
+                :alt="food.name"
+              />
+            </template>
+            <template #h1Name>
+              <h1>{{ food.name }}</h1>
+            </template>
+            <template #h1Total>
+              <h1>Còn lại: {{ food.total }}</h1>
+            </template>
+            <template #h1Price>
+              <h1>{{ food.price }}</h1>
+            </template>
+          </food-card>
+        </div>
       </div>
     </div>
   </container>
@@ -225,10 +227,15 @@ export default {
 }
 
 .section-cards {
-  display: flex;
-  gap: 2rem;
+  width: 100%;
+}
+.ctn-cards {
+  width: 100%;
+  display: grid;
+  grid-auto-flow: column;
+  gap: 1rem;
   overflow-x: auto;
-
+  grid-auto-columns: 21%;
   padding: 1rem 0.5rem;
 }
 </style>
