@@ -1,69 +1,59 @@
 <template>
-  <container>
+  <container class="drink-ctn">
     <div class="section-ctn">
       <!-- TITLES -->
       <div class="section-intro">
-        <h1 class="section--title">Các món ăn hôm nay</h1>
-        <p class="section--subTitle">Số ở trên là số món mà bạn đã chọn</p>
+        <h1 class="section--title">Đồ uống</h1>
+        <p class="section--subTitle">Số ở trên là số đồ uống mà bạn đã chọn</p>
       </div>
       <!-- SECTION BUTTONS -->
       <div class="section-btns">
         <SSButton
-          :class="{ active: this.foodStatus === 'rice' }"
-          :quantity="this.quantity('rice')"
-          @click="onClickFoodBTN($event, 'rice')"
+          :class="{ active: this.drinkStatus === 'gas' }"
+          :quantity="this.quantity('gas')"
+          @click="onClickFoodBTN($event, 'gas')"
         >
           <template #img>
             <img class="RiceIcon" src="../../assets/imgs/riceIcon.png" />
           </template>
-          Cơm
+          Có Gas
         </SSButton>
         <SSButton
-          :class="{ active: this.foodStatus === 'noodles' }"
-          :quantity="this.quantity('noodles')"
-          @click="onClickFoodBTN($event, 'noodles')"
+          :class="{ active: this.drinkStatus === 'noGas' }"
+          :quantity="this.quantity('noGas')"
+          @click="onClickFoodBTN($event, 'noGas')"
         >
           <template #img>
             <img class="RiceIcon" src="../../assets/imgs/noodlesIcon.png" />
           </template>
-          Món Nước</SSButton
-        >
-        <SSButton
-          :class="{ active: this.foodStatus === 'cake' }"
-          :quantity="this.quantity('cake')"
-          @click="onClickFoodBTN($event, 'cake')"
-        >
-          <template #img>
-            <img class="RiceIcon" src="../../assets/imgs/cakeIcon.png" />
-          </template>
-          Bánh Ngọt</SSButton
+          Không Có Gas</SSButton
         >
       </div>
-      <!--FOOD CARDS -->
+      <!--DRINKS CARDS -->
       <div class="section-cards">
         <div class="ctn-cards">
           <food-card
-            v-for="food in products"
-            :key="food.id"
-            :quantity="currSelected(food.id)"
-            @resetQuantity="resetQuantity(food.id)"
-            @icrQuantity="icrQuantity(food.id)"
-            @dcrQuantity="dcrQuantity(food.id)"
+            v-for="drink in products"
+            :key="drink.id"
+            :quantity="currSelected(drink.id)"
+            @resetQuantity="resetQuantity(drink.id)"
+            @icrQuantity="icrQuantity(drink.id)"
+            @dcrQuantity="dcrQuantity(drink.id)"
           >
             <template #img>
               <img
-                :src="require(`../../assets/imgs/${food.img}`)"
-                :alt="food.name"
+                :src="require(`../../assets/imgs/${drink.img}`)"
+                :alt="drink.name"
               />
             </template>
             <template #h1Name>
-              <h1>{{ food.name }}</h1>
+              <h1>{{ drink.name }}</h1>
             </template>
             <template #h1Total>
-              <h1>Còn lại: {{ food.total }}</h1>
+              <h1>Còn lại: {{ drink.total }}</h1>
             </template>
             <template #h1Price>
-              <h1>{{ food.price }} đ</h1>
+              <h1>{{ drink.price }} đ</h1>
             </template>
           </food-card>
         </div>
@@ -84,13 +74,13 @@ export default {
   },
   data() {
     return {
-      foodStatus: "rice",
+      drinkStatus: "gas",
     };
   },
   methods: {
     onClickFoodBTN(event, val) {
       event.preventDefault();
-      this.foodStatus = val;
+      this.drinkStatus = val;
     },
     icrQuantity(id) {
       this.$store.commit("icrQSelected", id);
@@ -104,7 +94,7 @@ export default {
   },
   computed: {
     products() {
-      return this.$store.getters.getTypeArr(this.foodStatus);
+      return this.$store.getters.getTypeArr(this.drinkStatus);
     },
     currSelected() {
       return (id) => {
@@ -119,6 +109,9 @@ export default {
 </script>
 
 <style scoped>
+.drink-ctn {
+  background: rgba(253, 196, 70, 0.6) !important;
+}
 .section-ctn {
   padding: 4rem 0;
   color: var(--dark);

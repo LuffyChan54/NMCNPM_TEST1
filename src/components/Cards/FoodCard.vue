@@ -79,7 +79,9 @@ export default {
 }
 
 .container-img > img {
-  height: 100%;
+  inline-size: 100%;
+  object-fit: cover;
+  aspect-ratio: 16/12;
 }
 
 .control--btn {
