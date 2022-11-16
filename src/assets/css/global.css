@@ -44,3 +44,9 @@ body {
 #app {
   margin-top: 2rem;
 }
+
+.section-intro {
+  display: flex;
+  flex-direction: column;
+  gap: 0.2rem;
+}

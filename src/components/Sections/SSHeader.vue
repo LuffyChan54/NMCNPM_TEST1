@@ -3,7 +3,10 @@
     <div class="background">
       <!-- TELEPORT MODEL -->
       <Teleport to="body">
-        <BaseModel v-if="this.isShowModal" @closeModel="closeModel">
+        <BaseModel
+          v-if="this.isShowModal || openLoginForm"
+          @closeModel="closeModel"
+        >
           <LogResForm
             :status="this.status"
             @onChangeBTN="onChangeBTN"
@@ -76,12 +79,13 @@ export default {
   data() {
     return {
       isShowModal: false,
-      status: "",
+      status: "login",
     };
   },
   methods: {
     closeModel() {
       this.isShowModal = false;
+      this.$store.dispatch("resetOpenLoginForm");
     },
     openModal(val) {
       this.isShowModal = true;
@@ -89,6 +93,15 @@ export default {
     },
     onChangeBTN(val) {
       this.status = val;
+    },
+    changeToLogin() {
+      this.status = "login";
+    },
+  },
+  computed: {
+    openLoginForm() {
+      this.changeToLogin();
+      return this.$store.state.openLoginForm;
     },
   },
 };

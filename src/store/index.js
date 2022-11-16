@@ -3,6 +3,49 @@ import { createStore } from "vuex";
 const store = createStore({
   state() {
     return {
+      isPrintBill: false,
+      showScreenBill: false,
+      openLoginForm: false,
+      isValidPayMent: true,
+      isLogin: true,
+      idValidPosition: [
+        {
+          id: "A7",
+          letter: "A",
+          number: 7,
+          status: "wait",
+          color: "#198754",
+        },
+        {
+          id: "B9",
+          letter: "B",
+          number: 9,
+          status: "wait",
+          color: "#ffc107",
+        },
+        {
+          id: "C5",
+          letter: "C",
+          number: 5,
+          status: "wait",
+          color: "#6f42c1",
+        },
+        {
+          id: "C5",
+          letter: "C",
+          number: 5,
+          status: "wait",
+          color: "#dc3545",
+        },
+      ],
+      account: {
+        id: "ACCOUNT123",
+        fullName: "Luffy Chan",
+        email: "LuffyChan@gmail.com",
+        money: 100000,
+        role: "user",
+      },
+      totalCost: 0,
       qTypeSelected: {
         rice: 0,
         noodles: 0,
@@ -321,22 +364,47 @@ const store = createStore({
     getProduct: (state) => (id) => {
       return state.products.filter((product) => product.id === id)[0];
     },
+    getProductSelected: (state, getters) => () => {
+      const productsID = Object.keys(state.qSelected);
+      let rs = [];
+      productsID.forEach((id) => {
+        rs.push(getters.getProduct(id));
+      });
+      return rs;
+    },
   },
   mutations: {
     icrQSelected(state, id) {
+      if (!state.isLogin) {
+        state.openLoginForm = true;
+        return;
+      }
+
       if (state.qSelected[id] === this.getters.getProduct(id).total) {
         //donothing
       } else {
-        this.dispatch("updateTypeSelected", { status: "icr", id });
+        if (
+          state.totalCost + this.getters.getProduct(id).price <=
+          state.account.money
+        ) {
+          this.dispatch("updateTypeSelected", { status: "icr", id });
 
-        if (state.qSelected[id]) {
-          state.qSelected[id]++;
+          if (state.qSelected[id]) {
+            state.qSelected[id]++;
+          } else {
+            state.qSelected[id] = 1;
+          }
         } else {
-          state.qSelected[id] = 1;
+          state.isValidPayMent = false;
         }
       }
     },
     dcrQSelected(state, id) {
+      if (!state.isLogin) {
+        state.openLoginForm = true;
+        return;
+      }
+
       this.dispatch("updateTypeSelected", { status: "dcr", id });
 
       if (state.qSelected[id] === 1) {
@@ -348,6 +416,11 @@ const store = createStore({
       }
     },
     resetQSelected(state, id) {
+      if (!state.isLogin) {
+        state.openLoginForm = true;
+        return;
+      }
+
       this.dispatch("updateTypeSelected", { status: "reset", id });
       if (state.qSelected[id]) {
         delete state.qSelected[id];
@@ -355,21 +428,58 @@ const store = createStore({
     },
   },
   actions: {
+    changeShowScreenBill({ commit, state }) {
+      commit;
+      state.showScreenBill = false;
+    },
+    showUserPayment({ commit, state }) {
+      commit;
+      if (!state.isLogin) {
+        state.openLoginForm = true;
+        return;
+      }
+      state.showScreenBill = true;
+      state.isPrintBill = true;
+      setTimeout(() => {
+        state.isPrintBill = false;
+      }, 5000);
+    },
+    resetValidPayment({ commit, state }) {
+      commit;
+      state.isValidPayMent = true;
+    },
+    resetOpenLoginForm({ commit, state }) {
+      commit;
+      state.openLoginForm = false;
+    },
     updateTypeSelected({ commit, state }, { status, id }) {
       commit;
       switch (status) {
         case "icr":
-          state.qTypeSelected[this.getters.getProduct(id).type]++;
+          if (
+            state.totalCost + this.getters.getProduct(id).price <=
+            this.state.account.money
+          ) {
+            state.qTypeSelected[this.getters.getProduct(id).type]++;
+            state.totalCost += this.getters.getProduct(id).price;
+          } else {
+            state.isValidPayMent = false;
+          }
+
           break;
         case "dcr":
           if (state.qSelected[id] >= 1) {
             state.qTypeSelected[this.getters.getProduct(id).type]--;
+            state.totalCost -= this.getters.getProduct(id).price;
           }
 
           break;
         case "reset":
           state.qTypeSelected[this.getters.getProduct(id).type] -=
             state.qSelected[id];
+          state.totalCost -=
+            state.qSelected[id] * this.getters.getProduct(id).price;
+
           break;
       }
     },
