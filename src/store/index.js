@@ -3,11 +3,17 @@ import { createStore } from "vuex";
 const store = createStore({
   state() {
     return {
+      isSuccessPayment: false,
+      timeWaitingBill: 10,
+      idBill: "ID1234",
       isPrintBill: false,
       showScreenBill: false,
       openLoginForm: false,
       isValidPayMent: true,
       isLogin: true,
+
+      //
+      TimeOutFn: null,
       idValidPosition: [
         {
           id: "A7",
@@ -438,11 +444,44 @@ const store = createStore({
         state.openLoginForm = true;
         return;
       }
+      if (Object.keys(state.qSelected).length === 0) {
+        return;
+      }
       state.showScreenBill = true;
       state.isPrintBill = true;
-      setTimeout(() => {
+      state.TimeOutFn = setTimeout(() => {
         state.isPrintBill = false;
-      }, 5000);
+      }, state.timeWaitingBill * 1000);
+    },
+    doUserPayment({ commit, state }) {
+      commit;
+      state.account.money -= state.totalCost;
+      const arrIDSelected = Object.keys(state.qSelected);
+      arrIDSelected.forEach((id) => {
+        this.getters.getProduct(id).total -= state.qSelected[id];
+      });
+      state.qTypeSelected.rice = 0;
+      state.qTypeSelected.noodles = 0;
+      state.qTypeSelected.cake = 0;
+      state.qTypeSelected.gas = 0;
+      state.qTypeSelected.noGas = 0;
+      state.qSelected = {};
+      state.totalCost = 0;
+      state.showScreenBill = false;
+      clearTimeout(state.TimeOutFn);
+      state.isPrintBill = false;
+      state.isSuccessPayment = true;
+    },
+    cancelUserPayment({ commit, state }) {
+      commit;
+      state;
+      if (state.TimeOutFn) {
+        clearTimeout(state.TimeOutFn);
+      }
+    },
+    resetIsSuccessPayment({ commit, state }) {
+      commit;
+      state.isSuccessPayment = false;
     },
     resetValidPayment({ commit, state }) {
       commit;

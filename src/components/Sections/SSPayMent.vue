@@ -69,9 +69,16 @@
     </BaseModel>
   </Teleport>
   <Teleport to="body">
-    <BaseModel v-if="showScreenBill" @closeModel="changeShowScreenBill">
+    <BaseModel v-if="showScreenBill" @closeModel="cancelPayBill">
       <BillCard v-if="isPrintBill"> </BillCard>
       <ErrorCard v-else> <h1>Hết Thời Gian Chờ!</h1></ErrorCard>
+    </BaseModel>
+  </Teleport>
+  <Teleport to="body">
+    <BaseModel v-if="this.isSuccessPayment">
+      <SuccessCard @onClickSuccessBTN="onClickSuccessBTN">
+        <h1>Đặt Món Thành Công!</h1>
+      </SuccessCard>
     </BaseModel>
   </Teleport>
 </template>
@@ -83,6 +90,7 @@ import SpecialBTN from "../Buttons/SpecialBTN.vue";
 import BaseModel from "../Models/BaseModel.vue";
 import ErrorCard from "../Cards/ErrorCard.vue";
 import BillCard from "../Cards/BillCard.vue";
+import SuccessCard from "../Cards/SuccessCard.vue";
 export default {
   components: {
     container,
@@ -91,8 +99,12 @@ export default {
     BaseModel,
     ErrorCard,
     BillCard,
+    SuccessCard,
   },
   computed: {
+    isSuccessPayment() {
+      return this.$store.state.isSuccessPayment;
+    },
     quantity() {
       return (val) => this.$store.state.qTypeSelected[val];
     },
@@ -124,6 +136,9 @@ export default {
     },
   },
   methods: {
+    onClickSuccessBTN() {
+      this.$store.dispatch("resetIsSuccessPayment");
+    },
     icrQuantity(id) {
       this.$store.commit("icrQSelected", id);
     },
@@ -139,8 +154,9 @@ export default {
     payment() {
       this.$store.dispatch("showUserPayment");
     },
-    changeShowScreenBill() {
+    cancelPayBill() {
       this.$store.dispatch("changeShowScreenBill");
+      this.$store.dispatch("cancelUserPayment");
     },
   },
 };

@@ -2,7 +2,7 @@
   <div class="modal--container">
     <div class="modal--content">
       <slot></slot>
-      <button v-if="!isPrintBill" @click="closeModel" class="modal--btnClose">
+      <button @click="closeModel" class="modal--btnClose">
         <i class="fa fa-times modal--iconClose" aria-hidden="true"></i>
       </button>
     </div>
@@ -17,11 +17,7 @@ export default {
       this.$emit("closeModel");
     },
   },
-  computed: {
-    isPrintBill() {
-      return this.$store.state.isPrintBill;
-    },
-  },
+  computed: {},
 };
 </script>
 
