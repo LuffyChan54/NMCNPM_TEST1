@@ -39,6 +39,7 @@ export default {
 }
 
 .footerwrapper {
+  margin-bottom: 2rem;
   padding: 2rem 0;
   color: var(--white);
   display: flex;
