@@ -48,6 +48,7 @@ const store = createStore({
         id: "ACCOUNT123",
         fullName: "Luffy Chan",
         email: "LuffyChan@gmail.com",
+        img: "avt.jpg",
         money: 100000,
         role: "user",
       },
