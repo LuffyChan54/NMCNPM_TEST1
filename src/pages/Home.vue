@@ -4,6 +4,7 @@
   <SSDrink></SSDrink>
   <SSPayMent></SSPayMent>
   <SSAbout></SSAbout>
+  <SSFooter></SSFooter>
 </template>
 
 <script>
@@ -12,6 +13,7 @@ import SSFood from "../components/Sections/SSFood.vue";
 import SSDrink from "../components/Sections/SSDrink.vue";
 import SSPayMent from "../components/Sections/SSPayMent.vue";
 import SSAbout from "../components/Sections/SSAbout.vue";
+import SSFooter from "../components/Sections/SSFooter.vue";
 export default {
   components: {
     SSHeader,
@@ -19,6 +21,7 @@ export default {
     SSDrink,
     SSPayMent,
     SSAbout,
+    SSFooter,
   },
   data() {
     return {};
