@@ -1,6 +1,6 @@
 <template>
   <div class="doingFoodCTN">
-    <div class="statusFood">
+    <div @click="toggleOpen" class="statusFood">
       <h1>Đang hoàn thành</h1>
       <div class="percentFinish">
         <h1>3</h1>
@@ -8,7 +8,7 @@
         <h1>4</h1>
       </div>
     </div>
-    <div class="statusFoodDetails">
+    <div v-if="this.isOpenSTTFood" class="statusFoodDetails">
       <div class="sttProductItem">
         <div class="sttPNameCTN">
           <h1>Cơm chiên</h1>
@@ -44,7 +44,18 @@
 </template>
 
 <script>
-export default {};
+export default {
+  data() {
+    return {
+      isOpenSTTFood: false,
+    };
+  },
+  methods: {
+    toggleOpen() {
+      this.isOpenSTTFood = !this.isOpenSTTFood;
+    },
+  },
+};
 </script>
 
 <style>
@@ -102,7 +113,7 @@ export default {};
   border-radius: var(--radius);
   box-shadow: 0px 2px 10px rgba(47, 47, 47, 0.4);
   position: absolute;
-  top: 105%;
+  top: 110%;
   left: 0;
   display: flex;
   flex-direction: column;

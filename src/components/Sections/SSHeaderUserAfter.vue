@@ -7,7 +7,7 @@
             <img src="../../assets/imgs/moneyIcon.png" />
             <h1>{{ money }}đ</h1>
           </div>
-          <specialBTN>
+          <specialBTN @click="this.isAddMoney = true">
             <h1 style="font-size: 2rem">Nạp tiền</h1>
           </specialBTN>
         </div>
@@ -19,6 +19,10 @@
       <statusFoodCard></statusFoodCard>
     </div>
   </container>
+  <AddMoneyModal
+    v-if="this.isAddMoney"
+    @closeModel="this.isAddMoney = false"
+  ></AddMoneyModal>
 </template>
 
 <script>
@@ -26,12 +30,19 @@ import container from "../Containers/Container.vue";
 import specialBTN from "../Buttons/SpecialBTN.vue";
 import accountCard from "../Cards/AccountCard.vue";
 import statusFoodCard from "../Cards/StatusFoodCard.vue";
+import AddMoneyModal from "../Models/AddMoneyModal.vue";
 export default {
   components: {
     container,
     specialBTN,
     accountCard,
     statusFoodCard,
+    AddMoneyModal,
+  },
+  data() {
+    return {
+      isAddMoney: false,
+    };
   },
   computed: {
     money() {

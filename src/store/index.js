@@ -3,6 +3,7 @@ import { createStore } from "vuex";
 const store = createStore({
   state() {
     return {
+      //
       isSuccessPayment: false,
       timeWaitingBill: 10,
       idBill: "ID1234",
@@ -435,6 +436,17 @@ const store = createStore({
     },
   },
   actions: {
+    addMoney({ commit, state }, cardCode) {
+      commit;
+      return new Promise((resolve, reject) => {
+        if (cardCode === "123456789") {
+          state.account.money += 50000;
+          resolve("SUCCESS");
+        } else {
+          reject("FAIL");
+        }
+      });
+    },
     changeShowScreenBill({ commit, state }) {
       commit;
       state.showScreenBill = false;

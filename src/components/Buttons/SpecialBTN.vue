@@ -10,6 +10,7 @@ export default {};
 
 <style>
 .Special-btn {
+  width: fit-content;
   background: var(--yellow);
   border-radius: var(--radius);
   border: var(--border_lg) solid var(--dark);
