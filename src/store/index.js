@@ -371,7 +371,7 @@ const store = createStore({
       productFinish: 0,
 
       //NUMBER VALID ID POS TO THIS PAYMENT #REQUEST TO GET
-      NumberValidIDPOS: 0,
+      NumberValidIDPOS: 10,
 
       //DATATEST ALL THE BILLS OF THIS USER! #WILL BE DELETED
       USERBILLS: [],
