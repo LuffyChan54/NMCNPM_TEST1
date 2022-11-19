@@ -7,31 +7,85 @@
       <div class="formInfoItem">
         <label for="">Họ Và Tên</label>
         <div class="formInfoItemInput">
-          <input type="text" value="LuffyChan" />
-          <i class="fa fa-pencil-square" aria-hidden="true"></i>
+          <input
+            :disabled="this.changeName === false"
+            type="text"
+            v-model="this.fullNameUser"
+          />
+          <i
+            @click="this.changeName = !this.changeName"
+            class="fa fa-pencil-square"
+            aria-hidden="true"
+          ></i>
         </div>
       </div>
 
       <div class="formInfoItem">
         <label for="">Email</label>
         <div class="formInfoItemInput">
-          <input type="email" value="LuffyChan123456@gmail.com" />
+          <input disabled type="email" :value="this.getEmailUser" />
         </div>
       </div>
 
-      <button class="changePassWordBTN">
+      <button @click="this.isChangePW = true" class="changePassWordBTN">
         <h1>Đổi mật khẩu</h1>
       </button>
 
-      <button class="saveInfoBTN">
+      <button @click="saveChangeInfo" class="saveInfoBTN">
         <h1>Lưu Thông Tin</h1>
       </button>
     </div>
   </div>
+  <teleport to="body">
+    <BaseModel v-if="isChanged" @closeModel="this.isChanged = false">
+      <SuccessCard @onClickSuccessBTN="this.isChanged = false">
+        <h1>Thay đổi tên thành công!</h1>
+      </SuccessCard>
+    </BaseModel>
+  </teleport>
+  <ChangePWModal
+    v-if="this.isChangePW"
+    @closeModel="this.isChangePW = false"
+  ></ChangePWModal>
 </template>
 
 <script>
-export default {};
+import BaseModel from "../Models/BaseModel.vue";
+import SuccessCard from "../Cards/SuccessCard.vue";
+import ChangePWModal from "../Models/ChangePWModal.vue";
+export default {
+  components: {
+    BaseModel,
+    SuccessCard,
+    ChangePWModal,
+  },
+  data() {
+    return {
+      fullNameUser: "",
+      isChanged: false,
+      isChangePW: false,
+      changeName: false,
+    };
+  },
+  methods: {
+    saveChangeInfo() {
+      this.changeName = false;
+      this.$store.dispatch("changeUserName", this.fullNameUser);
+      this.isChanged = true;
+    },
+  },
+  created() {
+    this.fullNameUser = this.getNameUser;
+  },
+  computed: {
+    getNameUser() {
+      return this.$store.state.account.fullName;
+    },
+    getEmailUser() {
+      return this.$store.state.account.email;
+    },
+  },
+};
 </script>
 
 <style scoped>

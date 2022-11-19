@@ -47,6 +47,7 @@ const store = createStore({
       ],
       account: {
         id: "ACCOUNT123",
+        password: "123",
         fullName: "Luffy Chan",
         email: "LuffyChan@gmail.com",
         img: "avt.jpg",
@@ -436,6 +437,21 @@ const store = createStore({
     },
   },
   actions: {
+    changeUserName({ commit, state }, newName) {
+      commit;
+      state.account.fullName = newName;
+    },
+    changePW({ commit, state }, { oldPW, newPW }) {
+      commit;
+      return new Promise((resolve, reject) => {
+        if (oldPW === state.account.password) {
+          state.account.password = newPW;
+          resolve("SUCCESS");
+        } else {
+          reject("FAIL");
+        }
+      });
+    },
     addMoney({ commit, state }, cardCode) {
       commit;
       return new Promise((resolve, reject) => {
