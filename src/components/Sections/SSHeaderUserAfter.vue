@@ -49,6 +49,14 @@ export default {
       return this.$store.state.account.money;
     },
   },
+  created() {
+    if (
+      this.$store.state.account.role === "admin" &&
+      this.$store.state.isLogin
+    ) {
+      this.$router.push("/cashierhome");
+    }
+  },
 };
 </script>
 

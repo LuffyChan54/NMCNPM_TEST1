@@ -572,6 +572,7 @@ const store = createStore({
             localStorage.setItem("isKeepLogin", true);
           }
           this.state.isLogin = true;
+
           resolve("Success");
         } else {
           reject("Fail");

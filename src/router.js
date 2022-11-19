@@ -3,7 +3,7 @@ import { createRouter, createWebHashHistory } from "vue-router";
 import Home from "./pages/Home.vue";
 import UserInfo from "./pages/UserInfo.vue";
 import UserHistory from "./pages/UserHistory.vue";
-
+import CashierHome from "./pages/CashierHome.vue";
 const routes = [
   {
     path: "/",
@@ -19,6 +19,11 @@ const routes = [
     path: "/Userhistory",
     name: "user-history-route",
     component: UserHistory,
+  },
+  {
+    path: "/CashierHome",
+    name: "cashier-home-route",
+    component: CashierHome,
   },
 ];
 
