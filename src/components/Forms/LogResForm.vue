@@ -15,32 +15,96 @@
     <div class="ruler"></div>
     <div class="inputCTN">
       <label for="inputEmail">Email</label>
-      <input id="inputEmail" type="email" />
+      <input v-model="this.inputEmail" id="inputEmail" type="email" />
     </div>
     <div v-if="this.status === 'register'" class="inputCTN">
       <label for="inputFullName">Họ Tên</label>
-      <input id="inputFullName" type="text" />
+      <input v-model="this.inputFullName" id="inputFullName" type="text" />
     </div>
     <div v-if="this.status !== 'forgetPW'" class="inputCTN">
       <label for="inputPassword">Mật Khẩu</label>
-      <input id="inputPassword" type="password" />
+      <input v-model="this.inputPW" id="inputPassword" type="password" />
     </div>
     <div v-if="this.status === 'register'" class="inputCTN">
       <label for="inputPasswordAgain">Xác Nhận Mật Khẩu</label>
-      <input id="inputPasswordAgain" type="password" />
+      <input
+        v-model="this.inputConfirmPW"
+        id="inputPasswordAgain"
+        type="password"
+      />
+    </div>
+
+    <div
+      style="display: flex; align-items: center; gap: 1rem"
+      v-if="this.status === 'login'"
+    >
+      <label
+        style="color: var(--dark); font-size: 1.5rem; font-weight: bold"
+        for=""
+        >Lưu đăng nhập!</label
+      >
+      <input
+        style="border: none; height: 2rem; width: 2rem; cursor: pointer"
+        type="checkbox"
+        class="rememberme"
+        v-model="rememberMe"
+      />
     </div>
 
     <p v-if="this.status === 'forgetPW'" class="subTitleForgetPW">
       Mật khẩu sẽ được gửi về email mà bạn đã đăng ký
     </p>
 
-    <RegularBTNVue v-if="this.status === 'login'" class="checkLogin">
+    <p
+      v-if="!this.statusLogin && this.status === 'login'"
+      style="color: var(--stt-red)"
+      class="subTitleForgetPW"
+    >
+      Sai tên tài khoản hoặc mật khẩu!
+    </p>
+
+    <RegularBTNVue
+      @click="login"
+      v-if="this.status === 'login'"
+      class="checkLogin"
+    >
       <p class="titleCheckBTN">Đăng nhập</p>
     </RegularBTNVue>
-    <RegularBTNVue v-if="this.status === 'register'" class="checkRegister">
+
+    <p
+      v-if="
+        this.statusRegister &&
+        this.status === 'register' &&
+        !this.checkConfirmPW
+      "
+      style="color: var(--stt-red)"
+      class="subTitleForgetPW"
+    >
+      Xác nhận mật khẩu sai!
+    </p>
+    <p
+      v-if="
+        !this.statusRegister &&
+        this.status === 'register' &&
+        this.checkConfirmPW
+      "
+      style="color: var(--stt-red)"
+      class="subTitleForgetPW"
+    >
+      Đăng ký thất bại! Email đã được sử dụng!
+    </p>
+    <RegularBTNVue
+      @click="register"
+      v-if="this.status === 'register'"
+      class="checkRegister"
+    >
       <p class="titleCheckBTN">Đăng ký</p>
     </RegularBTNVue>
-    <RegularBTNVue v-if="this.status === 'forgetPW'" class="checkForgetPW">
+    <RegularBTNVue
+      @click="forgetPW"
+      v-if="this.status === 'forgetPW'"
+      class="checkForgetPW"
+    >
       <p class="titleCheckBTN">Lấy lại mật khẩu</p>
     </RegularBTNVue>
     <div v-if="this.status === 'login'" class="wrap-forgetPW">
@@ -63,7 +127,16 @@ export default {
     status: String,
   },
   data() {
-    return {};
+    return {
+      inputEmail: "",
+      inputPW: "",
+      inputFullName: "",
+      inputConfirmPW: "",
+      statusLogin: true,
+      statusRegister: true,
+      checkConfirmPW: true,
+      rememberMe: "",
+    };
   },
   components: {
     RegularBTNVue,
@@ -72,6 +145,46 @@ export default {
     onChangeBTN(event, val) {
       event.preventDefault();
       this.$emit("onChangeBTN", val);
+    },
+    login(event) {
+      event.preventDefault();
+      this.$store
+        .dispatch("login", {
+          email: this.inputEmail,
+          pw: this.inputPW,
+          rememberMe: this.rememberMe,
+        })
+        .then(() => {
+          this.statusLogin = true;
+        })
+        .catch(() => {
+          this.statusLogin = false;
+        });
+    },
+    register(event) {
+      event.preventDefault();
+      if (this.inputPW !== this.inputConfirmPW) {
+        this.checkConfirmPW = false;
+      } else {
+        this.checkConfirmPW = true;
+
+        this.$store
+          .dispatch("register", {
+            email: this.inputEmail,
+            fullname: this.inputFullName,
+            pw: this.inputPW,
+          })
+          .then(() => {
+            this.statusRegister = true;
+          })
+          .catch(() => {
+            this.statusRegister = false;
+          });
+      }
+    },
+    forgetPW(event) {
+      event.preventDefault();
+      this.$store.dispatch("forgetPW", { email: this.inputEmail });
     },
   },
 };

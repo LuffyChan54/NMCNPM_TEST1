@@ -3,8 +3,10 @@ import { createStore } from "vuex";
 const store = createStore({
   state() {
     return {
-      //
+      //Total money user paid in this month! #REQUEST TO GET
       moneyUsedInMonth: 80000,
+
+      //The numbers of each type which used by user! #REQUEST TO GET
       QuantityTypeUsed: {
         rice: 0,
         noodles: 0,
@@ -12,174 +14,25 @@ const store = createStore({
         gas: 0,
         noGas: 0,
       },
-      //testDATA USERBILLS
-      USERBILLS: [
-        {
-          idPositions: [
-            {
-              id: "A7",
-              letter: "A",
-              number: 7,
-              status: "wait",
-              color: "#198754",
-            },
-            {
-              id: "B9",
-              letter: "B",
-              number: 9,
-              status: "wait",
-              color: "#ffc107",
-            },
-          ],
-          time: "7:00",
-          day: "07",
-          month: "11",
-          year: "2022",
-          userName: "LuffyChan",
-          userID: "ID1234",
-          billID: "HD1234",
-          products: [
-            {
-              name: "Cơm Chiên",
-              quantity: 1,
-              cost: 25000,
-            },
-            {
-              name: "Bánh mì ngọt",
-              quantity: 2,
-              cost: 20000,
-            },
-          ],
-          totalCost: 45000,
-        },
-        {
-          idPositions: [
-            {
-              id: "A7",
-              letter: "A",
-              number: 7,
-              status: "wait",
-              color: "#198754",
-            },
-            {
-              id: "B9",
-              letter: "B",
-              number: 9,
-              status: "wait",
-              color: "#ffc107",
-            },
-          ],
-          time: "12:00",
-          day: "08",
-          month: "11",
-          year: "2022",
-          userName: "LuffyChan",
-          userID: "ID1234",
-          billID: "HD1234",
-          products: [
-            {
-              name: "Cơm Chiên",
-              quantity: 1,
-              cost: 25000,
-            },
-            {
-              name: "Bánh mì ngọt",
-              quantity: 2,
-              cost: 20000,
-            },
-          ],
-          totalCost: 45000,
-        },
-        {
-          idPositions: [
-            {
-              id: "A7",
-              letter: "A",
-              number: 7,
-              status: "wait",
-              color: "#198754",
-            },
-            {
-              id: "B9",
-              letter: "B",
-              number: 9,
-              status: "wait",
-              color: "#ffc107",
-            },
-          ],
-          time: "9:00",
-          day: "10",
-          month: "11",
-          year: "2022",
-          userName: "LuffyChan",
-          userID: "ID1234",
-          billID: "HD1234",
-          products: [
-            {
-              name: "Cơm Chiên",
-              quantity: 1,
-              cost: 25000,
-            },
-            {
-              name: "Bánh mì ngọt",
-              quantity: 2,
-              cost: 20000,
-            },
-          ],
-          totalCost: 45000,
-        },
-        {
-          idPositions: [
-            {
-              id: "A7",
-              letter: "A",
-              number: 7,
-              status: "wait",
-              color: "#198754",
-            },
-            {
-              id: "B9",
-              letter: "B",
-              number: 9,
-              status: "wait",
-              color: "#ffc107",
-            },
-          ],
-          time: "9:00",
-          day: "09",
-          month: "11",
-          year: "2022",
-          userName: "LuffyChan",
-          userID: "ID1234",
-          billID: "HD1234",
-          products: [
-            {
-              name: "Cơm Chiên",
-              quantity: 1,
-              cost: 25000,
-            },
-            {
-              name: "Bánh mì ngọt",
-              quantity: 2,
-              cost: 20000,
-            },
-          ],
-          totalCost: 45000,
-        },
-      ],
-      UserBillInfo: [],
-      //
-      isSuccessPayment: false,
-      timeWaitingBill: 10,
-      idBill: "ID1234",
-      isPrintBill: false,
-      showScreenBill: false,
-      openLoginForm: false,
-      isValidPayMent: true,
-      isLogin: true,
 
-      //
-      TimeOutFn: null,
+      //Bills after user search by date #REQUEST TO GET
+      UserBillInfo: [],
+
+      //IDBill wait for this payment #REQUEST TO GET
+      idBill: "ID1234",
+
+      //ACCOUNT info after login (not include password!) #REQUEST TO GET
+      account: {
+        id: "ACCOUNT123",
+        password: "123",
+        fullName: "Luffy Chan",
+        email: "LuffyChan@gmail.com",
+        img: "avt.jpg",
+        money: 100000,
+        role: "user",
+      },
+
+      //IDPOSITIONS valid to put all the food user choosed! #REQUEST TO GET
       idValidPosition: [
         {
           id: "A7",
@@ -210,24 +63,8 @@ const store = createStore({
           color: "#dc3545",
         },
       ],
-      account: {
-        id: "ACCOUNT123",
-        password: "123",
-        fullName: "Luffy Chan",
-        email: "LuffyChan@gmail.com",
-        img: "avt.jpg",
-        money: 100000,
-        role: "user",
-      },
-      totalCost: 0,
-      qTypeSelected: {
-        rice: 0,
-        noodles: 0,
-        cake: 0,
-        gas: 0,
-        noGas: 0,
-      },
-      qSelected: {},
+
+      //All the product will be sold today! #REQUEST TO GET
       products: [
         {
           id: "r1",
@@ -526,6 +363,191 @@ const store = createStore({
           price: 10000,
         },
       ],
+
+      //DATATEST ALL THE BILLS OF THIS USER! #WILL BE DELETED
+      USERBILLS: [
+        {
+          idPositions: [
+            {
+              id: "A7",
+              letter: "A",
+              number: 7,
+              status: "wait",
+              color: "#198754",
+            },
+            {
+              id: "B9",
+              letter: "B",
+              number: 9,
+              status: "wait",
+              color: "#ffc107",
+            },
+          ],
+          time: "7:00",
+          day: "07",
+          month: "11",
+          year: "2022",
+          userName: "LuffyChan",
+          userID: "ID1234",
+          billID: "HD1234",
+          products: [
+            {
+              name: "Cơm Chiên",
+              quantity: 1,
+              cost: 25000,
+            },
+            {
+              name: "Bánh mì ngọt",
+              quantity: 2,
+              cost: 20000,
+            },
+          ],
+          totalCost: 45000,
+        },
+        {
+          idPositions: [
+            {
+              id: "A7",
+              letter: "A",
+              number: 7,
+              status: "wait",
+              color: "#198754",
+            },
+            {
+              id: "B9",
+              letter: "B",
+              number: 9,
+              status: "wait",
+              color: "#ffc107",
+            },
+          ],
+          time: "12:00",
+          day: "08",
+          month: "11",
+          year: "2022",
+          userName: "LuffyChan",
+          userID: "ID1234",
+          billID: "HD1234",
+          products: [
+            {
+              name: "Cơm Chiên",
+              quantity: 1,
+              cost: 25000,
+            },
+            {
+              name: "Bánh mì ngọt",
+              quantity: 2,
+              cost: 20000,
+            },
+          ],
+          totalCost: 45000,
+        },
+        {
+          idPositions: [
+            {
+              id: "A7",
+              letter: "A",
+              number: 7,
+              status: "wait",
+              color: "#198754",
+            },
+            {
+              id: "B9",
+              letter: "B",
+              number: 9,
+              status: "wait",
+              color: "#ffc107",
+            },
+          ],
+          time: "9:00",
+          day: "10",
+          month: "11",
+          year: "2022",
+          userName: "LuffyChan",
+          userID: "ID1234",
+          billID: "HD1234",
+          products: [
+            {
+              name: "Cơm Chiên",
+              quantity: 1,
+              cost: 25000,
+            },
+            {
+              name: "Bánh mì ngọt",
+              quantity: 2,
+              cost: 20000,
+            },
+          ],
+          totalCost: 45000,
+        },
+        {
+          idPositions: [
+            {
+              id: "A7",
+              letter: "A",
+              number: 7,
+              status: "wait",
+              color: "#198754",
+            },
+            {
+              id: "B9",
+              letter: "B",
+              number: 9,
+              status: "wait",
+              color: "#ffc107",
+            },
+          ],
+          time: "9:00",
+          day: "09",
+          month: "11",
+          year: "2022",
+          userName: "LuffyChan",
+          userID: "ID1234",
+          billID: "HD1234",
+          products: [
+            {
+              name: "Cơm Chiên",
+              quantity: 1,
+              cost: 25000,
+            },
+            {
+              name: "Bánh mì ngọt",
+              quantity: 2,
+              cost: 20000,
+            },
+          ],
+          totalCost: 45000,
+        },
+      ],
+
+      /*TRUE/FALSE VARIABLES: */
+      isPrintBill: false, //Check to print basemodel bill
+      showScreenBill: false, //check to print bill
+      openLoginForm: false, //check to Open login form
+      isValidPayMent: true, //check to valid payment
+      isLogin: false, //check LOGIN
+      isSuccessPayment: false, //check to alert success or fail of payment
+
+      //Time set to wait user accept or deny pay
+      timeWaitingBill: 10,
+
+      //Function to response after 10s
+      TimeOutFn: null,
+
+      //Variable to show the cost in page
+      totalCost: 0,
+
+      //The numbers of each type that user choosed
+      qTypeSelected: {
+        rice: 0,
+        noodles: 0,
+        cake: 0,
+        gas: 0,
+        noGas: 0,
+      },
+
+      //The id and quantity of each item user choosed! (>=1)
+      qSelected: {},
     };
   },
   getters: {
@@ -602,6 +624,49 @@ const store = createStore({
     },
   },
   actions: {
+    forgetPW({ commit, state }, { email }) {
+      commit;
+      state;
+      console.log(email);
+    },
+    checkKeepLogin({ commit, state }) {
+      commit;
+
+      if (localStorage.getItem("isKeepLogin") === "true") {
+        state.isLogin = true;
+      }
+    },
+    login({ commit, state }, { email, pw, rememberMe }) {
+      commit;
+      state;
+      return new Promise((resolve, reject) => {
+        if (email === "huydz@gmail.com" && pw === "123") {
+          if (rememberMe) {
+            localStorage.setItem("isKeepLogin", true);
+          }
+          this.state.isLogin = true;
+          resolve("Success");
+        } else {
+          reject("Fail");
+        }
+      });
+    },
+    register({ commit, state }, { email, fullname, pw }) {
+      commit;
+      return new Promise((resolve, reject) => {
+        if (email !== "huydz@gmail.com") {
+          console.log(fullname, pw);
+          state.isLogin = true;
+          resolve("success");
+        } else {
+          reject("fail");
+        }
+      });
+    },
+    resetUserBillInfo({ commit, state }) {
+      commit;
+      state.UserBillInfo = [];
+    },
     searchBillByDate({ commit, state }, { year, month, day }) {
       commit;
       state;
@@ -613,6 +678,7 @@ const store = createStore({
       });
     },
     logout({ commit, state }) {
+      localStorage.removeItem("isKeepLogin");
       commit;
       state.isLogin = false;
     },

@@ -35,5 +35,8 @@ export default {
       return this.$store.state.isLogin;
     },
   },
+  created() {
+    this.$store.dispatch("checkKeepLogin");
+  },
 };
 </script>

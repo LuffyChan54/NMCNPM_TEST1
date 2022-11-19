@@ -41,6 +41,7 @@ export default {
       this.$router.push("info");
     },
     gotoHistorypage() {
+      this.$store.dispatch("resetUserBillInfo");
       this.$router.push("Userhistory");
     },
     toggleSubMenuAccount() {
