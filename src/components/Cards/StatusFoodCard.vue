@@ -3,40 +3,29 @@
     <div @click="toggleOpen" class="statusFood">
       <h1>Đang hoàn thành</h1>
       <div class="percentFinish">
-        <h1>3</h1>
+        <h1>{{ this.productFinish }}</h1>
         <h1>/</h1>
-        <h1>4</h1>
+        <h1>{{ this.PRODUCTBOUGHT.length }}</h1>
       </div>
     </div>
     <div v-if="this.isOpenSTTFood" class="statusFoodDetails">
-      <div class="sttProductItem">
-        <div class="sttPNameCTN">
-          <h1>Cơm chiên</h1>
+      <div
+        v-for="(product, idx) in PRODUCTBOUGHT"
+        :key="idx"
+        class="sttProductItem"
+      >
+        <div
+          class="sttPNameCTN"
+          :style="{ background: this.getColor(product) }"
+        >
+          <h1>{{ product.name }}</h1>
         </div>
-        <h1 class="STTquantity">1</h1>
-        <div class="sttPIDCTN">
-          <h1 class="letter">A</h1>
-          <h1 class="number">5</h1>
-        </div>
-      </div>
-      <div class="sttProductItem">
-        <div class="sttPNameCTN">
-          <h1>Cơm chiên</h1>
-        </div>
-        <h1 class="STTquantity">1</h1>
-        <div class="sttPIDCTN">
-          <h1 class="letter">A</h1>
-          <h1 class="number">5</h1>
-        </div>
-      </div>
-      <div class="sttProductItem">
-        <div class="sttPNameCTN">
-          <h1>Cơm chiên</h1>
-        </div>
-        <h1 class="STTquantity">1</h1>
-        <div class="sttPIDCTN">
-          <h1 class="letter">A</h1>
-          <h1 class="number">5</h1>
+        <h1 class="STTquantity">{{ product.quantity }}</h1>
+        <div v-if="product.pos" class="sttPIDCTN">
+          <h1 :style="{ color: product.pos.color }" class="letter">
+            {{ product.pos.letter }}
+          </h1>
+          <h1 class="number">{{ product.pos.number }}</h1>
         </div>
       </div>
     </div>
@@ -53,6 +42,21 @@ export default {
   methods: {
     toggleOpen() {
       this.isOpenSTTFood = !this.isOpenSTTFood;
+    },
+  },
+  computed: {
+    PRODUCTBOUGHT() {
+      return this.$store.state.PRODUCTBOUGHT;
+    },
+    productFinish() {
+      return this.$store.state.productFinish;
+    },
+    getColor() {
+      return (product) => {
+        return product.status === "doing"
+          ? "var(--stt-yellow)"
+          : "var(--stt-green)";
+      };
     },
   },
 };

@@ -364,163 +364,20 @@ const store = createStore({
         },
       ],
 
+      //DATATEST ALL THE products be choosed! #REQUEST TO GET
+      PRODUCTBOUGHT: [],
+
+      //NUMBER PRODUCTS IS DOING #REQUEST TO GET
+      productFinish: 0,
+
+      //NUMBER VALID ID POS TO THIS PAYMENT #REQUEST TO GET
+      NumberValidIDPOS: 0,
+
       //DATATEST ALL THE BILLS OF THIS USER! #WILL BE DELETED
-      USERBILLS: [
-        {
-          idPositions: [
-            {
-              id: "A7",
-              letter: "A",
-              number: 7,
-              status: "wait",
-              color: "#198754",
-            },
-            {
-              id: "B9",
-              letter: "B",
-              number: 9,
-              status: "wait",
-              color: "#ffc107",
-            },
-          ],
-          time: "7:00",
-          day: "07",
-          month: "11",
-          year: "2022",
-          userName: "LuffyChan",
-          userID: "ID1234",
-          billID: "HD1234",
-          products: [
-            {
-              name: "Cơm Chiên",
-              quantity: 1,
-              cost: 25000,
-            },
-            {
-              name: "Bánh mì ngọt",
-              quantity: 2,
-              cost: 20000,
-            },
-          ],
-          totalCost: 45000,
-        },
-        {
-          idPositions: [
-            {
-              id: "A7",
-              letter: "A",
-              number: 7,
-              status: "wait",
-              color: "#198754",
-            },
-            {
-              id: "B9",
-              letter: "B",
-              number: 9,
-              status: "wait",
-              color: "#ffc107",
-            },
-          ],
-          time: "12:00",
-          day: "08",
-          month: "11",
-          year: "2022",
-          userName: "LuffyChan",
-          userID: "ID1234",
-          billID: "HD1234",
-          products: [
-            {
-              name: "Cơm Chiên",
-              quantity: 1,
-              cost: 25000,
-            },
-            {
-              name: "Bánh mì ngọt",
-              quantity: 2,
-              cost: 20000,
-            },
-          ],
-          totalCost: 45000,
-        },
-        {
-          idPositions: [
-            {
-              id: "A7",
-              letter: "A",
-              number: 7,
-              status: "wait",
-              color: "#198754",
-            },
-            {
-              id: "B9",
-              letter: "B",
-              number: 9,
-              status: "wait",
-              color: "#ffc107",
-            },
-          ],
-          time: "9:00",
-          day: "10",
-          month: "11",
-          year: "2022",
-          userName: "LuffyChan",
-          userID: "ID1234",
-          billID: "HD1234",
-          products: [
-            {
-              name: "Cơm Chiên",
-              quantity: 1,
-              cost: 25000,
-            },
-            {
-              name: "Bánh mì ngọt",
-              quantity: 2,
-              cost: 20000,
-            },
-          ],
-          totalCost: 45000,
-        },
-        {
-          idPositions: [
-            {
-              id: "A7",
-              letter: "A",
-              number: 7,
-              status: "wait",
-              color: "#198754",
-            },
-            {
-              id: "B9",
-              letter: "B",
-              number: 9,
-              status: "wait",
-              color: "#ffc107",
-            },
-          ],
-          time: "9:00",
-          day: "09",
-          month: "11",
-          year: "2022",
-          userName: "LuffyChan",
-          userID: "ID1234",
-          billID: "HD1234",
-          products: [
-            {
-              name: "Cơm Chiên",
-              quantity: 1,
-              cost: 25000,
-            },
-            {
-              name: "Bánh mì ngọt",
-              quantity: 2,
-              cost: 20000,
-            },
-          ],
-          totalCost: 45000,
-        },
-      ],
+      USERBILLS: [],
 
       /*TRUE/FALSE VARIABLES: */
+      isHasFoodSelected: false,
       isPrintBill: false, //Check to print basemodel bill
       showScreenBill: false, //check to print bill
       openLoginForm: false, //check to Open login form
@@ -576,6 +433,23 @@ const store = createStore({
         return;
       }
 
+      let type = this.getters.getProduct(id).type;
+      if (type === "gas" || type === "noGas") {
+        let check = false;
+        Object.keys(state.qSelected).forEach((elid) => {
+          if (
+            this.getters.getProduct(elid).type === "rice" ||
+            this.getters.getProduct(elid).type === "noodles" ||
+            this.getters.getProduct(elid).type === "cake"
+          ) {
+            check = true;
+          }
+        });
+        if (!check) {
+          return;
+        }
+      }
+
       if (state.qSelected[id] === this.getters.getProduct(id).total) {
         //donothing
       } else {
@@ -601,6 +475,34 @@ const store = createStore({
         return;
       }
 
+      let type = this.getters.getProduct(id).type;
+      if (
+        state.qSelected[id] === 1 &&
+        (type === "rice" || type === "noodles" || type === "cake")
+      ) {
+        let check = false;
+        Object.keys(state.qSelected).forEach((elid) => {
+          if (
+            elid !== id &&
+            (this.getters.getProduct(elid).type === "rice" ||
+              this.getters.getProduct(elid).type === "noodles" ||
+              this.getters.getProduct(elid).type === "cake")
+          ) {
+            check = true;
+          }
+        });
+        if (!check) {
+          state.qSelected = {};
+          state.totalCost = 0;
+          state.qTypeSelected.rice = 0;
+          state.qTypeSelected.noodles = 0;
+          state.qTypeSelected.cake = 0;
+          state.qTypeSelected.gas = 0;
+          state.qTypeSelected.noGas = 0;
+          return;
+        }
+      }
+
       this.dispatch("updateTypeSelected", { status: "dcr", id });
 
       if (state.qSelected[id] === 1) {
@@ -615,6 +517,31 @@ const store = createStore({
       if (!state.isLogin) {
         state.openLoginForm = true;
         return;
+      }
+
+      let type = this.getters.getProduct(id).type;
+      if (type === "rice" || type === "noodles" || type === "cake") {
+        let check = false;
+        Object.keys(state.qSelected).forEach((elid) => {
+          if (
+            elid !== id &&
+            (this.getters.getProduct(elid).type === "rice" ||
+              this.getters.getProduct(elid).type === "noodles" ||
+              this.getters.getProduct(elid).type === "cake")
+          ) {
+            check = true;
+          }
+        });
+        if (!check) {
+          state.qSelected = {};
+          state.totalCost = 0;
+          state.qTypeSelected.rice = 0;
+          state.qTypeSelected.noodles = 0;
+          state.qTypeSelected.cake = 0;
+          state.qTypeSelected.gas = 0;
+          state.qTypeSelected.noGas = 0;
+          return;
+        }
       }
 
       this.dispatch("updateTypeSelected", { status: "reset", id });
@@ -722,13 +649,61 @@ const store = createStore({
         return;
       }
       state.showScreenBill = true;
+
+      if (state.NumberValidIDPOS === 0) {
+        return;
+      }
       state.isPrintBill = true;
       state.TimeOutFn = setTimeout(() => {
         state.isPrintBill = false;
       }, state.timeWaitingBill * 1000);
     },
-    doUserPayment({ commit, state }) {
+    doUserPayment({ commit, state }, { currTime }) {
       commit;
+      let newBill = {};
+      newBill["idPositions"] = [];
+      state.idValidPosition.forEach((pos) => {
+        newBill.idPositions.push(pos);
+      });
+      newBill["time"] = currTime.split(" ")[0];
+      newBill["day"] = currTime.split(" ")[1].split("/")[0];
+      newBill["month"] = currTime.split(" ")[1].split("/")[1];
+      newBill["year"] = currTime.split(" ")[1].split("/")[2];
+      newBill["userName"] = state.account.fullName;
+      newBill["userID"] = state.account.id;
+      newBill["billID"] = state.idBill;
+      newBill["products"] = [];
+
+      this.getters.getProductSelected().forEach((product) => {
+        const qtt = state.qSelected[product.id];
+        let obj = {};
+        obj.name = product.name;
+        obj.quantity = qtt;
+        obj.cost = qtt * product.price;
+        newBill.products.push(obj);
+      });
+      newBill["totalCost"] = state.totalCost;
+      //add new bill after success
+      state.USERBILLS.push(newBill);
+      //add to doing products:
+      let indexPOS = 0;
+      this.getters.getProductSelected().forEach((product) => {
+        let obj = {};
+        obj.status = "doing";
+        obj.name = product.name;
+        obj.quantity = state.qSelected[product.id];
+        if (
+          product.type === "rice" ||
+          product.type === "noodles" ||
+          product.type === "cake"
+        ) {
+          obj.pos = state.idValidPosition[indexPOS];
+          state.idValidPosition[indexPOS].status = "used";
+          indexPOS++;
+        }
+        state.PRODUCTBOUGHT.push(obj);
+      });
+      //reset======================
       state.account.money -= state.totalCost;
       const arrIDSelected = Object.keys(state.qSelected);
       arrIDSelected.forEach((id) => {

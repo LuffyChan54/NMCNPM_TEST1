@@ -75,6 +75,14 @@
     </BaseModel>
   </Teleport>
   <Teleport to="body">
+    <BaseModel
+      v-if="showScreenBill && NumberValidIDPOS === 0"
+      @closeModel="cancelPayBill"
+    >
+      <ErrorCard> <h1>Rất tiếc, không đủ vị trí nhận hàng!</h1></ErrorCard>
+    </BaseModel>
+  </Teleport>
+  <Teleport to="body">
     <BaseModel v-if="this.isSuccessPayment">
       <SuccessCard @onClickSuccessBTN="onClickSuccessBTN">
         <h1>Đặt Món Thành Công!</h1>
@@ -102,6 +110,9 @@ export default {
     SuccessCard,
   },
   computed: {
+    NumberValidIDPOS() {
+      return this.$store.state.NumberValidIDPOS;
+    },
     isSuccessPayment() {
       return this.$store.state.isSuccessPayment;
     },

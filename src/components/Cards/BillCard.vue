@@ -79,7 +79,7 @@ export default {
   },
   methods: {
     doUserPayment() {
-      this.$store.dispatch("doUserPayment");
+      this.$store.dispatch("doUserPayment", { currTime: this.currTime });
     },
     turnOnTutorial() {
       this.isTutorialOn = true;
