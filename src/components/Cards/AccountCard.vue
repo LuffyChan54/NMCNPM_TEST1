@@ -11,10 +11,10 @@
       <div @click="gotoInfopage" class="accMenuTitle">
         <h1>Tài khoản</h1>
       </div>
-      <div class="accMenuTitle">
+      <div @click="gotoHistorypage" class="accMenuTitle">
         <h1>Lịch Sử</h1>
       </div>
-      <div class="accMenuTitle">
+      <div @click="logout" class="accMenuTitle">
         <h1>Đăng xuất</h1>
       </div>
     </div>
@@ -34,8 +34,14 @@ export default {
     },
   },
   methods: {
+    logout() {
+      this.$store.dispatch("logout");
+    },
     gotoInfopage() {
       this.$router.push("info");
+    },
+    gotoHistorypage() {
+      this.$router.push("Userhistory");
     },
     toggleSubMenuAccount() {
       this.isDropMenu = !this.isDropMenu;

@@ -4,6 +4,171 @@ const store = createStore({
   state() {
     return {
       //
+      moneyUsedInMonth: 80000,
+      QuantityTypeUsed: {
+        rice: 0,
+        noodles: 0,
+        cake: 0,
+        gas: 0,
+        noGas: 0,
+      },
+      //testDATA USERBILLS
+      USERBILLS: [
+        {
+          idPositions: [
+            {
+              id: "A7",
+              letter: "A",
+              number: 7,
+              status: "wait",
+              color: "#198754",
+            },
+            {
+              id: "B9",
+              letter: "B",
+              number: 9,
+              status: "wait",
+              color: "#ffc107",
+            },
+          ],
+          time: "7:00",
+          day: "07",
+          month: "11",
+          year: "2022",
+          userName: "LuffyChan",
+          userID: "ID1234",
+          billID: "HD1234",
+          products: [
+            {
+              name: "Cơm Chiên",
+              quantity: 1,
+              cost: 25000,
+            },
+            {
+              name: "Bánh mì ngọt",
+              quantity: 2,
+              cost: 20000,
+            },
+          ],
+          totalCost: 45000,
+        },
+        {
+          idPositions: [
+            {
+              id: "A7",
+              letter: "A",
+              number: 7,
+              status: "wait",
+              color: "#198754",
+            },
+            {
+              id: "B9",
+              letter: "B",
+              number: 9,
+              status: "wait",
+              color: "#ffc107",
+            },
+          ],
+          time: "12:00",
+          day: "08",
+          month: "11",
+          year: "2022",
+          userName: "LuffyChan",
+          userID: "ID1234",
+          billID: "HD1234",
+          products: [
+            {
+              name: "Cơm Chiên",
+              quantity: 1,
+              cost: 25000,
+            },
+            {
+              name: "Bánh mì ngọt",
+              quantity: 2,
+              cost: 20000,
+            },
+          ],
+          totalCost: 45000,
+        },
+        {
+          idPositions: [
+            {
+              id: "A7",
+              letter: "A",
+              number: 7,
+              status: "wait",
+              color: "#198754",
+            },
+            {
+              id: "B9",
+              letter: "B",
+              number: 9,
+              status: "wait",
+              color: "#ffc107",
+            },
+          ],
+          time: "9:00",
+          day: "10",
+          month: "11",
+          year: "2022",
+          userName: "LuffyChan",
+          userID: "ID1234",
+          billID: "HD1234",
+          products: [
+            {
+              name: "Cơm Chiên",
+              quantity: 1,
+              cost: 25000,
+            },
+            {
+              name: "Bánh mì ngọt",
+              quantity: 2,
+              cost: 20000,
+            },
+          ],
+          totalCost: 45000,
+        },
+        {
+          idPositions: [
+            {
+              id: "A7",
+              letter: "A",
+              number: 7,
+              status: "wait",
+              color: "#198754",
+            },
+            {
+              id: "B9",
+              letter: "B",
+              number: 9,
+              status: "wait",
+              color: "#ffc107",
+            },
+          ],
+          time: "9:00",
+          day: "09",
+          month: "11",
+          year: "2022",
+          userName: "LuffyChan",
+          userID: "ID1234",
+          billID: "HD1234",
+          products: [
+            {
+              name: "Cơm Chiên",
+              quantity: 1,
+              cost: 25000,
+            },
+            {
+              name: "Bánh mì ngọt",
+              quantity: 2,
+              cost: 20000,
+            },
+          ],
+          totalCost: 45000,
+        },
+      ],
+      UserBillInfo: [],
+      //
       isSuccessPayment: false,
       timeWaitingBill: 10,
       idBill: "ID1234",
@@ -437,6 +602,20 @@ const store = createStore({
     },
   },
   actions: {
+    searchBillByDate({ commit, state }, { year, month, day }) {
+      commit;
+      state;
+      state.UserBillInfo = [];
+      state.USERBILLS.forEach((el) => {
+        if (el.day === day && el.month === month && el.year === year) {
+          state.UserBillInfo.push(el);
+        }
+      });
+    },
+    logout({ commit, state }) {
+      commit;
+      state.isLogin = false;
+    },
     changeUserName({ commit, state }, newName) {
       commit;
       state.account.fullName = newName;
