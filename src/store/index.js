@@ -415,9 +415,50 @@ const store = createStore({
 
       //Products in CASHIER bill
       ProductsAdminBill: [],
+
+      //PRODUCT IN BILL IS DOING CASHIER AND ASSISTANT
+      BillsDoing: [],
+
+      //PRODUCT IN BILL IS DONE CASHIER AND ASSISTANT
+      BillsDone: [],
     };
   },
   getters: {
+    //CASHIER GET BILL DOING
+    getBillDoing: (state) => () => {
+      state.BillsDoing = [];
+      state.UserBillInfo.forEach((bill) => {
+        let check = false;
+        bill.products.forEach((product) => {
+          if (product.status === "doing") {
+            check = true;
+          }
+        });
+        if (check) {
+          state.BillsDoing.push(bill);
+        }
+      });
+
+      return state.BillsDoing;
+    },
+
+    //CASHIER GET BILL DONE
+    getBillDone: (state) => () => {
+      state.BillsDone = [];
+      state.BillsDone.forEach((bill) => {
+        let check = true;
+        bill.products.forEach((product) => {
+          if (product.status === "doing") {
+            check = false;
+          }
+        });
+        if (check) {
+          state.BillsDone.push(bill);
+        }
+      });
+      return state.BillsDone;
+    },
+
     //CASHIER GET PRODUCTS IN CASHIER BILL
     getProductCahierBill: (state, getters) => () => {
       state.ProductsAdminBill = [];

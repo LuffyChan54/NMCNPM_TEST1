@@ -26,7 +26,7 @@
           </button>
         </div>
 
-        <div class="mainCTN">
+        <div v-if="this.statusSell === 'offline'" class="mainCTN">
           <div class="mainListBTNS">
             <div class="section-btns">
               <SSButton
@@ -120,6 +120,39 @@
             </div>
           </div>
         </div>
+
+        <div v-if="this.statusSell === 'online'" class="mainCTN">
+          <div class="mainListBTNS">
+            <div class="section-btns">
+              <button
+                @click="this.onlineStatus = 'doing'"
+                class="doing"
+                :class="{ active: this.onlineStatus === 'doing' }"
+              >
+                <h1>Chưa Hoàn Thành</h1>
+              </button>
+              <button
+                @click="this.onlineStatus = 'done'"
+                class="done"
+                :class="{ active: this.onlineStatus === 'done' }"
+              >
+                <h1>Đã Hoàn Thành</h1>
+              </button>
+            </div>
+            <div class="searchBillOnlineCTN">
+              <label for="">Tìm Kiếm:</label>
+              <input type="text" placeholder="Mã hoá đơn" />
+              <div class="searchICON">
+                <i class="fa fa-search" aria-hidden="true"></i>
+              </div>
+            </div>
+          </div>
+          <div class="mainListSearch">
+            <h1>Số lượng: 3</h1>
+            <BillCardDoing></BillCardDoing>
+            <BillCardDone></BillCardDone>
+          </div>
+        </div>
       </div>
     </Container>
   </template>
@@ -171,6 +204,8 @@ import FoodCard from "../components/Cards/FoodCard.vue";
 import BaseModel from "@/components/Models/BaseModel.vue";
 import SuccessCard from "@/components/Cards/SuccessCard.vue";
 import ErrorCard from "@/components/Cards/ErrorCard.vue";
+import BillCardDoing from "@/components/Cards/BillCardDoing.vue";
+import BillCardDone from "@/components/Cards/BillCardDone.vue";
 export default {
   components: {
     ErrorPage,
@@ -180,6 +215,8 @@ export default {
     BaseModel,
     SuccessCard,
     ErrorCard,
+    BillCardDoing,
+    BillCardDone,
   },
   data() {
     return {
@@ -188,6 +225,8 @@ export default {
       showCashierBill: false,
       isPayMentSuccess: false,
       isPayMentError: false,
+
+      onlineStatus: "doing",
     };
   },
   methods: {
@@ -260,6 +299,75 @@ export default {
 </script>
 
 <style scoped>
+.mainListSearch {
+  display: flex;
+  flex-direction: column;
+  gap: 1rem;
+}
+
+.mainListSearch > h1 {
+  font-size: 1.5rem;
+  color: var(--white);
+}
+.searchBillOnlineCTN {
+  display: flex;
+  align-items: center;
+  gap: 1rem;
+}
+.searchBillOnlineCTN label {
+  font-size: 1.5rem;
+  color: var(--white);
+  font-weight: bold;
+}
+
+.searchICON {
+  padding: 0.5rem;
+  border-radius: 50%;
+  background: var(--yellow);
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  cursor: pointer;
+}
+
+.searchBillOnlineCTN i {
+  font-size: 1.5rem;
+  font-weight: bold;
+  color: var(--dark);
+}
+
+.searchBillOnlineCTN input {
+  border-radius: var(--radius);
+  padding: 0.5rem 1rem;
+  font-size: 1.5rem;
+  font-weight: bold;
+  letter-spacing: 1px;
+  border: none;
+  color: var(--dark);
+}
+.searchBillOnlineCTN input:focus {
+  outline: none;
+}
+
+.done,
+.doing {
+  border-radius: var(--radius);
+  background: var(--white);
+  padding: 0.5rem 1.5rem;
+  cursor: pointer;
+  border: none;
+}
+
+.done.active,
+.doing.active {
+  background: var(--blue);
+}
+
+.done > h1,
+.doing > h1 {
+  font-size: 1.5rem;
+  color: var(--dark);
+}
 .CashierSellBTN {
   background: var(--stt-green);
   border-radius: var(--radius);
@@ -399,6 +507,7 @@ export default {
 .mainListBTNS {
   display: flex;
   justify-content: space-between;
+  align-items: center;
 }
 .section-btns {
   display: flex;
