@@ -2,7 +2,11 @@
   <template v-if="this.isLogin && this.userRole === 'admin'">
     <Container class="CHCTN">
       <div class="CHMenuAboveCTN">
-        <i class="fa fa-bars" aria-hidden="true"></i>
+        <i
+          @click="this.isOpenMenu = true"
+          class="fa fa-bars"
+          aria-hidden="true"
+        ></i>
         <button @click="logout" class="logoutBTN">
           <h1>Đăng Xuất</h1>
         </button>
@@ -142,16 +146,41 @@
             <div class="searchBillOnlineCTN">
               <label for="">Tìm Kiếm:</label>
               <input type="text" placeholder="Mã hoá đơn" />
-              <div class="searchICON">
+              <div @click="searchByBIllID" class="searchICON">
                 <i class="fa fa-search" aria-hidden="true"></i>
               </div>
             </div>
           </div>
           <div class="mainListSearch">
             <h1>Số lượng: 3</h1>
-            <BillCardDoing></BillCardDoing>
-            <BillCardDone></BillCardDone>
+            <BillCardDoing v-if="this.onlineStatus === 'doing'"></BillCardDoing>
+            <BillCardDone v-if="this.onlineStatus === 'done'"></BillCardDone>
           </div>
+        </div>
+      </div>
+
+      <div v-if="this.isOpenMenu" class="CASHIERMENU">
+        <i
+          @click="this.isOpenMenu = false"
+          class="fa fa-times"
+          aria-hidden="true"
+        ></i>
+        <div class="MENUBTNS">
+          <button>
+            <h1>Lên Lịch Bán Hàng</h1>
+          </button>
+          <button>
+            <h1>Doanh Thu</h1>
+          </button>
+          <button>
+            <h1>Lịch Sử</h1>
+          </button>
+          <button>
+            <h1>Nhập Xuất Kho</h1>
+          </button>
+          <button>
+            <h1>Quầy Giao Hàng</h1>
+          </button>
         </div>
       </div>
     </Container>
@@ -220,6 +249,7 @@ export default {
   },
   data() {
     return {
+      isOpenMenu: false,
       status: "rice",
       statusSell: "offline",
       showCashierBill: false,
@@ -230,6 +260,7 @@ export default {
     };
   },
   methods: {
+    searchByBIllID() {},
     onSellClick() {
       if (this.BillProducts.length !== 0) {
         this.showCashierBill = true;
@@ -299,6 +330,52 @@ export default {
 </script>
 
 <style scoped>
+.MENUBTNS {
+  align-self: center;
+  display: flex;
+  flex-direction: column;
+  gap: 2rem;
+  justify-content: center;
+  align-items: center;
+}
+
+.MENUBTNS > button {
+  width: 100%;
+  border-radius: var(--radius);
+  border: var(--border_lg) solid var(--dark);
+  background: var(--white);
+  padding: 0.5rem 1.5rem;
+  transition: 0.2s all ease-in;
+  cursor: pointer;
+}
+
+.MENUBTNS > button:hover {
+  background: var(--yellow);
+}
+
+.MENUBTNS > button h1 {
+  font-size: 1.5rem;
+  color: var(--dark);
+}
+.CASHIERMENU {
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  background: var(--white);
+  display: flex;
+  flex-direction: column;
+  padding: 3rem 2rem;
+  gap: 3rem;
+}
+
+.CASHIERMENU i {
+  font-size: 3rem;
+  font-weight: bold;
+  color: var(--dark);
+  cursor: pointer;
+}
 .mainListSearch {
   display: flex;
   flex-direction: column;
@@ -454,7 +531,9 @@ export default {
   font-size: 1.5rem;
 }
 .CHCTN {
+  position: relative;
   padding: 3rem 2rem !important;
+  transition: 0.4s all ease-in;
 }
 .CHUnderMenuBTNS {
   display: flex;
