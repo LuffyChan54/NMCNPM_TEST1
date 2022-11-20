@@ -1,19 +1,27 @@
 <template>
   <template v-if="this.isLogin && this.userRole === 'admin'">
-    <Container>
+    <Container class="CHCTN">
       <div class="CHMenuAboveCTN">
         <i class="fa fa-bars" aria-hidden="true"></i>
-        <button class="logoutBTN">
+        <button @click="logout" class="logoutBTN">
           <h1>Đăng Xuất</h1>
         </button>
       </div>
 
       <div class="CHUnderMenuCTN">
         <div class="CHUnderMenuBTNS">
-          <button class="offline">
+          <button
+            :class="{ active: this.statusSell === 'offline' }"
+            class="offline"
+            @click="this.statusSell = 'offline'"
+          >
             <h1>OFFLINE</h1>
           </button>
-          <button class="online">
+          <button
+            :class="{ active: this.statusSell === 'online' }"
+            class="online"
+            @click="this.statusSell = 'online'"
+          >
             <h1>ONLINE</h1>
           </button>
         </div>
@@ -77,7 +85,7 @@
                 Không Có Gas</SSButton
               >
             </div>
-            <button class="sellBTN">
+            <button @click="onSellClick" class="sellBTN">
               <h1>BÁN</h1>
             </button>
           </div>
@@ -116,6 +124,43 @@
     </Container>
   </template>
   <ErrorPage v-else></ErrorPage>
+
+  <teleport to="body" v-if="this.showCashierBill">
+    <BaseModel @closeModel="successPayment">
+      <div
+        class="CashierBillOverView"
+        v-if="!this.isPayMentSuccess && !this.isPayMentError"
+      >
+        <div class="CHCheckBill">
+          <h1>Xác Nhận</h1>
+        </div>
+        <div class="productContainer">
+          <template v-for="product in BillProducts" :key="product.id">
+            <h1 class="ProductName">{{ product.name }}</h1>
+            <h1>{{ product.quantity }}</h1>
+            <h1>{{ product.total }}đ</h1>
+          </template>
+        </div>
+        <div class="rulerContainer"></div>
+        <div class="totalContainer">
+          <h1>Tổng</h1>
+          <h1>{{ this.totalCost }}đ</h1>
+        </div>
+        <button @click="doAdminPayment" class="CashierSellBTN">
+          <h1>In Hoá Đơn</h1>
+        </button>
+      </div>
+      <SuccessCard
+        v-if="this.isPayMentSuccess"
+        @onClickSuccessBTN="successPayment"
+      >
+        <h1>Thành Công</h1>
+      </SuccessCard>
+      <ErrorCard v-if="this.isPayMentError">
+        <h1>Thanh Toán Thất Bại</h1>
+      </ErrorCard>
+    </BaseModel>
+  </teleport>
 </template>
 
 <script>
@@ -123,19 +168,54 @@ import ErrorPage from "./ErrorPage.vue";
 import Container from "../components/Containers/Container.vue";
 import SSButton from "../components/Buttons/SectionBTN.vue";
 import FoodCard from "../components/Cards/FoodCard.vue";
+import BaseModel from "@/components/Models/BaseModel.vue";
+import SuccessCard from "@/components/Cards/SuccessCard.vue";
+import ErrorCard from "@/components/Cards/ErrorCard.vue";
 export default {
   components: {
     ErrorPage,
     Container,
     SSButton,
     FoodCard,
+    BaseModel,
+    SuccessCard,
+    ErrorCard,
   },
   data() {
     return {
       status: "rice",
+      statusSell: "offline",
+      showCashierBill: false,
+      isPayMentSuccess: false,
+      isPayMentError: false,
     };
   },
   methods: {
+    onSellClick() {
+      if (this.BillProducts.length !== 0) {
+        this.showCashierBill = true;
+      }
+    },
+    successPayment() {
+      this.showCashierBill = false;
+      this.isPayMentSuccess = false;
+      this.isPayMentError = false;
+    },
+    doAdminPayment(event) {
+      event.preventDefault();
+      this.$store
+        .dispatch("doAdminPayment")
+        .then(() => {
+          this.isPayMentSuccess = true;
+        })
+        .catch(() => {
+          this.isPayMentError = true;
+        });
+    },
+    logout() {
+      this.$store.dispatch("logout");
+      this.$router.push("/");
+    },
     onClickFoodBTN(event, val) {
       event.preventDefault();
       this.status = val;
@@ -151,6 +231,12 @@ export default {
     },
   },
   computed: {
+    totalCost() {
+      return this.$store.state.totalCost;
+    },
+    BillProducts() {
+      return this.$store.getters.getProductCahierBill();
+    },
     userRole() {
       return this.$store.state.account.role;
     },
@@ -174,6 +260,146 @@ export default {
 </script>
 
 <style scoped>
+.CashierSellBTN {
+  background: var(--stt-green);
+  border-radius: var(--radius);
+  border: var(--border_lg) solid var(--dark);
+  padding: 0.5rem 1.5rem;
+  cursor: pointer;
+}
+
+.CashierSellBTN > h1 {
+  font-size: 1.5rem;
+  color: var(--white);
+}
+.productContainer {
+  max-height: 15rem;
+  max-width: 100%;
+  display: grid;
+  grid-template-columns: 2fr 1fr 2fr;
+  gap: 0.5rem;
+  justify-items: end;
+  color: var(--dark);
+  overflow-x: hidden;
+  overflow-y: auto;
+}
+
+.productContainer .ProductName {
+  justify-self: start;
+}
+
+.rulerContainer {
+  width: 100%;
+  height: 0.5rem;
+  background: var(--yellow);
+}
+.totalContainer {
+  width: 100%;
+  display: flex;
+  justify-content: space-between;
+  color: var(--dark);
+}
+.CHCheckBill {
+  padding: 0.5rem 1.5rem;
+  width: fit-content;
+  border-radius: var(--radius);
+  background: var(--yellow);
+}
+
+.CHCheckBill > h1 {
+  font-size: 1.5rem;
+  color: var(--dark);
+}
+.CashierBillOverView {
+  border-radius: var(--radius);
+  background: var(--white);
+  padding: 1rem;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  gap: 1rem;
+}
+.CHMenuAboveCTN {
+  display: flex;
+  justify-content: space-between;
+  margin-bottom: 1rem;
+  align-items: center;
+}
+
+.CHMenuAboveCTN > i {
+  font-size: 2rem;
+  cursor: pointer;
+  color: var(--dark);
+}
+
+.CHMenuAboveCTN > button {
+  border: var(--border_lg) solid var(--dark);
+  border-radius: var(--radius);
+  background: var(--white);
+  padding: 0.5rem 1.5rem;
+  cursor: pointer;
+}
+
+.CHMenuAboveCTN > button > h1 {
+  color: var(--dark);
+  font-size: 1.5rem;
+}
+.CHCTN {
+  padding: 3rem 2rem !important;
+}
+.CHUnderMenuBTNS {
+  display: flex;
+  gap: 1.5rem;
+}
+
+.CHUnderMenuBTNS > button {
+  border: none;
+  border-top-left-radius: var(--radius);
+  border-top-right-radius: var(--radius);
+  background: var(--yellow);
+  padding: 0.5rem 1.5rem;
+  cursor: pointer;
+}
+
+.CHUnderMenuBTNS > button.active {
+  background: var(--dark);
+}
+
+.CHUnderMenuBTNS > button.active > h1 {
+  color: var(--yellow);
+}
+
+.CHUnderMenuBTNS > button > h1 {
+  font-size: 1.5rem;
+  color: var(--dark);
+}
+.mainCTN {
+  padding: 2rem 1rem;
+  background: var(--dark);
+  display: flex;
+  flex-direction: column;
+  gap: 2rem;
+  border-top-right-radius: var(--radius);
+  border-bottom-left-radius: var(--radius);
+  border-bottom-right-radius: var(--radius);
+}
+.sellBTN {
+  padding: 0.5rem 1rem;
+  border: var(--border_md) solid var(--white);
+  border-radius: var(--radius);
+  background: var(--stt-green);
+  cursor: pointer;
+}
+
+.sellBTN > h1 {
+  font-size: 1.5rem;
+  color: var(--white);
+}
+.mainListBTNS {
+  display: flex;
+  justify-content: space-between;
+}
 .section-btns {
   display: flex;
   gap: 1.5rem;
@@ -186,9 +412,9 @@ export default {
   width: 100%;
   display: grid;
   grid-auto-flow: column;
-  gap: 1rem;
+  gap: 2rem;
   overflow-x: auto;
   grid-auto-columns: 21%;
-  padding: 1rem 0.5rem;
+  padding: 1rem 0rem;
 }
 </style>

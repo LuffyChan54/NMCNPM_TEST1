@@ -405,12 +405,85 @@ const store = createStore({
 
       //The id and quantity of each item user choosed! (>=1)
       qSelected: {},
+
+      //IMPROVE CODE
+      RiceProduct: [],
+      NoodlesProduct: [],
+      CakeProduct: [],
+      GasProduct: [],
+      NoGasProduct: [],
+
+      //Products in CASHIER bill
+      ProductsAdminBill: [],
     };
   },
   getters: {
+    //CASHIER GET PRODUCTS IN CASHIER BILL
+    getProductCahierBill: (state, getters) => () => {
+      state.ProductsAdminBill = [];
+      getters.getProductSelected().forEach((product) => {
+        let obj = {};
+        obj.name = product.name;
+        obj.quantity = state.qSelected[product.id];
+        obj.total = obj.quantity * product.price;
+        state.ProductsAdminBill.push(obj);
+      });
+
+      return state.ProductsAdminBill;
+    },
+
     //START USER CASHIER GET TYPE PRODUCT WILL BE SOLD TODAY BY TYPE
     getTypeArr: (state) => (type) => {
-      return state.products.filter((product) => product.type === type);
+      if (type === "rice") {
+        if (state.RiceProduct.length !== 0) {
+          return state.RiceProduct;
+        } else {
+          state.RiceProduct = state.products.filter(
+            (product) => product.type === type
+          );
+          return state.RiceProduct;
+        }
+      }
+      if (type === "noodles") {
+        if (state.NoodlesProduct.length !== 0) {
+          return state.NoodlesProduct;
+        } else {
+          state.NoodlesProduct = state.products.filter(
+            (product) => product.type === type
+          );
+          return state.NoodlesProduct;
+        }
+      }
+      if (type === "cake") {
+        if (state.CakeProduct.length !== 0) {
+          return state.CakeProduct;
+        } else {
+          state.CakeProduct = state.products.filter(
+            (product) => product.type === type
+          );
+          return state.CakeProduct;
+        }
+      }
+      if (type === "gas") {
+        if (state.GasProduct.length !== 0) {
+          return state.GasProduct;
+        } else {
+          state.GasProduct = state.products.filter(
+            (product) => product.type === type
+          );
+          return state.GasProduct;
+        }
+      }
+      if (type === "noGas") {
+        if (state.NoGasProduct.length !== 0) {
+          return state.NoGasProduct;
+        } else {
+          state.NoGasProduct = state.products.filter(
+            (product) => product.type === type
+          );
+          return state.NoGasProduct;
+        }
+      }
     },
     //START USER CASHIER GET PRODUCT SELECTED
     getqSelected: (state) => (id) => {
@@ -438,20 +511,22 @@ const store = createStore({
         return;
       }
 
-      let type = this.getters.getProduct(id).type;
-      if (type === "gas" || type === "noGas") {
-        let check = false;
-        Object.keys(state.qSelected).forEach((elid) => {
-          if (
-            this.getters.getProduct(elid).type === "rice" ||
-            this.getters.getProduct(elid).type === "noodles" ||
-            this.getters.getProduct(elid).type === "cake"
-          ) {
-            check = true;
+      if (state.account.role === "user") {
+        let type = this.getters.getProduct(id).type;
+        if (type === "gas" || type === "noGas") {
+          let check = false;
+          Object.keys(state.qSelected).forEach((elid) => {
+            if (
+              this.getters.getProduct(elid).type === "rice" ||
+              this.getters.getProduct(elid).type === "noodles" ||
+              this.getters.getProduct(elid).type === "cake"
+            ) {
+              check = true;
+            }
+          });
+          if (!check) {
+            return;
           }
-        });
-        if (!check) {
-          return;
         }
       }
 
@@ -460,7 +535,8 @@ const store = createStore({
       } else {
         if (
           state.totalCost + this.getters.getProduct(id).price <=
-          state.account.money
+            state.account.money ||
+          state.account.role === "admin"
         ) {
           this.dispatch("updateTypeSelected", { status: "icr", id });
 
@@ -480,31 +556,33 @@ const store = createStore({
         return;
       }
 
-      let type = this.getters.getProduct(id).type;
-      if (
-        state.qSelected[id] === 1 &&
-        (type === "rice" || type === "noodles" || type === "cake")
-      ) {
-        let check = false;
-        Object.keys(state.qSelected).forEach((elid) => {
-          if (
-            elid !== id &&
-            (this.getters.getProduct(elid).type === "rice" ||
-              this.getters.getProduct(elid).type === "noodles" ||
-              this.getters.getProduct(elid).type === "cake")
-          ) {
-            check = true;
+      if (state.account.role === "user") {
+        let type = this.getters.getProduct(id).type;
+        if (
+          state.qSelected[id] === 1 &&
+          (type === "rice" || type === "noodles" || type === "cake")
+        ) {
+          let check = false;
+          Object.keys(state.qSelected).forEach((elid) => {
+            if (
+              elid !== id &&
+              (this.getters.getProduct(elid).type === "rice" ||
+                this.getters.getProduct(elid).type === "noodles" ||
+                this.getters.getProduct(elid).type === "cake")
+            ) {
+              check = true;
+            }
+          });
+          if (!check) {
+            state.qSelected = {};
+            state.totalCost = 0;
+            state.qTypeSelected.rice = 0;
+            state.qTypeSelected.noodles = 0;
+            state.qTypeSelected.cake = 0;
+            state.qTypeSelected.gas = 0;
+            state.qTypeSelected.noGas = 0;
+            return;
           }
-        });
-        if (!check) {
-          state.qSelected = {};
-          state.totalCost = 0;
-          state.qTypeSelected.rice = 0;
-          state.qTypeSelected.noodles = 0;
-          state.qTypeSelected.cake = 0;
-          state.qTypeSelected.gas = 0;
-          state.qTypeSelected.noGas = 0;
-          return;
         }
       }
 
@@ -524,28 +602,30 @@ const store = createStore({
         return;
       }
 
-      let type = this.getters.getProduct(id).type;
-      if (type === "rice" || type === "noodles" || type === "cake") {
-        let check = false;
-        Object.keys(state.qSelected).forEach((elid) => {
-          if (
-            elid !== id &&
-            (this.getters.getProduct(elid).type === "rice" ||
-              this.getters.getProduct(elid).type === "noodles" ||
-              this.getters.getProduct(elid).type === "cake")
-          ) {
-            check = true;
+      if (state.account.role === "user") {
+        let type = this.getters.getProduct(id).type;
+        if (type === "rice" || type === "noodles" || type === "cake") {
+          let check = false;
+          Object.keys(state.qSelected).forEach((elid) => {
+            if (
+              elid !== id &&
+              (this.getters.getProduct(elid).type === "rice" ||
+                this.getters.getProduct(elid).type === "noodles" ||
+                this.getters.getProduct(elid).type === "cake")
+            ) {
+              check = true;
+            }
+          });
+          if (!check) {
+            state.qSelected = {};
+            state.totalCost = 0;
+            state.qTypeSelected.rice = 0;
+            state.qTypeSelected.noodles = 0;
+            state.qTypeSelected.cake = 0;
+            state.qTypeSelected.gas = 0;
+            state.qTypeSelected.noGas = 0;
+            return;
           }
-        });
-        if (!check) {
-          state.qSelected = {};
-          state.totalCost = 0;
-          state.qTypeSelected.rice = 0;
-          state.qTypeSelected.noodles = 0;
-          state.qTypeSelected.cake = 0;
-          state.qTypeSelected.gas = 0;
-          state.qTypeSelected.noGas = 0;
-          return;
         }
       }
 
@@ -761,7 +841,8 @@ const store = createStore({
         case "icr":
           if (
             state.totalCost + this.getters.getProduct(id).price <=
-            this.state.account.money
+              this.state.account.money ||
+            state.account.role === "admin"
           ) {
             state.qTypeSelected[this.getters.getProduct(id).type]++;
             state.totalCost += this.getters.getProduct(id).price;
@@ -785,6 +866,29 @@ const store = createStore({
 
           break;
       }
+    },
+
+    //CASHIER PAYMENT=========================
+    doAdminPayment({ commit, state }) {
+      commit;
+      return new Promise((resolve, reject) => {
+        if (state.ProductsAdminBill.length !== 0) {
+          const arrIDSelected = Object.keys(state.qSelected);
+          arrIDSelected.forEach((id) => {
+            this.getters.getProduct(id).total -= state.qSelected[id];
+          });
+          state.qTypeSelected.rice = 0;
+          state.qTypeSelected.noodles = 0;
+          state.qTypeSelected.cake = 0;
+          state.qTypeSelected.gas = 0;
+          state.qTypeSelected.noGas = 0;
+          state.qSelected = {};
+          state.totalCost = 0;
+          resolve("Success");
+        } else {
+          reject("Fail");
+        }
+      });
     },
   },
 });
