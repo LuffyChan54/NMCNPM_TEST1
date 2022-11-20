@@ -29,7 +29,7 @@ const store = createStore({
         email: "LuffyChan@gmail.com",
         img: "avt.jpg",
         money: 100000,
-        role: "user",
+        role: "admin",
       },
 
       //IDPOSITIONS valid to put all the food user choosed! #REQUEST TO GET
@@ -382,7 +382,7 @@ const store = createStore({
       showScreenBill: false, //check to print bill
       openLoginForm: false, //check to Open login form
       isValidPayMent: true, //check to valid payment
-      isLogin: false, //check LOGIN
+      isLogin: true, //check LOGIN
       isSuccessPayment: false, //check to alert success or fail of payment
 
       //Time set to wait user accept or deny pay
@@ -408,15 +408,19 @@ const store = createStore({
     };
   },
   getters: {
+    //START USER CASHIER GET TYPE PRODUCT WILL BE SOLD TODAY BY TYPE
     getTypeArr: (state) => (type) => {
       return state.products.filter((product) => product.type === type);
     },
+    //START USER CASHIER GET PRODUCT SELECTED
     getqSelected: (state) => (id) => {
       return state.qSelected[id] || 0;
     },
+    //START USER CASHIER ASSISTANT GET PRODUCT BY ID
     getProduct: (state) => (id) => {
       return state.products.filter((product) => product.id === id)[0];
     },
+    //START USER CASHIER GET PRODUCT SELECTED
     getProductSelected: (state, getters) => () => {
       const productsID = Object.keys(state.qSelected);
       let rs = [];
@@ -427,6 +431,7 @@ const store = createStore({
     },
   },
   mutations: {
+    //START USER CHANGE PRODUCT SELECTED!
     icrQSelected(state, id) {
       if (!state.isLogin) {
         state.openLoginForm = true;
@@ -551,18 +556,7 @@ const store = createStore({
     },
   },
   actions: {
-    forgetPW({ commit, state }, { email }) {
-      commit;
-      state;
-      console.log(email);
-    },
-    checkKeepLogin({ commit, state }) {
-      commit;
-
-      if (localStorage.getItem("isKeepLogin") === "true") {
-        state.isLogin = true;
-      }
-    },
+    //START USER CASHIER ASSISTANT LOGIN==================
     login({ commit, state }, { email, pw, rememberMe }) {
       commit;
       state;
@@ -579,6 +573,18 @@ const store = createStore({
         }
       });
     },
+    resetOpenLoginForm({ commit, state }) {
+      commit;
+      state.openLoginForm = false;
+    },
+    checkKeepLogin({ commit, state }) {
+      commit;
+
+      if (localStorage.getItem("isKeepLogin") === "true") {
+        state.isLogin = true;
+      }
+    },
+    //START USER REGISTER===============
     register({ commit, state }, { email, fullname, pw }) {
       commit;
       return new Promise((resolve, reject) => {
@@ -591,25 +597,19 @@ const store = createStore({
         }
       });
     },
-    resetUserBillInfo({ commit, state }) {
-      commit;
-      state.UserBillInfo = [];
-    },
-    searchBillByDate({ commit, state }, { year, month, day }) {
+    //START USER FORGET PASSWORD========
+    forgetPW({ commit, state }, { email }) {
       commit;
       state;
-      state.UserBillInfo = [];
-      state.USERBILLS.forEach((el) => {
-        if (el.day === day && el.month === month && el.year === year) {
-          state.UserBillInfo.push(el);
-        }
-      });
+      console.log(email);
     },
+    //START USER CASHIER ASSISTANT LOGOUT=================
     logout({ commit, state }) {
       localStorage.removeItem("isKeepLogin");
       commit;
       state.isLogin = false;
     },
+    //START USER CHANGE INFO USER======
     changeUserName({ commit, state }, newName) {
       commit;
       state.account.fullName = newName;
@@ -625,6 +625,22 @@ const store = createStore({
         }
       });
     },
+    //START USER HISTORY==========
+    resetUserBillInfo({ commit, state }) {
+      commit;
+      state.UserBillInfo = [];
+    },
+    searchBillByDate({ commit, state }, { year, month, day }) {
+      commit;
+      state;
+      state.UserBillInfo = [];
+      state.USERBILLS.forEach((el) => {
+        if (el.day === day && el.month === month && el.year === year) {
+          state.UserBillInfo.push(el);
+        }
+      });
+    },
+    //START USER ADDMONEY TO ACCOUNT====
     addMoney({ commit, state }, cardCode) {
       commit;
       return new Promise((resolve, reject) => {
@@ -636,6 +652,7 @@ const store = createStore({
         }
       });
     },
+    //START USER PAYMENT===========
     changeShowScreenBill({ commit, state }) {
       commit;
       state.showScreenBill = false;
@@ -737,10 +754,7 @@ const store = createStore({
       commit;
       state.isValidPayMent = true;
     },
-    resetOpenLoginForm({ commit, state }) {
-      commit;
-      state.openLoginForm = false;
-    },
+    //START USER UPDATE TYPE SELECTED===
     updateTypeSelected({ commit, state }, { status, id }) {
       commit;
       switch (status) {

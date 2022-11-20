@@ -37,6 +37,10 @@ export default {
   font-size: 2rem;
 }
 
+.SectionBTN.cashier > h1 {
+  font-size: 1.5rem;
+}
+
 .SectionBTN.active {
   background: var(--blue);
 }

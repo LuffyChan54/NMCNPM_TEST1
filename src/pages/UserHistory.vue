@@ -1,5 +1,5 @@
 <template>
-  <template v-if="this.isLogin">
+  <template v-if="this.isLogin && this.userRole === 'user'">
     <container>
       <div class="UserHistoryCTN">
         <div class="UserHistoryHeader">
@@ -75,6 +75,9 @@ export default {
     };
   },
   computed: {
+    userRole() {
+      return this.$store.state.account.role;
+    },
     isLogin() {
       return this.$store.state.isLogin;
     },

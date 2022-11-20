@@ -67,6 +67,10 @@ export default {
   box-shadow: 0px 2px 10px 5px rgba(47, 47, 47, 0.4);
 }
 
+.card--container h1 {
+  font-size: 1.5rem !important;
+}
+
 .card--container.active {
   background: var(--yellow);
 }
