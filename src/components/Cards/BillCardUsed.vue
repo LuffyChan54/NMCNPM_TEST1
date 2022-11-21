@@ -264,8 +264,8 @@ export default {
 }
 
 .productContainer {
-  max-height: 10rem;
-  max-width: 100%;
+  height: 5rem;
+  width: 100%;
   display: grid;
   grid-template-columns: 2fr 1fr 2fr;
   gap: 0.5rem;

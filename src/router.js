@@ -5,6 +5,7 @@ import UserInfo from "./pages/UserInfo.vue";
 import UserHistory from "./pages/UserHistory.vue";
 import CashierHome from "./pages/CashierHome.vue";
 import CashierTurnover from "./pages/CashierTurnover.vue";
+import CashierHistory from "./pages/CashierHistory.vue";
 const routes = [
   {
     path: "/",
@@ -30,6 +31,11 @@ const routes = [
     path: "/CashierTurnover",
     name: "cashier-turnover-route",
     component: CashierTurnover,
+  },
+  {
+    path: "/CashierHistory",
+    name: "cashier-history-route",
+    component: CashierHistory,
   },
 ];
 

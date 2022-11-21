@@ -175,7 +175,7 @@
           <button @click="goToCashierTurnover">
             <h1>Doanh Thu</h1>
           </button>
-          <button>
+          <button @click="goToCashierHistory">
             <h1>Lịch Sử</h1>
           </button>
           <button>
@@ -263,6 +263,10 @@ export default {
     };
   },
   methods: {
+    goToCashierHistory(event) {
+      event.preventDefault();
+      this.$router.push("/cashierhistory");
+    },
     goToCashierTurnover(event) {
       event.preventDefault();
       this.$router.push("/cashierturnover");
