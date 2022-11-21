@@ -166,10 +166,13 @@
           aria-hidden="true"
         ></i>
         <div class="MENUBTNS">
+          <button @click="this.isOpenMenu = false">
+            <h1>Trang Chủ</h1>
+          </button>
           <button>
             <h1>Lên Lịch Bán Hàng</h1>
           </button>
-          <button>
+          <button @click="goToCashierTurnover">
             <h1>Doanh Thu</h1>
           </button>
           <button>
@@ -260,6 +263,10 @@ export default {
     };
   },
   methods: {
+    goToCashierTurnover(event) {
+      event.preventDefault();
+      this.$router.push("/cashierturnover");
+    },
     searchByBIllID() {},
     onSellClick() {
       if (this.BillProducts.length !== 0) {
