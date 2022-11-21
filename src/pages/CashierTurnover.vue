@@ -21,7 +21,7 @@
           <button @click="goToCashierHome">
             <h1>Trang Chủ</h1>
           </button>
-          <button>
+          <button @click="goToCashierSchedule">
             <h1>Lên Lịch Bán Hàng</h1>
           </button>
           <button @click="this.isOpenMenu = false">
@@ -103,6 +103,10 @@ export default {
     },
   },
   methods: {
+    goToCashierSchedule(event) {
+      event.preventDefault();
+      this.$router.push("/cashierschedule");
+    },
     goToCashierHistory(event) {
       event.preventDefault();
       this.$router.push("/cashierhistory");

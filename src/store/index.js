@@ -29,7 +29,7 @@ const store = createStore({
         email: "LuffyChan@gmail.com",
         img: "avt.jpg",
         money: 100000,
-        role: "user",
+        role: "admin",
       },
 
       //IDPOSITIONS valid to put all the food user choosed! #REQUEST TO GET

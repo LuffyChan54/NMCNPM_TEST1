@@ -78,6 +78,7 @@ export default {
     },
     goToCashierSchedule(event) {
       event.preventDefault();
+      this.$router.push("/cashierschedule");
     },
     goToCashierTurnover(event) {
       event.preventDefault();
