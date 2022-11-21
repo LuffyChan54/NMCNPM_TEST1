@@ -76,26 +76,54 @@
           <button>
             <h1>Thêm Món Ăn</h1>
           </button>
-          <button>
+          <button @click="this.isUpload = true">
             <h1>Đăng Lên</h1>
           </button>
         </div>
       </div>
+      <SSSchedule
+        @isAllowChange="this.isUpload = false"
+        :isUpload="this.isUpload"
+        :indexDay="this.indexDay"
+      ></SSSchedule>
     </template>
   </SSCashierTemplate>
 </template>
 
 <script>
 import SSCashierTemplate from "@/components/Sections/SSCashierTemplate.vue";
+import SSSchedule from "@/components/Sections/SSSchedule.vue";
 export default {
   data() {
     return {
-      day: "Monday",
+      arrDays: [
+        "Sunday",
+        "Monday",
+        "Tuesday",
+        "Wednesday",
+        "Thursday",
+        "Friday",
+        "Saturday",
+      ],
+      isUpload: false,
+      today: "",
+      day: "",
       status: "rice",
     };
   },
+  computed: {
+    indexDay() {
+      return this.arrDays.indexOf(this.day);
+    },
+  },
   components: {
     SSCashierTemplate,
+    SSSchedule,
+  },
+  created() {
+    const date = new Date();
+    this.day = this.arrDays[date.getDay()];
+    this.today = this.day;
   },
 };
 </script>

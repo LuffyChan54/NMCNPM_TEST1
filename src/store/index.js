@@ -373,6 +373,261 @@ const store = createStore({
       //NUMBER VALID ID POS TO THIS PAYMENT #REQUEST TO GET
       NumberValidIDPOS: 10,
 
+      //Products in schedule #REQUEST TO GET
+      //NOTYPE
+      productsSchedule: [
+        {
+          day: 1,
+          products: [
+            {
+              id: "r1",
+              name: "Cơm chiên",
+              img: "comchien.jpg",
+              type: "rice",
+              price: 25000,
+              total: 50,
+            },
+            {
+              id: "r2",
+              name: "Cơm chiên",
+              img: "comchien.jpg",
+              type: "rice",
+              price: 35000,
+              total: 30,
+            },
+            {
+              id: "r3",
+              name: "Cơm chiên",
+              img: "comchien.jpg",
+              type: "rice",
+              price: 25000,
+              total: 20,
+            },
+            {
+              id: "r4",
+              name: "Cơm chiên",
+              img: "comchien.jpg",
+              type: "rice",
+              price: 25000,
+              total: 50,
+            },
+            {
+              id: "r5",
+              name: "Cơm chiên",
+              img: "comchien.jpg",
+              type: "rice",
+              price: 35000,
+              total: 30,
+            },
+            {
+              id: "r6",
+              name: "Cơm chiên",
+              img: "comchien.jpg",
+              type: "rice",
+              price: 25000,
+              total: 20,
+            },
+          ],
+        },
+        {
+          day: 2,
+          products: [
+            {
+              id: "n1",
+              name: "Cơm chiên",
+              img: "comchien.jpg",
+              type: "rice",
+              price: 25000,
+              total: 50,
+            },
+            {
+              id: "n2",
+              name: "Cơm chiên",
+              img: "comchien.jpg",
+              type: "rice",
+              price: 35000,
+              total: 30,
+            },
+            {
+              id: "n3",
+              name: "Cơm chiên",
+              img: "comchien.jpg",
+              type: "rice",
+              price: 25000,
+              total: 20,
+            },
+            {
+              id: "n4",
+              name: "Cơm chiên",
+              img: "comchien.jpg",
+              type: "rice",
+              price: 25000,
+              total: 50,
+            },
+            {
+              id: "n5",
+              name: "Cơm chiên",
+              img: "comchien.jpg",
+              type: "rice",
+              price: 35000,
+              total: 30,
+            },
+            {
+              id: "n6",
+              name: "Cơm chiên",
+              img: "comchien.jpg",
+              type: "rice",
+              price: 25000,
+              total: 20,
+            },
+          ],
+        },
+        {
+          day: 3,
+          products: [
+            {
+              id: "c1",
+              name: "Cơm chiên",
+              img: "comchien.jpg",
+              type: "rice",
+              price: 25000,
+              total: 50,
+            },
+            {
+              id: "c2",
+              name: "Cơm chiên",
+              img: "comchien.jpg",
+              type: "rice",
+              price: 35000,
+              total: 30,
+            },
+            {
+              id: "c3",
+              name: "Cơm chiên",
+              img: "comchien.jpg",
+              type: "rice",
+              price: 25000,
+              total: 20,
+            },
+            {
+              id: "c4",
+              name: "Cơm chiên",
+              img: "comchien.jpg",
+              type: "rice",
+              price: 25000,
+              total: 50,
+            },
+            {
+              id: "c5",
+              name: "Cơm chiên",
+              img: "comchien.jpg",
+              type: "rice",
+              price: 35000,
+              total: 30,
+            },
+            {
+              id: "c6",
+              name: "Cơm chiên",
+              img: "comchien.jpg",
+              type: "rice",
+              price: 25000,
+              total: 20,
+            },
+          ],
+        },
+      ],
+      //TYPED
+      productsTypedSche: [
+        {
+          day: 1,
+          products: {
+            rice: [
+              {
+                id: "r1",
+                name: "Cơm chiên",
+                img: "comchien.jpg",
+                type: "rice",
+                price: 25000,
+                total: 50,
+              },
+              {
+                id: "r2",
+                name: "Cơm chiên",
+                img: "comchien.jpg",
+                type: "rice",
+                price: 35000,
+                total: 30,
+              },
+            ],
+            noodles: [
+              {
+                id: "n1",
+                name: "Phở tái",
+                img: "noodles.jpg",
+                type: "noodles",
+                price: 25000,
+                total: 10,
+              },
+              {
+                id: "n2",
+                name: "Mì xào bò",
+                img: "noodles.jpg",
+                type: "noodles",
+                price: 35000,
+                total: 20,
+              },
+            ],
+            cake: [],
+            gas: [],
+            noGas: [],
+          },
+        },
+        {
+          day: 2,
+          products: {
+            rice: [
+              {
+                id: "r1",
+                name: "Cơm chiên",
+                img: "comchien.jpg",
+                type: "rice",
+                price: 25000,
+                total: 50,
+              },
+              {
+                id: "r2",
+                name: "Cơm chiên",
+                img: "comchien.jpg",
+                type: "rice",
+                price: 35000,
+                total: 30,
+              },
+            ],
+            noodles: [
+              {
+                id: "n1",
+                name: "Phở tái",
+                img: "noodles.jpg",
+                type: "noodles",
+                price: 25000,
+                total: 10,
+              },
+              {
+                id: "n2",
+                name: "Mì xào bò",
+                img: "noodles.jpg",
+                type: "noodles",
+                price: 35000,
+                total: 20,
+              },
+            ],
+            cake: [],
+            gas: [],
+            noGas: [],
+          },
+        },
+      ],
+
       //DATATEST ALL THE BILLS OF THIS USER! #WILL BE DELETED
       USERBILLS: [],
 
@@ -424,6 +679,20 @@ const store = createStore({
     };
   },
   getters: {
+    //CASHIER GET PRODUCTS IN SCHEDULE
+    getProductTypeSche: (state) => (day, type) => {
+      state.productsTypedSche.forEach((el) => {
+        if (el.day === day) {
+          return el.products[type];
+          // if (el.products[type].length !== 0) {
+          //   return el.products[type];
+          // }
+          // else{
+          //   //el.products[types].push()
+          // }
+        }
+      });
+    },
     //CASHIER GET BILL DOING
     getBillDoing: (state) => () => {
       state.BillsDoing = [];
