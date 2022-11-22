@@ -4,16 +4,16 @@
       >Chỉnh Sửa</CashierUnderBTN
     >
     <div class="CSCardCTN">
-      <div v-for="(product, idx) in products" :key="idx" class="CSCard">
+      <div v-for="(product, idx) in currProducts" :key="idx" class="CSCard">
         <div class="CSCardimgCTN">
-          <img :src="require(`../../assets/imgs/${product.img} `)" />
+          <img :src="require(`../../assets/imgs/${product.img}`)" />
         </div>
         <div class="CSCardContent">
           <div class="CSCardItem">
             <input
               :disabled="this.isChangeName === false"
               type="text"
-              value="Cơm Chiên"
+              v-model="product.name"
             />
             <i
               :style="{ visibility: this.isAllowChange ? 'unset' : 'hidden' }"
@@ -28,7 +28,7 @@
               <input
                 :disabled="this.isChangeQuantity === false"
                 type="number"
-                value="10"
+                :value="product.total"
               />
             </div>
             <i
@@ -44,7 +44,7 @@
               <input
                 :disabled="this.isChangePrice === false"
                 type="number"
-                value="25000"
+                :value="product.price"
                 step="1000"
               />
             </div>
@@ -55,7 +55,7 @@
               aria-hidden="true"
             ></i>
           </div>
-          <button>
+          <button @click="deleteProduct($event, idx)">
             <h1>Huỷ Món</h1>
           </button>
         </div>
@@ -65,6 +65,7 @@
 </template>
 
 <script>
+import _ from "lodash";
 import CashierUnderBTN from "../Buttons/CashierUnderBTN.vue";
 export default {
   data() {
@@ -73,10 +74,16 @@ export default {
       isChangeName: false,
       isChangeQuantity: false,
       isChangePrice: false,
+      products: [],
+      // currProducts: [],
     };
   },
-  emits: ["isAllowChange"],
+  emits: ["isAllowChange", "resetAddNew"],
   methods: {
+    deleteProduct(event, id) {
+      event.preventDefault();
+      this.currProducts.splice(id, 1);
+    },
     setIsAllowChange() {
       this.isAllowChange = true;
       this.$emit("isAllowChange");
@@ -86,17 +93,56 @@ export default {
     isUpload: Boolean,
     indexDay: Number,
     status: String,
+    sendObj: Boolean,
+    formAddNewInfo: Object,
   },
   components: {
     CashierUnderBTN,
   },
+  created() {
+    this.products = _.cloneDeep(this.$store.state.productsTypedSche);
+  },
   computed: {
-    products() {
-      ///
-      return this.$store.getters.getProductTypeSche(this.indexDay, this.status);
+    updateDayStatus() {
+      return { day: this.indexDay, stt: this.status };
+    },
+    currObj() {
+      if (this.products.length !== 0) {
+        return this.products[this.indexDay - 1];
+      } else {
+        return {};
+      }
+    },
+    currProducts() {
+      if (this.currObj !== {}) {
+        return this.currObj.products[this.status];
+      } else {
+        return [];
+      }
     },
   },
   watch: {
+    sendObj: {
+      handler(value) {
+        if (value === true) {
+          this.currObj.products[this.formAddNewInfo.type].push(
+            _.cloneDeep(this.formAddNewInfo)
+          );
+          this.$emit("resetAddNew");
+        }
+      },
+      immediate: true,
+    },
+    // updateDayStatus: {
+    //   handler(value) {
+    //     if (this.products.length !== 0) {
+    //       this.currObj = this.products[value.day - 1];
+    //       this.currProducts = this.currObj.products[value.stt];
+    //     }
+    //   },
+    //   immediate: true,
+    // },
+
     isUpload: {
       handler(value) {
         if (value === true) {
@@ -104,6 +150,9 @@ export default {
           this.isChangeName = false;
           this.isChangePrice = false;
           this.isChangeQuantity = false;
+          if (this.currProducts.length !== 0) {
+            this.$store.dispatch("cashierUpdateSche", this.currObj);
+          }
         }
       },
       immediate: true,

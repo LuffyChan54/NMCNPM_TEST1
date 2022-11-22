@@ -626,6 +626,46 @@ const store = createStore({
             noGas: [],
           },
         },
+        {
+          day: 3,
+          products: {
+            rice: [],
+            noodles: [],
+            cake: [],
+            gas: [],
+            noGas: [],
+          },
+        },
+        {
+          day: 4,
+          products: {
+            rice: [],
+            noodles: [],
+            cake: [],
+            gas: [],
+            noGas: [],
+          },
+        },
+        {
+          day: 5,
+          products: {
+            rice: [],
+            noodles: [],
+            cake: [],
+            gas: [],
+            noGas: [],
+          },
+        },
+        {
+          day: 6,
+          products: {
+            rice: [],
+            noodles: [],
+            cake: [],
+            gas: [],
+            noGas: [],
+          },
+        },
       ],
 
       //DATATEST ALL THE BILLS OF THIS USER! #WILL BE DELETED
@@ -1199,6 +1239,13 @@ const store = createStore({
           reject("Fail");
         }
       });
+    },
+
+    //CASHIER UPDATE SCHEDULE=================
+    cashierUpdateSche({ commit, state }, newObj) {
+      commit;
+      state.productsTypedSche[newObj.day - 1] = newObj;
+      console.log(newObj);
     },
   },
 });
