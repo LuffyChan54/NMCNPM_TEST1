@@ -668,6 +668,9 @@ const store = createStore({
         },
       ],
 
+      //PRODUCTS IMPORTED CASHIER #WILL BE DELETE
+      productImported: [],
+
       //DATATEST ALL THE BILLS OF THIS USER! #WILL BE DELETED
       USERBILLS: [],
 
@@ -1246,6 +1249,15 @@ const store = createStore({
       commit;
       state.productsTypedSche[newObj.day - 1] = newObj;
       console.log(newObj);
+    },
+
+    //CASHIER UPDATE PRODUCT IMPORTED
+    importProducts({ commit, state }, newArrProduct) {
+      commit;
+      newArrProduct.forEach((product) => {
+        state.productImported.push(product);
+      });
+      console.log(state.productImported);
     },
   },
 });

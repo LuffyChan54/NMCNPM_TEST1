@@ -30,7 +30,7 @@
           <button @click="goToCashierHistory">
             <h1>Lịch Sử</h1>
           </button>
-          <button>
+          <button @click="goToCashierExport">
             <h1>Nhập Xuất Kho</h1>
           </button>
           <button>
@@ -103,6 +103,10 @@ export default {
     },
   },
   methods: {
+    goToCashierExport(event) {
+      event.preventDefault();
+      this.$router.push("/cashierexport");
+    },
     goToCashierSchedule(event) {
       event.preventDefault();
       this.$router.push("/cashierschedule");

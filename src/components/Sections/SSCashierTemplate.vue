@@ -71,6 +71,7 @@ export default {
     },
     goToCashierExport(event) {
       event.preventDefault();
+      this.$router.push("/cashierexport");
     },
     goToCashierHistory(event) {
       event.preventDefault();
