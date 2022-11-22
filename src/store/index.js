@@ -1259,6 +1259,14 @@ const store = createStore({
       });
       console.log(state.productImported);
     },
+
+    //CASHIER SEARCH IMPORT PRODUCT BY DATE
+    searchProductIE({ commit, state }, { status, date }) {
+      commit;
+      state;
+      status;
+      date;
+    },
   },
 });
 

@@ -33,7 +33,7 @@
         </div>
         <div class="dateImport">
           <label for="">Ngày Nhập</label>
-          <input type="date" />
+          <input v-model="date" type="date" />
         </div>
 
         <div class="CEWrapperProduct">
@@ -93,15 +93,20 @@
           <h1>Nhập Hàng</h1>
         </button>
       </div>
+
+      <CSCEHistory v-if="this.status === 'History'"></CSCEHistory>
     </template>
   </SSCashierTemplate>
 </template>
 
 <script>
 import SSCashierTemplate from "@/components/Sections/SSCashierTemplate.vue";
+
+import CSCEHistory from "../components/Sections/SSCEHistory.vue";
 export default {
   data() {
     return {
+      date: "",
       status: "Import",
       ImportProduct: [
         {
@@ -118,12 +123,18 @@ export default {
   },
   components: {
     SSCashierTemplate,
+    CSCEHistory,
   },
   methods: {
     importProducts(event) {
       event.preventDefault();
-
+      this.ImportProduct.forEach((product) => {
+        product["date"] = this.date;
+      });
       this.$store.dispatch("importProducts", this.ImportProduct);
+
+      this.ImportProduct = [];
+      this.addImportProduct();
     },
     addImportProduct() {
       let obj = {
@@ -131,6 +142,7 @@ export default {
         source: "",
         quantity: "",
         totalCost: "",
+        status: "import",
         price: "",
         img: "comchien.jpg",
         type: "",
