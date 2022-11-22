@@ -18,21 +18,21 @@
 
       <div class="CETOPSearch">
         <label for="">Tìm Theo Ngày</label>
-        <input type="date" />
-        <div class="CEiconSearch">
+        <input v-model="this.date" type="date" />
+        <div @click="searchIEByDate" class="CEiconSearch">
           <i class="fa fa-search" aria-hidden="true"></i>
         </div>
       </div>
     </div>
 
-    <div class="CEunder">
-      <div class="CECard">
-        <h1>Coca cola</h1>
-        <h1>(Nước uống có gas)</h1>
-        <h1>32</h1>
-        <h1>300000đ</h1>
-        <h1>Công Ty A</h1>
-        <h1>20/11/2022</h1>
+    <div class="CEunder" v-if="this.data.length !== 0">
+      <div v-for="(product, idx) in data" :key="idx" class="CECard">
+        <h1>{{ product.name }}</h1>
+        <h1>({{ changeToNameType(product.type) }})</h1>
+        <h1>{{ product.quantity }}</h1>
+        <h1>{{ product.totalCost }}</h1>
+        <h1>{{ product.source }}</h1>
+        <h1>{{ converDate(product.date) }}</h1>
       </div>
     </div>
   </div>
@@ -43,7 +43,43 @@ export default {
   data() {
     return {
       status: "Import",
+      date: "",
+      data: [],
     };
+  },
+  methods: {
+    searchIEByDate() {
+      this.$store
+        .dispatch("searchHistoryIE", {
+          status: this.status,
+          date: this.date,
+        })
+        .then((arr) => {
+          this.data = arr;
+        })
+        .catch((err) => {
+          console.log(err);
+        });
+    },
+
+    changeToNameType(type) {
+      switch (type) {
+        case "rice":
+          return "Cơm";
+        case "noodles":
+          return "Các Món Nước";
+        case "cake":
+          return "Bánh Ngọt";
+        case "gas":
+          return "Nước Có Gas";
+        case "noGas":
+          return "Nước Không Có Gas";
+      }
+    },
+    converDate(date) {
+      const arr = date.split("-");
+      return `${arr[2]}/${arr[1]}/${arr[0]}`;
+    },
   },
 };
 </script>

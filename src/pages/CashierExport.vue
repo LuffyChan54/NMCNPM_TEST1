@@ -95,6 +95,10 @@
       </div>
 
       <CSCEHistory v-if="this.status === 'History'"></CSCEHistory>
+
+      <SSExportCashier v-if="this.status === 'Export'"></SSExportCashier>
+
+      <SSinventory v-if="this.status === 'Inventory'"></SSinventory>
     </template>
   </SSCashierTemplate>
 </template>
@@ -102,6 +106,8 @@
 <script>
 import SSCashierTemplate from "@/components/Sections/SSCashierTemplate.vue";
 
+import SSinventory from "@/components/Sections/SSinventory.vue";
+import SSExportCashier from "@/components/Sections/SSExportCashier.vue";
 import CSCEHistory from "../components/Sections/SSCEHistory.vue";
 export default {
   data() {
@@ -124,6 +130,8 @@ export default {
   components: {
     SSCashierTemplate,
     CSCEHistory,
+    SSExportCashier,
+    SSinventory,
   },
   methods: {
     importProducts(event) {

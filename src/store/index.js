@@ -1267,6 +1267,20 @@ const store = createStore({
       status;
       date;
     },
+
+    //CASHIER SEARCH HISTORY PRODUCT IE
+    searchHistoryIE({ commit, state }, { status, date }) {
+      commit;
+      state;
+      date;
+      return new Promise((resolve, reject) => {
+        if (status === "Import" || status === "Export") {
+          resolve([]);
+        } else {
+          reject("fail");
+        }
+      });
+    },
   },
 });
 
