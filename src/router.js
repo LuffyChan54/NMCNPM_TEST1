@@ -8,6 +8,7 @@ import CashierTurnover from "./pages/CashierTurnover.vue";
 import CashierHistory from "./pages/CashierHistory.vue";
 import CashierSchedule from "./pages/CashierSchedule.vue";
 import CashierExport from "./pages/CashierExport.vue";
+import CashierDelivery from "./pages/CashierDelivery.vue";
 const routes = [
   {
     path: "/",
@@ -49,6 +50,11 @@ const routes = [
     path: "/CashierExport",
     name: "cashier-export-route",
     component: CashierExport,
+  },
+  {
+    path: "/CashierDelivery",
+    name: "cashier-delivery-route",
+    component: CashierDelivery,
   },
 ];
 

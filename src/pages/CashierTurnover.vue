@@ -33,7 +33,7 @@
           <button @click="goToCashierExport">
             <h1>Nhập Xuất Kho</h1>
           </button>
-          <button>
+          <button @click="goToCashierDelivery">
             <h1>Quầy Giao Hàng</h1>
           </button>
         </div>
@@ -103,6 +103,10 @@ export default {
     },
   },
   methods: {
+    goToCashierDelivery(event) {
+      event.preventDefault();
+      this.$router.push("/cashierdelivery");
+    },
     goToCashierExport(event) {
       event.preventDefault();
       this.$router.push("/cashierexport");
