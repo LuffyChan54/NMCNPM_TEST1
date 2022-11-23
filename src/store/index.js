@@ -29,7 +29,7 @@ const store = createStore({
         email: "LuffyChan@gmail.com",
         img: "avt.jpg",
         money: 100000,
-        role: "assistant",
+        role: "admin",
       },
 
       //IDPOSITIONS valid to put all the food user choosed! #REQUEST TO GET
@@ -700,6 +700,9 @@ const store = createStore({
           ],
         },
       ],
+
+      //ASSISTANT REQUEST TO GET COLORS;
+      colors: ["#285430", "#F49D1A", "#497174", "#50577A", "#FF6464"],
 
       //PRODUCTS IMPORTED CASHIER #WILL BE DELETE
       productImported: [],

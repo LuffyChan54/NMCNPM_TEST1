@@ -2,7 +2,7 @@
   <template v-if="this.isLogin && this.isAssistant">
     <Container class="assistantCTN">
       <div class="ASmainCTN">
-        <button class="ASLogout">
+        <button @click="logout" class="ASLogout">
           <h1>Đăng xuất</h1>
         </button>
 
@@ -72,29 +72,40 @@
           </div>
 
           <div class="CTNPosEmpty">
-            <div class="PosCTN">
-              <h1 class="letter">A</h1>
-              <h1>4</h1>
+            <div
+              v-for="(pos, idx) in ArrPos"
+              :key="idx"
+              class="PosCTN"
+              @click="deleteArrPosEl($event, idx)"
+            >
+              <h1 :style="{ color: pos.color }" class="letter">
+                {{ pos.letter }}
+              </h1>
+              <h1>{{ pos.number }}</h1>
             </div>
           </div>
 
           <div class="ASinputCTN">
             <div class="ASinputPos">
-              <input type="text" />
-              <div class="ASIconCheck">
+              <input v-model="this.targetPos" type="text" />
+              <div @click="generatePos" class="ASIconCheck">
                 <i class="fa fa-check" aria-hidden="true"></i>
               </div>
             </div>
             <h1>Chọn Màu</h1>
             <div class="ASinputColors">
-              <div class="AScolor"></div>
-              <div class="AScolor"></div>
-              <div class="AScolor"></div>
-              <div class="AScolor"></div>
+              <div
+                v-for="(color, idx) in colors"
+                :key="idx"
+                :style="{ background: color }"
+                :class="{ active: this.indexCheckColor === idx }"
+                class="AScolor"
+                @click="pickColor($event, idx, color)"
+              ></div>
             </div>
           </div>
         </div>
-        <button class="ASaccept">
+        <button @click="updatePosEmpty" class="ASaccept">
           <h1>Xác Nhận</h1>
         </button>
       </div>
@@ -110,6 +121,10 @@ export default {
   data() {
     return {
       status: "bill",
+      targetColor: "",
+      targetPos: "",
+      indexCheckColor: "",
+      ArrPos: [],
     };
   },
   components: {
@@ -126,8 +141,39 @@ export default {
     ASSISTANTBILLS() {
       return this.$store.state.ASSISTANTBILLS;
     },
+    colors() {
+      return this.$store.state.colors;
+    },
   },
   methods: {
+    logout() {
+      this.$store.dispatch("logout");
+      this.$router.push("/");
+    },
+    deleteArrPosEl(event, index) {
+      event;
+      this.ArrPos.splice(index, 1);
+    },
+    updatePosEmpty() {
+      console.log(this.ArrPos);
+    },
+    pickColor(event, idx, color) {
+      event.preventDefault();
+      this.indexCheckColor = idx;
+      this.targetColor = color;
+    },
+    generatePos() {
+      let obj = {};
+      obj.id = this.targetPos;
+      obj.letter = this.targetPos[0];
+      obj.number = +this.targetPos.slice(1);
+      obj.color = this.targetColor;
+      obj.status = "empty";
+      this.ArrPos.push(obj);
+      this.targetColor = "";
+      this.targetPos = "";
+      this.indexCheckColor = "";
+    },
     checkProductDone(event, idB, idP) {
       event.preventDefault();
 
@@ -170,7 +216,7 @@ export default {
 .PosCTN {
   width: fit-content;
   display: flex;
-  gap: 1rem;
+  gap: 0.5rem;
   padding: 0.5rem;
   border: var(--border_lg) solid var(--dark);
   border-radius: var(--radius);
@@ -207,6 +253,7 @@ export default {
   font-weight: bold;
   letter-spacing: 1px;
   padding: 0.5rem 1.5rem;
+  color: var(--dark);
 }
 
 .ASIconCheck {
@@ -237,7 +284,12 @@ export default {
   height: 4rem;
   border-radius: var(--radius);
   background: var(--stt-green);
+
   cursor: pointer;
+}
+
+.AScolor.active {
+  border: var(--border_lg) solid var(--dark);
 }
 
 .ASaccept {
