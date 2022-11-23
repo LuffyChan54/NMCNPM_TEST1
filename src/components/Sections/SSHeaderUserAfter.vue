@@ -56,6 +56,13 @@ export default {
     ) {
       this.$router.push("/cashierhome");
     }
+
+    if (
+      this.$store.state.account.role === "assistant" &&
+      this.$store.state.isLogin
+    ) {
+      this.$router.push("/assistant");
+    }
   },
 };
 </script>

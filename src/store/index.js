@@ -29,7 +29,7 @@ const store = createStore({
         email: "LuffyChan@gmail.com",
         img: "avt.jpg",
         money: 100000,
-        role: "admin",
+        role: "assistant",
       },
 
       //IDPOSITIONS valid to put all the food user choosed! #REQUEST TO GET
@@ -668,6 +668,39 @@ const store = createStore({
         },
       ],
 
+      //BILL IN ASSISTANT REQUEST TO GET
+      ASSISTANTBILLS: [
+        {
+          idBill: "HD1234",
+          products: [
+            {
+              id: "R1",
+              name: "Cơm chiên",
+              quantity: 2,
+              status: "doing",
+              idPos: {
+                id: "A7",
+                letter: "A",
+                number: 7,
+                color: "#198754",
+              },
+            },
+            {
+              id: "R2",
+              name: "Cơm xào thịt",
+              quantity: 12,
+              status: "done",
+              idPos: {
+                id: "A9",
+                letter: "A",
+                number: 9,
+                color: "#198754",
+              },
+            },
+          ],
+        },
+      ],
+
       //PRODUCTS IMPORTED CASHIER #WILL BE DELETE
       productImported: [],
 
@@ -1278,6 +1311,21 @@ const store = createStore({
           resolve([]);
         } else {
           reject("fail");
+        }
+      });
+    },
+
+    //ASSISTANT CHECKPRODUCT
+
+    checkProductDone({ commit, state }, { idBill, idProduct }) {
+      commit;
+      state.ASSISTANTBILLS.forEach((el) => {
+        if (el.idBill === idBill) {
+          el.products.forEach((e) => {
+            if (e.id === idProduct) {
+              e.status = "done";
+            }
+          });
         }
       });
     },

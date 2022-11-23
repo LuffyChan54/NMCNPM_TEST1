@@ -9,6 +9,7 @@ import CashierHistory from "./pages/CashierHistory.vue";
 import CashierSchedule from "./pages/CashierSchedule.vue";
 import CashierExport from "./pages/CashierExport.vue";
 import CashierDelivery from "./pages/CashierDelivery.vue";
+import AssistantPage from "./pages/AssistantPage.vue";
 const routes = [
   {
     path: "/",
@@ -55,6 +56,11 @@ const routes = [
     path: "/CashierDelivery",
     name: "cashier-delivery-route",
     component: CashierDelivery,
+  },
+  {
+    path: "/Assistant",
+    name: "cashier-assistant-route",
+    component: AssistantPage,
   },
 ];
 
