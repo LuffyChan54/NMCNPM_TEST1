@@ -24,9 +24,23 @@
     </div>
 
     <div class="productInfoCTN">
-      <div class="ExportCard">
-        <h1>Tên Sản Phẩm: Coca cola</h1>
-        <h1>Số Lượng Tồn: 15</h1>
+      <div
+        v-for="(el, idx) in this.productImported[this.status]"
+        :key="idx"
+        class="ExportCard"
+      >
+        <h1>Tên Sản Phẩm: {{ el.name }}</h1>
+        <h1>Số Lượng Tồn: {{ el.quantity }}</h1>
+        <div class="ExportInputItem">
+          <label for="">Nhập SL:</label>
+          <input v-model="this.numberExport[this.status][idx]" type="number" />
+        </div>
+        <button
+          @click="destroyProduct(el.id, this.numberExport[this.status][idx])"
+          class="ExportBTN"
+        >
+          <h1>Huỷ</h1>
+        </button>
       </div>
     </div>
   </div>
@@ -37,24 +51,83 @@ export default {
   data() {
     return {
       status: "gas",
+      numberExport: {
+        cake: [],
+        gas: [],
+        noGas: [],
+      },
     };
+  },
+
+  created() {
+    this.$store.dispatch("getProductImported");
+  },
+
+  methods: {
+    destroyProduct(id, quantity) {
+      this.$store.dispatch("destroyProduct", { id, quantity });
+      this.numberExport.cake = [];
+      this.numberExport.gas = [];
+      this.numberExport.noGas = [];
+    },
+  },
+
+  computed: {
+    productImported() {
+      return this.$store.state.productImported;
+    },
   },
 };
 </script>
 
 <style scoped>
+/* .ExportInputItem {
+  display: flex;
+  align-items: center;
+  gap: 1rem;
+} */
+.ExportBTN h1 {
+  font-size: 1rem;
+  color: var(--white) !important;
+}
+.ExportBTN {
+  border: none;
+  border-radius: var(--radius);
+  padding: 0.5rem 1rem;
+  background: var(--stt-green);
+  cursor: pointer;
+}
+
+.ExportInputItem input:focus {
+  outline: none;
+}
+.ExportInputItem input {
+  width: 5rem;
+  border: none;
+  border-radius: var(--radius);
+  padding: 0.5rem;
+  font-size: 1rem;
+  font-weight: bold;
+  color: var(--dark);
+}
+.ExportInputItem label {
+  font-size: 1rem;
+  font-weight: bold;
+  color: var(--dark);
+}
 .ExportInputItem {
   display: flex;
   align-items: center;
   gap: 1rem;
 }
+
 .ExportCard h1 {
   font-size: 1rem;
   color: var(--dark);
 }
 .ExportCard {
   display: grid;
-  grid-template-columns: 3fr 2fr;
+  grid-template-columns: 3fr 2fr 1fr 1fr;
   gap: 1rem;
   align-items: center;
 }

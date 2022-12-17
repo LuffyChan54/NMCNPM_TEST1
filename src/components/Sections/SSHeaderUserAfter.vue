@@ -50,17 +50,11 @@ export default {
     },
   },
   created() {
-    if (
-      this.$store.state.account.role === "admin" &&
-      this.$store.state.isLogin
-    ) {
+    if (this.$store.state.account.role === "admin") {
       this.$router.push("/cashierhome");
     }
 
-    if (
-      this.$store.state.account.role === "assistant" &&
-      this.$store.state.isLogin
-    ) {
+    if (this.$store.state.account.role === "assistant") {
       this.$router.push("/assistant");
     }
   },

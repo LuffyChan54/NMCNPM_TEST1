@@ -68,9 +68,10 @@ export default {
     };
   },
   methods: {
-    saveChangeInfo() {
+    async saveChangeInfo() {
       this.changeName = false;
-      this.$store.dispatch("changeUserName", this.fullNameUser);
+      await this.$store.dispatch("changeUserName", this.fullNameUser);
+
       this.isChanged = true;
     },
   },

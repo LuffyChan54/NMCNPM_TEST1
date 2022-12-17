@@ -25,13 +25,13 @@
       </div>
     </div>
 
-    <div class="CEunder" v-if="this.data.length !== 0">
-      <div v-for="(product, idx) in data" :key="idx" class="CECard">
-        <h1>{{ product.name }}</h1>
+    <div class="CEunder" v-if="this.ProductHistoryCE !== 0">
+      <div v-for="(product, idx) in ProductHistoryCE" :key="idx" class="CECard">
+        <h1>Tên: {{ product.name }}</h1>
         <h1>({{ changeToNameType(product.type) }})</h1>
-        <h1>{{ product.quantity }}</h1>
-        <h1>{{ product.totalCost }}</h1>
-        <h1>{{ product.source }}</h1>
+        <h1>SL: {{ product.quantity }}</h1>
+        <h1>Tổng tiền: {{ product.totalCost }}</h1>
+        <h1>Nguồn: {{ product.source }}</h1>
         <h1>{{ converDate(product.date) }}</h1>
       </div>
     </div>
@@ -54,8 +54,8 @@ export default {
           status: this.status,
           date: this.date,
         })
-        .then((arr) => {
-          this.data = arr;
+        .then(() => {
+          // this.data = arr;
         })
         .catch((err) => {
           console.log(err);
@@ -79,6 +79,12 @@ export default {
     converDate(date) {
       const arr = date.split("-");
       return `${arr[2]}/${arr[1]}/${arr[0]}`;
+    },
+  },
+
+  computed: {
+    ProductHistoryCE() {
+      return this.$store.state.ProductHistoryCE;
     },
   },
 };

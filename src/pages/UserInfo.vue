@@ -1,5 +1,5 @@
 <template>
-  <template v-if="this.isLogin && this.userRole === 'user'">
+  <template v-if="this.userRole === 'user'">
     <container>
       <div class="InfoCTN">
         <div class="InfoHeader">

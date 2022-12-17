@@ -1,4 +1,8 @@
 import { createStore } from "vuex";
+import axios from "axios";
+import Cookies from "js-cookie";
+
+import router from "@/router";
 
 const store = createStore({
   state() {
@@ -18,18 +22,20 @@ const store = createStore({
       //Bills after user search by date #REQUEST TO GET
       UserBillInfo: [],
 
+      ProductHistoryCE: [],
+
       //IDBill wait for this payment #REQUEST TO GET
       idBill: "ID1234",
 
       //ACCOUNT info after login (not include password!) #REQUEST TO GET
       account: {
-        id: "ACCOUNT123",
-        password: "123",
-        fullName: "Luffy Chan",
-        email: "LuffyChan@gmail.com",
-        img: "avt.jpg",
-        money: 100000,
-        role: "admin",
+        // id: "ACCOUNT123",
+        // password: "123",
+        // fullName: "Luffy Chan",
+        // email: "LuffyChan@gmail.com",
+        // img: "avt.jpg",
+        // money: 100000,
+        // role: "admin",
       },
 
       //IDPOSITIONS valid to put all the food user choosed! #REQUEST TO GET
@@ -542,40 +548,40 @@ const store = createStore({
           day: 1,
           products: {
             rice: [
-              {
-                id: "r1",
-                name: "Cơm chiên",
-                img: "comchien.jpg",
-                type: "rice",
-                price: 25000,
-                total: 50,
-              },
-              {
-                id: "r2",
-                name: "Cơm chiên",
-                img: "comchien.jpg",
-                type: "rice",
-                price: 35000,
-                total: 30,
-              },
+              // {
+              //   // id: "r1",
+              //   // name: "Cơm chiên",
+              //   // img: "comchien.jpg",
+              //   // type: "rice",
+              //   // price: 25000,
+              //   // total: 50,
+              // },
+              // {
+              //   // id: "r2",
+              //   // name: "Cơm chiên",
+              //   // img: "comchien.jpg",
+              //   // type: "rice",
+              //   // price: 35000,
+              //   // total: 30,
+              // },
             ],
             noodles: [
-              {
-                id: "n1",
-                name: "Phở tái",
-                img: "noodles.jpg",
-                type: "noodles",
-                price: 25000,
-                total: 10,
-              },
-              {
-                id: "n2",
-                name: "Mì xào bò",
-                img: "noodles.jpg",
-                type: "noodles",
-                price: 35000,
-                total: 20,
-              },
+              // {
+              //   // id: "n1",
+              //   // name: "Phở tái",
+              //   // img: "noodles.jpg",
+              //   // type: "noodles",
+              //   // price: 25000,
+              //   // total: 10,
+              // },
+              // {
+              //   // id: "n2",
+              //   // name: "Mì xào bò",
+              //   // img: "noodles.jpg",
+              //   // type: "noodles",
+              //   // price: 35000,
+              //   // total: 20,
+              // },
             ],
             cake: [],
             gas: [],
@@ -586,40 +592,40 @@ const store = createStore({
           day: 2,
           products: {
             rice: [
-              {
-                id: "r1",
-                name: "Cơm chiên",
-                img: "comchien.jpg",
-                type: "rice",
-                price: 25000,
-                total: 50,
-              },
-              {
-                id: "r2",
-                name: "Cơm chiên",
-                img: "comchien.jpg",
-                type: "rice",
-                price: 35000,
-                total: 30,
-              },
+              // {
+              //   // id: "r1",
+              //   // name: "Cơm chiên",
+              //   // img: "comchien.jpg",
+              //   // type: "rice",
+              //   // price: 25000,
+              //   // total: 50,
+              // },
+              // {
+              //   // id: "r2",
+              //   // name: "Cơm chiên",
+              //   // img: "comchien.jpg",
+              //   // type: "rice",
+              //   // price: 35000,
+              //   // total: 30,
+              // },
             ],
             noodles: [
-              {
-                id: "n1",
-                name: "Phở tái",
-                img: "noodles.jpg",
-                type: "noodles",
-                price: 25000,
-                total: 10,
-              },
-              {
-                id: "n2",
-                name: "Mì xào bò",
-                img: "noodles.jpg",
-                type: "noodles",
-                price: 35000,
-                total: 20,
-              },
+              // {
+              //   // id: "n1",
+              //   // name: "Phở tái",
+              //   // img: "noodles.jpg",
+              //   // type: "noodles",
+              //   // price: 25000,
+              //   // total: 10,
+              // },
+              // {
+              //   // id: "n2",
+              //   // name: "Mì xào bò",
+              //   // img: "noodles.jpg",
+              //   // type: "noodles",
+              //   // price: 35000,
+              //   // total: 20,
+              // },
             ],
             cake: [],
             gas: [],
@@ -705,7 +711,11 @@ const store = createStore({
       colors: ["#285430", "#F49D1A", "#497174", "#50577A", "#FF6464"],
 
       //PRODUCTS IMPORTED CASHIER #WILL BE DELETE
-      productImported: [],
+      productImported: {
+        cake: [],
+        gas: [],
+        noGas: [],
+      },
 
       //DATATEST ALL THE BILLS OF THIS USER! #WILL BE DELETED
       USERBILLS: [],
@@ -716,7 +726,7 @@ const store = createStore({
       showScreenBill: false, //check to print bill
       openLoginForm: false, //check to Open login form
       isValidPayMent: true, //check to valid payment
-      isLogin: true, //check LOGIN
+      isLogin: false, //check LOGIN
       isSuccessPayment: false, //check to alert success or fail of payment
 
       //Time set to wait user accept or deny pay
@@ -1026,21 +1036,70 @@ const store = createStore({
   },
   actions: {
     //START USER CASHIER ASSISTANT LOGIN==================
-    login({ commit, state }, { email, pw, rememberMe }) {
+    async login({ commit, state }, { email, pw, rememberMe }) {
       commit;
       state;
-      return new Promise((resolve, reject) => {
-        if (email === "huydz@gmail.com" && pw === "123") {
-          if (rememberMe) {
-            localStorage.setItem("isKeepLogin", true);
-          }
-          this.state.isLogin = true;
+      Cookies;
+      rememberMe;
 
-          resolve("Success");
-        } else {
-          reject("Fail");
-        }
-      });
+      let config = {
+        headers: {},
+      };
+
+      let data = {
+        password: pw,
+        email: email,
+      };
+
+      // let msg = "";
+
+      await axios
+        .post(
+          "https://back-end-can-teen-manage-25.vercel.app/api/v1/auth/login",
+          data,
+          config
+        )
+        .then((rs) => {
+          const accessToken = rs.data.data.accessToken;
+          Cookies.set("accessToken", accessToken);
+          // msg = "success";
+
+          const objectType = {
+            "639c26402ed8ed438c491e6e": "user",
+            "639c2644049287301661111b": "admin",
+            "639c2657049287301661111d": "assistant",
+          };
+
+          state.account["id"] = rs.data.data.user.IdUser;
+          state.account["fullName"] = rs.data.data.user.username;
+          state.account["email"] = rs.data.data.user.email;
+          state.account["money"] = +rs.data.data.user.property;
+          state.account["img"] = "avt.jpg";
+          state.account["role"] = objectType[rs.data.data.user.roleID];
+
+          router.push("/");
+
+          state.isLogin = true;
+        })
+        .catch((err) => {
+          // msg = "fail";
+          console.log("that bai", err);
+        });
+
+      // return msg;
+
+      // return new Promise((resolve, reject) => {
+      //   if (email === "huydz@gmail.com" && pw === "123") {
+      //     if (rememberMe) {
+      //       localStorage.setItem("isKeepLogin", true);
+      //     }
+      //     this.state.isLogin = true;
+
+      //     resolve("Success");
+      //   } else {
+      //     reject("Fail");
+      //   }
+      // });
     },
     resetOpenLoginForm({ commit, state }) {
       commit;
@@ -1055,44 +1114,156 @@ const store = createStore({
     },
     //START USER REGISTER===============
     register({ commit, state }, { email, fullname, pw }) {
+      state;
       commit;
-      return new Promise((resolve, reject) => {
-        if (email !== "huydz@gmail.com") {
-          console.log(fullname, pw);
-          state.isLogin = true;
-          resolve("success");
-        } else {
-          reject("fail");
-        }
-      });
+
+      // import Cookies from 'js-cookie';
+
+      let config = {
+        headers: {
+          // 'accessToken': Cookies.get('accessToken'),
+        },
+      };
+
+      let data = {
+        username: fullname,
+        password: pw,
+        email: email,
+      };
+
+      const res = axios.post(
+        "https://back-end-can-teen-manage-25.vercel.app/api/v1/auth/register",
+        data,
+        config
+      );
+
+      return res;
+
+      // return new Promise((resolve, reject) => {
+
+      //   if (email !== "huydz@gmail.com") {
+      //     console.log(fullname, pw);
+      //     state.isLogin = true;
+      //     resolve("success");
+      //   } else {
+      //     reject("fail");
+      //   }
+      // });
     },
     //START USER FORGET PASSWORD========
     forgetPW({ commit, state }, { email }) {
       commit;
       state;
-      console.log(email);
+
+      let config = {
+        headers: {},
+      };
+
+      let data = {
+        email: email,
+      };
+
+      axios.post(
+        "https://back-end-can-teen-manage-25.vercel.app/api/v1/auth/forgotPassword",
+        data,
+        config
+      );
     },
     //START USER CASHIER ASSISTANT LOGOUT=================
-    logout({ commit, state }) {
+    async logout({ commit, state }) {
       localStorage.removeItem("isKeepLogin");
       commit;
+
+      const accessToken = Cookies.get("accessToken");
+
+      const config = {
+        headers: {
+          Authorization: "Bearer " + accessToken,
+          "x-access-token": accessToken,
+        },
+      };
+
+      await axios
+        .post(
+          "https://back-end-can-teen-manage-25.vercel.app/api/v1/user/logout",
+          {},
+          config
+        )
+        .then(() => {
+          state.isLogin = false;
+          Cookies.remove("accessToken");
+        });
+
       state.isLogin = false;
     },
     //START USER CHANGE INFO USER======
-    changeUserName({ commit, state }, newName) {
+    async changeUserName({ commit, state }, newName) {
       commit;
-      state.account.fullName = newName;
+      state;
+
+      const accessToken = Cookies.get("accessToken");
+
+      const config = {
+        headers: {
+          Authorization: "Bearer " + accessToken,
+          "x-access-token": accessToken,
+        },
+      };
+
+      const data = {
+        username: newName,
+      };
+
+      let flag;
+      await axios
+        .post(
+          "https://back-end-can-teen-manage-25.vercel.app/api/v1/user/profile",
+          data,
+          config
+        )
+        .then((rs) => {
+          state.account.fullName = rs.data.data.username;
+          flag = "success";
+        })
+        .catch((err) => {
+          console.log(err);
+          flag = "error";
+        });
+      return flag;
     },
-    changePW({ commit, state }, { oldPW, newPW }) {
+    async changePW({ commit, state }, { oldPW, newPW }) {
       commit;
-      return new Promise((resolve, reject) => {
-        if (oldPW === state.account.password) {
-          state.account.password = newPW;
-          resolve("SUCCESS");
-        } else {
-          reject("FAIL");
-        }
-      });
+      state;
+      const accessToken = Cookies.get("accessToken");
+
+      const config = {
+        headers: {
+          Authorization: "Bearer " + accessToken,
+          "x-access-token": accessToken,
+        },
+      };
+
+      const data = {
+        confirmPassword: oldPW,
+        newPassword: newPW,
+      };
+
+      let flag;
+      await axios
+        .post(
+          "https://back-end-can-teen-manage-25.vercel.app/api/v1/user/changePassword",
+          data,
+          config
+        )
+        .then((rs) => {
+          console.log(rs);
+          flag = "success";
+        })
+        .catch((err) => {
+          console.log(err);
+          flag = "fail";
+        });
+      return flag;
     },
     //START USER HISTORY==========
     resetUserBillInfo({ commit, state }) {
@@ -1110,16 +1281,50 @@ const store = createStore({
       });
     },
     //START USER ADDMONEY TO ACCOUNT====
-    addMoney({ commit, state }, cardCode) {
+    async addMoney({ commit, state }, cardCode) {
       commit;
-      return new Promise((resolve, reject) => {
-        if (cardCode === "123456789") {
-          state.account.money += 50000;
-          resolve("SUCCESS");
-        } else {
-          reject("FAIL");
-        }
-      });
+
+      const accessToken = Cookies.get("accessToken");
+
+      const config = {
+        headers: {
+          Authorization: "Bearer " + accessToken,
+          "x-access-token": accessToken,
+        },
+      };
+
+      const data = {
+        codePrice: cardCode,
+      };
+
+      let flag;
+      await axios
+        .post(
+          "https://back-end-can-teen-manage-25.vercel.app/api/v1/user/addProperty",
+          data,
+          config
+        )
+        .then((rs) => {
+          if (rs.data.message === "add property user successfuly") {
+            state.account.money = rs.data.data.property;
+            flag = "success";
+          } else {
+            throw 1;
+          }
+        })
+        .catch(() => {
+          flag = "fail";
+        });
+
+      return flag;
+      // return new Promise((resolve, reject) => {
+      //   if (cardCode === "123456789") {
+      //     state.account.money += 50000;
+      //     resolve("SUCCESS");
+      //   } else {
+      //     reject("FAIL");
+      //   }
+      // });
     },
     //START USER PAYMENT===========
     changeShowScreenBill({ commit, state }) {
@@ -1281,19 +1486,194 @@ const store = createStore({
     },
 
     //CASHIER UPDATE SCHEDULE=================
-    cashierUpdateSche({ commit, state }, newObj) {
+    async cashierUpdateSche({ commit, state }, newObj) {
       commit;
-      state.productsTypedSche[newObj.day - 1] = newObj;
-      console.log(newObj);
+      state;
+      // state.productsTypedSche[newObj.day - 1] = newObj;
+
+      const accessToken = Cookies.get("accessToken");
+
+      const config = {
+        headers: {
+          Authorization: "Bearer " + accessToken,
+          "x-access-token": accessToken,
+        },
+      };
+
+      newObj.products = [...newObj.products.rice, ...newObj.products.noodles];
+
+      const currObj = JSON.parse(JSON.stringify(newObj));
+
+      const data = { ...currObj };
+
+      // let flag;
+      await axios
+        .post(
+          "https://back-end-can-teen-manage-25.vercel.app/api/v1/cashier/addProduct",
+          data,
+          config
+        )
+        .then(() => {})
+        .catch(() => {});
+
+      store.dispatch("cashierGetSchedule");
+    },
+
+    //CASHIER GET SHEDULE PRODUCTS=================
+
+    async cashierGetSchedule({ commit, state }) {
+      commit;
+      state;
+      // state.productsTypedSche[newObj.day - 1] = newObj;
+
+      const accessToken = Cookies.get("accessToken");
+
+      const config = {
+        headers: {
+          Authorization: "Bearer " + accessToken,
+          "x-access-token": accessToken,
+        },
+      };
+      await axios
+        .post(
+          "https://back-end-can-teen-manage-25.vercel.app/api/v1/cashier/allProduct",
+          {},
+          config
+        )
+        .then((rs) => {
+          state.productsTypedSche = rs.data.data;
+        })
+        .catch(() => {});
     },
 
     //CASHIER UPDATE PRODUCT IMPORTED
-    importProducts({ commit, state }, newArrProduct) {
+    async importProducts({ commit, state }, newArrProduct) {
       commit;
-      newArrProduct.forEach((product) => {
-        state.productImported.push(product);
-      });
-      console.log(state.productImported);
+      state;
+      const accessToken = Cookies.get("accessToken");
+
+      const config = {
+        headers: {
+          Authorization: "Bearer " + accessToken,
+          "x-access-token": accessToken,
+        },
+      };
+
+      let data = {
+        product: newArrProduct,
+      };
+
+      data = JSON.parse(JSON.stringify(data));
+
+      await axios
+        .post(
+          "https://back-end-can-teen-manage-25.vercel.app/api/v1/cashier/importGoods",
+          data,
+          config
+        )
+        .then((rs) => {
+          console.log(rs);
+        })
+        .catch((err) => {
+          console.log(err);
+        });
+
+      // newArrProduct.forEach((product) => {
+      //   state.productImported.push(product);
+      // });
+      // console.log(state.productImported);
+    },
+
+    async getProductImported({ commit, state }) {
+      commit;
+      state;
+      const accessToken = Cookies.get("accessToken");
+
+      const config = {
+        headers: {
+          Authorization: "Bearer " + accessToken,
+          "x-access-token": accessToken,
+        },
+      };
+
+      await axios
+        .post(
+          "https://back-end-can-teen-manage-25.vercel.app/api/v1/cashier/inventory",
+          {},
+          config
+        )
+        .then((rs) => {
+          state.productImported = rs.data;
+        })
+        .catch((err) => {
+          console.log(err);
+        });
+    },
+
+    async exportProduct({ commit, state }, { idPro, quantity }) {
+      commit;
+      state;
+      const accessToken = Cookies.get("accessToken");
+
+      const config = {
+        headers: {
+          Authorization: "Bearer " + accessToken,
+          "x-access-token": accessToken,
+        },
+      };
+
+      let data = {
+        id: idPro,
+        quantity,
+      };
+
+      data = JSON.parse(JSON.stringify(data));
+
+      await axios
+        .post(
+          "https://back-end-can-teen-manage-25.vercel.app/api/v1/cashier/exportGoods",
+          data,
+          config
+        )
+        .then(() => {
+          store.dispatch("getProductImported");
+        })
+        .catch((err) => {
+          console.log(err);
+        });
+    },
+
+    async destroyProduct({ commit, state }, { id, quantity }) {
+      commit;
+      state;
+      const accessToken = Cookies.get("accessToken");
+
+      const config = {
+        headers: {
+          Authorization: "Bearer " + accessToken,
+          "x-access-token": accessToken,
+        },
+      };
+
+      let data = {
+        id,
+        quantity,
+      };
+
+      data = JSON.parse(JSON.stringify(data));
+
+      await axios
+        .post(
+          "https://back-end-can-teen-manage-25.vercel.app/api/v1/cashier/removeGood",
+          data,
+          config
+        )
+        .then(() => {
+          store.dispatch("getProductImported");
+        })
+        .catch((err) => {
+          console.log(err);
+        });
     },
 
     //CASHIER SEARCH IMPORT PRODUCT BY DATE
@@ -1305,17 +1685,50 @@ const store = createStore({
     },
 
     //CASHIER SEARCH HISTORY PRODUCT IE
-    searchHistoryIE({ commit, state }, { status, date }) {
+    async searchHistoryIE({ commit, state }, { status, date }) {
       commit;
       state;
-      date;
-      return new Promise((resolve, reject) => {
-        if (status === "Import" || status === "Export") {
-          resolve([]);
-        } else {
-          reject("fail");
-        }
-      });
+
+      const accessToken = Cookies.get("accessToken");
+
+      const config = {
+        headers: {
+          Authorization: "Bearer " + accessToken,
+          "x-access-token": accessToken,
+        },
+      };
+
+      if (!date) {
+        date = undefined;
+      }
+
+      let data = {
+        date,
+      };
+
+      data = JSON.parse(JSON.stringify(data));
+
+      let urlPath;
+
+      if (status === "Import") {
+        urlPath =
+          "https://back-end-can-teen-manage-25.vercel.app/api/v1/cashier/importHistory";
+      } else {
+        urlPath =
+          "https://back-end-can-teen-manage-25.vercel.app/api/v1/cashier/exportHistory";
+      }
+
+      await axios
+        .post(urlPath, data, config)
+        .then((rs) => {
+          // console.log("data history", rs);
+          // store.dispatch("getProductImported");
+          console.log("du lieu ve:", rs);
+          state.ProductHistoryCE = rs.data.products;
+        })
+        .catch((err) => {
+          console.log(err);
+        });
     },
 
     //ASSISTANT CHECKPRODUCT

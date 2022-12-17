@@ -58,18 +58,17 @@ export default {
       this.statusChangePW = "default";
       this.$emit("closeModel");
     },
-    changePW() {
-      this.$store
-        .dispatch("changePW", {
-          oldPW: this.oldPW,
-          newPW: this.newPW,
-        })
-        .then(() => {
-          this.statusChangePW = "success";
-        })
-        .catch(() => {
-          this.statusChangePW = "fail";
-        });
+    async changePW() {
+      const rs = await this.$store.dispatch("changePW", {
+        oldPW: this.oldPW,
+        newPW: this.newPW,
+      });
+
+      if (rs === "success") {
+        this.statusChangePW = "success";
+      } else {
+        this.statusChangePW = "fail";
+      }
     },
   },
 };

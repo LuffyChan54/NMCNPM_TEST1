@@ -28,7 +28,7 @@
               <input
                 :disabled="this.isChangeQuantity === false"
                 type="number"
-                :value="product.total"
+                v-model="product.total"
               />
             </div>
             <i
@@ -44,8 +44,8 @@
               <input
                 :disabled="this.isChangePrice === false"
                 type="number"
-                :value="product.price"
                 step="1000"
+                v-model="product.price"
               />
             </div>
             <i
@@ -74,7 +74,7 @@ export default {
       isChangeName: false,
       isChangeQuantity: false,
       isChangePrice: false,
-      products: [],
+      // products: [],
       // currProducts: [],
     };
   },
@@ -100,9 +100,14 @@ export default {
     CashierUnderBTN,
   },
   created() {
-    this.products = _.cloneDeep(this.$store.state.productsTypedSche);
+    // this.products = _.cloneDeep(this.$store.state.productsTypedSche);
+    this.$store.dispatch("cashierGetSchedule");
   },
   computed: {
+    products() {
+      return this.$store.state.productsTypedSche;
+    },
+
     updateDayStatus() {
       return { day: this.indexDay, stt: this.status };
     },
@@ -146,13 +151,16 @@ export default {
     isUpload: {
       handler(value) {
         if (value === true) {
-          this.isAllowChange = false;
-          this.isChangeName = false;
-          this.isChangePrice = false;
-          this.isChangeQuantity = false;
-          if (this.currProducts.length !== 0) {
-            this.$store.dispatch("cashierUpdateSche", this.currObj);
-          }
+          this.$store.dispatch("cashierUpdateSche", this.currObj);
+
+          // this.isAllowChange = false;
+          // this.isChangeName = false;
+          // this.isChangePrice = false;
+          // this.isChangeQuantity = false;
+          // if (this.currProducts.length !== 0) {
+          //   // this.sendChedules();
+          //   this.$store.dispatch("cashierUpdateSche", this.currObj);
+          // }
         }
       },
       immediate: true,

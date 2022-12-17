@@ -24,14 +24,21 @@
     </div>
 
     <div class="productInfoCTN">
-      <div class="ExportCard">
-        <h1>Tên Sản Phẩm: Coca cola</h1>
-        <h1>Số Lượng Tồn: 15</h1>
+      <div
+        v-for="(el, idx) in this.productImported[this.status]"
+        :key="idx"
+        class="ExportCard"
+      >
+        <h1>Tên Sản Phẩm: {{ el.name }}</h1>
+        <h1>Số Lượng Tồn: {{ el.quantity }}</h1>
         <div class="ExportInputItem">
           <label for="">Nhập SL:</label>
-          <input type="number" />
+          <input v-model="this.numberExport[this.status][idx]" type="number" />
         </div>
-        <button class="ExportBTN">
+        <button
+          @click="exportProduct(el.id, this.numberExport[this.status][idx])"
+          class="ExportBTN"
+        >
           <h1>Xuất</h1>
         </button>
       </div>
@@ -44,7 +51,33 @@ export default {
   data() {
     return {
       status: "gas",
+      numberExport: {
+        cake: [],
+        gas: [],
+        noGas: [],
+      },
     };
+  },
+  created() {
+    this.$store.dispatch("getProductImported");
+  },
+  computed: {
+    productImported() {
+      return this.$store.state.productImported;
+    },
+  },
+
+  methods: {
+    async exportProduct(idPro, quantity) {
+      await this.$store.dispatch("exportProduct", {
+        idPro,
+        quantity,
+      });
+
+      this.numberExport.cake = [];
+      this.numberExport.gas = [];
+      this.numberExport.noGas = [];
+    },
   },
 };
 </script>

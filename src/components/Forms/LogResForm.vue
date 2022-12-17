@@ -93,6 +93,20 @@
     >
       Đăng ký thất bại! Email đã được sử dụng!
     </p>
+
+    <p
+      v-if="
+        this.registerFlag &&
+        this.statusRegister &&
+        this.status === 'register' &&
+        this.checkConfirmPW
+      "
+      style="color: var(--stt-green)"
+      class="subTitleForgetPW"
+    >
+      Đăng ký thành công
+    </p>
+
     <RegularBTNVue
       @click="register"
       v-if="this.status === 'register'"
@@ -133,6 +147,9 @@ export default {
       inputFullName: "",
       inputConfirmPW: "",
       statusLogin: true,
+
+      registerFlag: false,
+
       statusRegister: true,
       checkConfirmPW: true,
       rememberMe: "",
@@ -146,39 +163,46 @@ export default {
       event.preventDefault();
       this.$emit("onChangeBTN", val);
     },
-    login(event) {
+
+    async login(event) {
       event.preventDefault();
-      this.$store
-        .dispatch("login", {
-          email: this.inputEmail,
-          pw: this.inputPW,
-          rememberMe: this.rememberMe,
-        })
-        .then(() => {
-          this.statusLogin = true;
-        })
-        .catch(() => {
-          this.statusLogin = false;
-        });
+      const resultLogin = await this.$store.dispatch("login", {
+        email: this.inputEmail,
+        pw: this.inputPW,
+        rememberMe: this.rememberMe,
+      });
+
+      if (resultLogin == "success") {
+        this.statusLogin = true;
+      } else {
+        this.statusLogin = false;
+      }
+      // .then(() => {
+      //   this.statusLogin = true;
+      // })
+      // .catch(() => {
+      //   this.statusLogin = false;
+      // });
     },
     register(event) {
       event.preventDefault();
       if (this.inputPW !== this.inputConfirmPW) {
         this.checkConfirmPW = false;
       } else {
-        this.checkConfirmPW = true;
-
         this.$store
           .dispatch("register", {
             email: this.inputEmail,
             fullname: this.inputFullName,
             pw: this.inputPW,
           })
-          .then(() => {
+          .then((rs) => {
             this.statusRegister = true;
+            this.registerFlag = true;
+            console.log("Thanh cong", rs);
           })
-          .catch(() => {
+          .catch((err) => {
             this.statusRegister = false;
+            console.log("That bai", err);
           });
       }
     },

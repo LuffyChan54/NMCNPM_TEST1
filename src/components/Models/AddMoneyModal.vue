@@ -50,14 +50,15 @@ export default {
       this.statusAction = "";
       this.$emit("closeModel");
     },
-    addMoney() {
+    async addMoney() {
       this.doAddMoney = true;
-      this.$store
-        .dispatch("addMoney", this.cardCode)
-        .then(() => {
-          this.statusAction = true;
-        })
-        .catch(() => (this.statusAction = false));
+      const rs = await this.$store.dispatch("addMoney", this.cardCode);
+
+      if (rs === "success") {
+        this.statusAction = true;
+      } else {
+        this.statusAction = false;
+      }
     },
   },
 };

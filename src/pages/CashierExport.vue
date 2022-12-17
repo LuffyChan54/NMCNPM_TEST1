@@ -71,8 +71,6 @@
               <div class="CTInfoItem">
                 <label for="">Loại:</label>
                 <select v-model="product.type">
-                  <option value="rice">Cơm</option>
-                  <option value="noodles">Món Nước</option>
                   <option value="cake">Bánh Ngọt</option>
                   <option value="gas">Nước Có Gas</option>
                   <option value="noGas">Nước Không Có Gas</option>

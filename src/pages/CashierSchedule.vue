@@ -53,7 +53,7 @@
           >
             <h1>Món Nước</h1>
           </button>
-          <button
+          <!-- <button
             @click="this.status = 'cake'"
             :class="{ active: this.status === 'cake' }"
           >
@@ -70,7 +70,7 @@
             :class="{ active: this.status === 'noGas' }"
           >
             <h1>Không Có Gas</h1>
-          </button>
+          </button> -->
         </div>
         <div class="SchedulesBTNs">
           <button @click="this.isOpenAddNew = true">
