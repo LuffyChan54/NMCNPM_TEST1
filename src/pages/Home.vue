@@ -1,4 +1,5 @@
 <template>
+  <LoadingModelVue></LoadingModelVue>
   <SSHeader v-if="!isLogin"></SSHeader>
   <SSHeaderUserAfter v-if="isLogin"></SSHeaderUserAfter>
   <SSFood></SSFood>
@@ -16,6 +17,7 @@ import SSPayMent from "../components/Sections/SSPayMent.vue";
 import SSAbout from "../components/Sections/SSAbout.vue";
 import SSFooter from "../components/Sections/SSFooter.vue";
 import SSHeaderUserAfter from "../components/Sections/SSHeaderUserAfter.vue";
+import LoadingModelVue from "@/components/Models/LoadingModel.vue";
 export default {
   components: {
     SSHeader,
@@ -25,6 +27,7 @@ export default {
     SSAbout,
     SSFooter,
     SSHeaderUserAfter,
+    LoadingModelVue,
   },
   data() {
     return {};

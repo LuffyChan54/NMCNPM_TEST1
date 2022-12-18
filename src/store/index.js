@@ -19,6 +19,8 @@ const store = createStore({
         noGas: 0,
       },
 
+      isFullPos: false,
+
       TurnOver: 0,
 
       //Bills after user search by date #REQUEST TO GET
@@ -87,6 +89,8 @@ const store = createStore({
         // },
       ],
 
+      isLoading: false,
+
       //DATATEST ALL THE products be choosed! #REQUEST TO GET
       PRODUCTBOUGHT: [],
 
@@ -94,7 +98,7 @@ const store = createStore({
       productFinish: 0,
 
       //NUMBER VALID ID POS TO THIS PAYMENT #REQUEST TO GET
-      NumberValidIDPOS: 10,
+      NumberValidIDPOS: 0,
 
       //Products in schedule #REQUEST TO GET
       //NOTYPE
@@ -781,6 +785,7 @@ const store = createStore({
 
       // let msg = "";
 
+      state.isLoading = true;
       await axios
         .post(
           "https://back-end-can-teen-manage-25.vercel.app/api/v1/auth/login",
@@ -788,6 +793,8 @@ const store = createStore({
           config
         )
         .then((rs) => {
+          state.isLoading = false;
+
           const accessToken = rs.data.data.accessToken;
           Cookies.set("accessToken", accessToken);
           // msg = "success";
@@ -810,6 +817,8 @@ const store = createStore({
           state.isLogin = true;
         })
         .catch(() => {
+          state.isLoading = false;
+
           // msg = "fail";
           // console.log("that bai", err);
         });
@@ -841,7 +850,7 @@ const store = createStore({
       }
     },
     //START USER REGISTER===============
-    register({ commit, state }, { email, fullname, pw }) {
+    async register({ commit, state }, { email, fullname, pw }) {
       state;
       commit;
 
@@ -859,11 +868,15 @@ const store = createStore({
         email: email,
       };
 
-      const res = axios.post(
+      state.isLoading = true;
+
+      const res = await axios.post(
         "https://back-end-can-teen-manage-25.vercel.app/api/v1/auth/register",
         data,
         config
       );
+
+      state.isLoading = false;
 
       return res;
 
@@ -879,7 +892,7 @@ const store = createStore({
       // });
     },
     //START USER FORGET PASSWORD========
-    forgetPW({ commit, state }, { email }) {
+    async forgetPW({ commit, state }, { email }) {
       commit;
       state;
 
@@ -891,11 +904,16 @@ const store = createStore({
         email: email,
       };
 
-      axios.post(
-        "https://back-end-can-teen-manage-25.vercel.app/api/v1/auth/forgotPassword",
-        data,
-        config
-      );
+      state.isLoading = true;
+      await axios
+        .post(
+          "https://back-end-can-teen-manage-25.vercel.app/api/v1/auth/forgotPassword",
+          data,
+          config
+        )
+        .then(() => {
+          state.isLoading = false;
+        });
     },
     //START USER CASHIER ASSISTANT LOGOUT=================
     async logout({ commit, state }) {
@@ -911,6 +929,9 @@ const store = createStore({
         },
       };
 
+      state.isLoading = true;
+      state.isLogin = false;
+
       await axios
         .post(
           "https://back-end-can-teen-manage-25.vercel.app/api/v1/user/logout",
@@ -918,8 +939,12 @@ const store = createStore({
           config
         )
         .then(() => {
+          state.isLoading = false;
+
           state.isLogin = false;
+          state.account = [];
           Cookies.remove("accessToken");
+          window.location.reload();
         });
 
       state.isLogin = false;
@@ -945,6 +970,8 @@ const store = createStore({
       };
 
       let flag;
+
+      state.isLoading = true;
       await axios
         .post(
           "https://back-end-can-teen-manage-25.vercel.app/api/v1/user/profile",
@@ -952,10 +979,14 @@ const store = createStore({
           config
         )
         .then((rs) => {
+          state.isLoading = false;
+
           state.account.fullName = rs.data.data.username;
           flag = "success";
         })
         .catch((err) => {
+          state.isLoading = false;
+
           console.log(err);
           flag = "error";
         });
@@ -977,7 +1008,7 @@ const store = createStore({
         confirmPassword: oldPW,
         newPassword: newPW,
       };
-
+      state.isLoading = true;
       let flag;
       await axios
         .post(
@@ -985,12 +1016,14 @@ const store = createStore({
           data,
           config
         )
-        .then((rs) => {
-          console.log(rs);
+        .then(() => {
+          state.isLoading = false;
           flag = "success";
         })
         .catch((err) => {
           console.log(err);
+          state.isLoading = false;
+
           flag = "fail";
         });
       return flag;
@@ -1012,6 +1045,8 @@ const store = createStore({
 
       const accessToken = Cookies.get("accessToken");
 
+      console.log("access token ", accessToken);
+
       const config = {
         headers: {
           Authorization: "Bearer " + accessToken,
@@ -1023,6 +1058,8 @@ const store = createStore({
         date,
       };
 
+      state.isLoading = true;
+
       await axios
         .post(
           "https://back-end-can-teen-manage-25.vercel.app/api/v1/user/getHistoryBill",
@@ -1030,6 +1067,8 @@ const store = createStore({
           config
         )
         .then((rs) => {
+          state.isLoading = false;
+
           // console.log("bill da mua", rs);
           state.UserBillInfo = rs.data.data;
           state.UserBillInfo.forEach((billEl) => {
@@ -1043,6 +1082,8 @@ const store = createStore({
           // state.UserBillInfo   ["idPositions"] = []
         })
         .catch((err) => {
+          state.isLoading = false;
+
           console.log(err);
         });
     },
@@ -1064,6 +1105,7 @@ const store = createStore({
       };
 
       let flag;
+      state.isLoading = true;
       await axios
         .post(
           "https://back-end-can-teen-manage-25.vercel.app/api/v1/user/addProperty",
@@ -1071,6 +1113,8 @@ const store = createStore({
           config
         )
         .then((rs) => {
+          state.isLoading = false;
+
           if (rs.data.message === "add property user successfuly") {
             state.account.money = rs.data.data.property;
             flag = "success";
@@ -1079,6 +1123,8 @@ const store = createStore({
           }
         })
         .catch(() => {
+          state.isLoading = false;
+
           flag = "fail";
         });
 
@@ -1107,9 +1153,9 @@ const store = createStore({
         return;
       }
 
-      if (state.NumberValidIDPOS === 0) {
-        return;
-      }
+      // if (state.NumberValidIDPOS === 0) {
+      //   return;
+      // }
 
       const accessToken = Cookies.get("accessToken");
 
@@ -1152,11 +1198,15 @@ const store = createStore({
         product: productSell,
       };
 
+      // console.log("data", data);
+
       // state.showScreenBill = true;
       // state.isPrintBill = true;
       // let flag;
 
       state.idValidPosition = [];
+
+      state.isLoading = true;
 
       await axios
         .post(
@@ -1165,6 +1215,7 @@ const store = createStore({
           config
         )
         .then((rs) => {
+          state.isLoading = false;
           // console.log("ket qua tra ve", rs.data.data);
           store.state.isCancelledBill = true;
           const data = rs.data.data;
@@ -1173,6 +1224,8 @@ const store = createStore({
             state.idValidPosition.push(e.position);
           });
 
+          state.NumberValidIDPOS = 1;
+
           state.currTimeUserBill = data.time;
           state.showScreenBill = true;
           state.isPrintBill = true;
@@ -1180,7 +1233,13 @@ const store = createStore({
           state.idBill = data.idBill;
         })
         .catch((err) => {
+          state.isLoading = false;
+
           console.log("that bai ", err);
+          // state.isFullPos = true;
+          state.showScreenBill = true;
+
+          state.NumberValidIDPOS = 0;
         });
 
       state.TimeOutFn = setTimeout(() => {
@@ -1399,6 +1458,7 @@ const store = createStore({
       };
 
       let flag;
+      state.isLoading = true;
       await axios
         .post(
           "https://back-end-can-teen-manage-25.vercel.app/api/v1/cashier/createBill",
@@ -1407,6 +1467,7 @@ const store = createStore({
         )
         .then(() => {
           // console.log("Ban thanh cong: ", rs);
+          state.isLoading = false;
 
           store.dispatch("getAllTodayProducts");
 
@@ -1419,8 +1480,9 @@ const store = createStore({
           state.totalCost = 0;
           flag = "success";
         })
-        .catch((err) => {
-          console.log("thanh toan that bai! ", err);
+        .catch(() => {
+          state.isLoading = false;
+
           flag = "fail";
         });
       return flag;
@@ -1670,7 +1732,7 @@ const store = createStore({
       };
 
       if (!date) {
-        date = "undefined";
+        date = "allDay";
       }
 
       let data = {
@@ -1678,6 +1740,8 @@ const store = createStore({
       };
 
       data = JSON.parse(JSON.stringify(data));
+
+      console.log("data gui len", data);
 
       let urlPath;
 
@@ -1692,12 +1756,14 @@ const store = createStore({
       await axios
         .post(urlPath, data, config)
         .then((rs) => {
-          console.log("data history", rs);
+          // console.log("data history", rs);
           // store.dispatch("getProductImported");
           state.ProductHistoryCE = rs.data.products;
+          return;
         })
         .catch((err) => {
           console.log(err);
+          return;
         });
     },
 
@@ -1870,7 +1936,7 @@ const store = createStore({
           // "x-access-token": accessToken,
         },
       };
-
+      state.isLoading = true;
       await axios
         .get(
           "https://back-end-can-teen-manage-25.vercel.app/api/v1/auth/",
@@ -1878,6 +1944,8 @@ const store = createStore({
           config
         )
         .then((rs) => {
+          state.isLoading = false;
+
           state.RiceProduct = [];
           rs.data.data.rice.forEach((el) => {
             const objtemp = {
@@ -1952,6 +2020,8 @@ const store = createStore({
           ];
         })
         .catch((err) => {
+          state.isLoading = false;
+
           console.log(err);
         });
     },
@@ -1998,13 +2068,15 @@ const store = createStore({
       state;
       const accessToken = Cookies.get("accessToken");
 
+      state.moneyUsedInMonth = 0;
+
       const config = {
         headers: {
           Authorization: "Bearer " + accessToken,
           "x-access-token": accessToken,
         },
       };
-
+      state.isLoading = true;
       await axios
         .post(
           "https://back-end-can-teen-manage-25.vercel.app/api/v1/user/getTotalMoneySpentInMonth",
@@ -2012,6 +2084,8 @@ const store = createStore({
           config
         )
         .then((rs) => {
+          state.isLoading = false;
+
           // state.productImported = rs.data;
           // console.log("gia tri tra ve, ", rs);
           // console.log("ket qua tra ve:", rs);
@@ -2021,6 +2095,8 @@ const store = createStore({
           // console.log(state.PRODUCTBOUGHT);
         })
         .catch((err) => {
+          state.isLoading = false;
+
           console.log(err);
         });
     },
@@ -2150,6 +2226,11 @@ const store = createStore({
         .catch((err) => {
           console.log("Loi khi lay hoa don theo id", err);
         });
+    },
+
+    resetIsFullPos({ commit, state }) {
+      commit;
+      state.isFullPos = false;
     },
 
     resetValueUserBillInfo({ commit, state }) {

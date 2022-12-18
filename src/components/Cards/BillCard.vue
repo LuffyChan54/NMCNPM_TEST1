@@ -1,5 +1,5 @@
 <template>
-  <div class="bill-ctn">
+  <div v-if="!this.isFullPos" class="bill-ctn">
     <div class="id-container">
       <div class="id-wrapper">
         <div class="id-Item" v-for="idpos in idPositions" :key="idpos.id">
@@ -42,6 +42,13 @@
       <h1>{{ this.count }}</h1>
     </div>
   </div>
+
+  <Teleport v-if="this.isFullPos" to="body">
+    <BaseModel @closeModel="resetIsFullPos">
+      <ErrorCardVue> Rất tiếc, không đủ vị trí trong hàng chờ! </ErrorCardVue>
+    </BaseModel>
+  </Teleport>
+
   <Teleport to="body">
     <BaseModel v-if="this.isTutorialOn" @closeModel="this.isTutorialOn = false">
       <div class="tutorialCTN">
@@ -66,10 +73,12 @@
 <script>
 import BaseModel from "../Models/BaseModel.vue";
 import BuyBTN from "../Buttons/BuyBTN.vue";
+import ErrorCardVue from "./ErrorCard.vue";
 export default {
   components: {
     BuyBTN,
     BaseModel,
+    ErrorCardVue,
   },
   data() {
     return {
@@ -78,6 +87,9 @@ export default {
     };
   },
   methods: {
+    resetIsFullPos() {
+      this.$store.dispatch("resetIsFullPos");
+    },
     async doUserPayment() {
       await this.$store.dispatch("doUserPayment", { currTime: this.currTime });
     },
@@ -102,6 +114,10 @@ export default {
     },
   },
   computed: {
+    isFullPos() {
+      return this.$store.state.isFullPos;
+    },
+
     currTimeUserBill() {
       return this.$store.state.currTimeUserBill;
     },

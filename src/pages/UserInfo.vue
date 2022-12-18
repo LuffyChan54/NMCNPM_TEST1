@@ -1,5 +1,6 @@
 <template>
   <template v-if="this.userRole === 'user'">
+    <LoadingModelVue v-if="this.isLoading"></LoadingModelVue>
     <container>
       <div class="InfoCTN">
         <div class="InfoHeader">
@@ -31,7 +32,7 @@ import ErrorPage from "./ErrorPage.vue";
 import SSFooter from "../components/Sections/SSFooter.vue";
 import container from "../components/Containers/Container.vue";
 import SSSubInfoHeader from "@/components/Sections/SSSubInfoHeader.vue";
-
+import LoadingModelVue from "@/components/Models/LoadingModel.vue";
 import UserInfoForm from "../components/Forms/UserInfoForm.vue";
 
 export default {
@@ -41,8 +42,12 @@ export default {
     container,
     SSSubInfoHeader,
     UserInfoForm,
+    LoadingModelVue,
   },
   computed: {
+    isLoading() {
+      return this.$store.state.isLoading;
+    },
     userRole() {
       return this.$store.state.account.role;
     },

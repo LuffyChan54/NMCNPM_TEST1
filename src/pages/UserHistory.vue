@@ -1,5 +1,6 @@
 <template>
   <template v-if="this.isLogin && this.userRole === 'user'">
+    <LoadingModelVue v-if="this.isLoading"></LoadingModelVue>
     <container>
       <div class="UserHistoryCTN">
         <div class="UserHistoryHeader">
@@ -61,6 +62,7 @@ import container from "../components/Containers/Container.vue";
 import SSSubInfoHeader from "@/components/Sections/SSSubInfoHeader.vue";
 import SSFooter from "@/components/Sections/SSFooter.vue";
 import BillCardUsed from "../components/Cards/BillCardUsed.vue";
+import LoadingModelVue from "@/components/Models/LoadingModel.vue";
 export default {
   components: {
     ErrorPage,
@@ -68,6 +70,7 @@ export default {
     SSSubInfoHeader,
     SSFooter,
     BillCardUsed,
+    LoadingModelVue,
   },
   data() {
     return {
@@ -75,6 +78,9 @@ export default {
     };
   },
   computed: {
+    isLoading() {
+      return this.$store.state.isLoading;
+    },
     userRole() {
       return this.$store.state.account.role;
     },
