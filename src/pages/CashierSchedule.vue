@@ -131,9 +131,9 @@
           <select v-model="this.formAddNewInfo.type">
             <option value="rice">Cơm</option>
             <option value="noodles">Món Nước</option>
-            <option value="cake">Bánh Ngọt</option>
+            <!-- <option value="cake">Bánh Ngọt</option>
             <option value="gas">Nước Có Gas</option>
-            <option value="noGas">Nước Không Có Gas</option>
+            <option value="noGas">Nước Không Có Gas</option> -->
           </select>
         </div>
         <button @click="addNew">

@@ -195,10 +195,10 @@ export default {
             fullname: this.inputFullName,
             pw: this.inputPW,
           })
-          .then((rs) => {
+          .then(() => {
             this.statusRegister = true;
             this.registerFlag = true;
-            console.log("Thanh cong", rs);
+            // console.log("Thanh cong", rs);
           })
           .catch((err) => {
             this.statusRegister = false;

@@ -14,7 +14,7 @@
       </button>
     </div>
     <div class="TimeContainer">
-      <h1>Thời gian: {{ this.currTime }}</h1>
+      <h1>Thời gian: {{ this.currTimeUserBill }}</h1>
     </div>
     <div class="userContainer">
       <h1>Tên người mua: {{ this.account.fullName }}</h1>
@@ -78,8 +78,8 @@ export default {
     };
   },
   methods: {
-    doUserPayment() {
-      this.$store.dispatch("doUserPayment", { currTime: this.currTime });
+    async doUserPayment() {
+      await this.$store.dispatch("doUserPayment", { currTime: this.currTime });
     },
     turnOnTutorial() {
       this.isTutorialOn = true;
@@ -102,6 +102,10 @@ export default {
     },
   },
   computed: {
+    currTimeUserBill() {
+      return this.$store.state.currTimeUserBill;
+    },
+
     isPrintBill() {
       return this.$store.state.isPrintBill;
     },
@@ -121,16 +125,28 @@ export default {
       return this.$store.state.idValidPosition;
     },
     currTime() {
-      let rs = "";
-      let objectDate = new Date();
-      let day = objectDate.getDate();
-      let month = objectDate.getMonth() + 1;
-      let year = objectDate.getFullYear();
-      let hours = objectDate.getHours();
-      let minutes = objectDate.getMinutes();
+      let today = new Date();
+      let buyTime =
+        today.getHours() +
+        ":" +
+        today.getMinutes() +
+        " " +
+        today.getFullYear() +
+        "-" +
+        (today.getMonth() + 1) +
+        "-" +
+        today.getDate();
 
-      rs = `${hours}:${minutes} ${day}/${month}/${year}`;
-      return rs;
+      // let rs = "";
+      // let objectDate = new Date();
+      // let day = objectDate.getDate();
+      // let month = objectDate.getMonth() + 1;
+      // let year = objectDate.getFullYear();
+      // let hours = objectDate.getHours();
+      // let minutes = objectDate.getMinutes();
+
+      // rs = `${hours}:${minutes} ${day}/${month}/${year}`;
+      return buyTime;
     },
     account() {
       return this.$store.state.account;

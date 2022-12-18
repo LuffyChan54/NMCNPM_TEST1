@@ -6,7 +6,7 @@
           <SSSubInfoHeader></SSSubInfoHeader>
         </div>
 
-        <div class="UserHistoryUsedCTN">
+        <!-- <div class="UserHistoryUsedCTN">
           <h1>Tháng này bạn đã dùng:</h1>
           <div class="UserHistoryOverview">
             <div class="UserHistoryUsedItem">
@@ -25,10 +25,10 @@
               <h1>Bánh ngọt: {{ this.QuantityTypeUsed.cake }}</h1>
             </div>
           </div>
-        </div>
+        </div> -->
 
         <div class="UserHistoryCost">
-          <h1>Tổng số tiền đã chi:</h1>
+          <h1>Tổng số tiền đã chi trong tháng:</h1>
           <div class="UserHistoryTTCost">
             <h1>{{ this.moneyUsedInMonth }}đ</h1>
           </div>
@@ -90,13 +90,18 @@ export default {
   },
   methods: {
     searchBillByDate() {
-      const dateArr = this.dateInput.split("-");
+      // const dateArr = this.dateInput.split("-");
       this.$store.dispatch("searchBillByDate", {
-        year: dateArr[0],
-        month: dateArr[1],
-        day: dateArr[2],
+        date: this.dateInput,
+        // year: dateArr[0],
+        // month: dateArr[1],
+        // day: dateArr[2],
       });
     },
+  },
+
+  created() {
+    this.$store.dispatch("getMoneyUsedInMonth");
   },
 };
 </script>

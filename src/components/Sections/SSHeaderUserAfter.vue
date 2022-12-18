@@ -50,6 +50,10 @@ export default {
     },
   },
   created() {
+    this.$store.dispatch("getAllTodayProducts");
+
+    this.$store.dispatch("getCurrProStatus");
+
     if (this.$store.state.account.role === "admin") {
       this.$router.push("/cashierhome");
     }

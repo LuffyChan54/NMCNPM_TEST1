@@ -113,7 +113,7 @@ export default {
     },
     currObj() {
       if (this.products.length !== 0) {
-        return this.products[this.indexDay - 1];
+        return this.products[this.indexDay];
       } else {
         return {};
       }

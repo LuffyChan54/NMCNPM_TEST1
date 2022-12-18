@@ -158,6 +158,10 @@ export default {
   overflow: hidden;
 }
 
+.nameCTN > h1 {
+  font-size: 1.2rem !important;
+}
+
 .sub-content h1 {
   font-family: inherit;
   font-size: 1.5rem;

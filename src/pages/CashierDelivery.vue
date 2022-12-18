@@ -72,7 +72,7 @@ export default {
         numPerColor: this.numPerColor,
       };
 
-      console.log(obj);
+      this.$store.dispatch("setUpDelivery", obj);
     },
   },
   components: {

@@ -1,6 +1,6 @@
 <template>
   <div class="UserBillContainer">
-    <div v-for="userbill in UserBills" :key="userbill.billID" class="bill-ctn">
+    <div v-for="(userbill, idx) in this.UserBills" :key="idx" class="bill-ctn">
       <div class="id-container">
         <div class="id-wrapper">
           <div
@@ -21,29 +21,21 @@
       <div class="TimeContainer">
         <h1>
           Thời gian:
-          {{
-            userbill.time +
-            " " +
-            userbill.day +
-            "/" +
-            userbill.month +
-            "/" +
-            userbill.year
-          }}
+          {{ userbill.time }}
         </h1>
       </div>
       <div class="userContainer">
-        <h1>Tên người mua: {{ userbill.userName }}</h1>
-        <h1>ID người mua: {{ userbill.userID }}</h1>
+        <h1>Tên người mua: {{ userbill.username }}</h1>
+        <h1>ID người mua: {{ userbill.idUser }}</h1>
       </div>
       <div class="idBillContainer">
-        <h1>Mã hoá đơn: {{ userbill.billID }}</h1>
+        <h1>Mã hoá đơn: {{ userbill.idBill }}</h1>
       </div>
       <div class="productContainer">
-        <template v-for="product in userbill.products" :key="product.id">
+        <template v-for="product in userbill.product" :key="product.id">
           <h1 class="ProductName">{{ product.name }}</h1>
           <h1>{{ product.quantity }}</h1>
-          <h1>{{ product.cost }}đ</h1>
+          <h1>{{ product.price }}đ</h1>
         </template>
       </div>
       <div class="rulerContainer"></div>
@@ -92,7 +84,8 @@ export default {
   },
   computed: {
     UserBills() {
-      return this.$store.getters.getBillDoing();
+      // return this.$store.getters.getBillDoing();
+      return this.$store.state.UserBillInfo;
     },
   },
   methods: {

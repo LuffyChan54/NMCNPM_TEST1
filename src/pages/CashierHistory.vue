@@ -1,12 +1,12 @@
 <template>
   <SSCashierTemplate>
     <template #buttons>
-      <button
+      <!-- <button
         :class="{ active: this.status === 'statistic' }"
         @click="this.status = 'statistic'"
       >
         <h1>Thống Kê</h1>
-      </button>
+      </button> -->
       <button
         :class="{ active: this.status === 'history' }"
         @click="this.status = 'history'"
@@ -15,7 +15,7 @@
       </button>
     </template>
     <template v-if="this.status === 'statistic'" #mainCTN>
-      <div class="CHStatisticCTN">
+      <!-- <div class="CHStatisticCTN">
         <h1>Cơm: 2</h1>
         <h1>Nước Có Gas: 2</h1>
         <h1>Món Nước: 0</h1>
@@ -44,7 +44,7 @@
             <i class="fa fa-search" aria-hidden="true"></i>
           </div>
         </div>
-      </div>
+      </div> -->
     </template>
 
     <template v-else #mainCTN>
@@ -53,14 +53,14 @@
         <div class="CSearchCTN2">
           <div class="CItem">
             <label for="">Mã Hoá Đơn:</label>
-            <input type="text" />
+            <input v-model="this.idBill" type="text" />
             <div @click="seachBIllByIDCS" class="iconSearch">
               <i class="fa fa-search" aria-hidden="true"></i>
             </div>
           </div>
           <div class="CItem">
             <label for="">Ngày:</label>
-            <input type="date" />
+            <input v-model="this.date" type="date" />
             <div @click="seachBIllByDateCS" class="iconSearch">
               <i class="fa fa-search" aria-hidden="true"></i>
             </div>
@@ -74,26 +74,35 @@
 
 <script>
 import SSCashierTemplate from "@/components/Sections/SSCashierTemplate.vue";
-import CashierUnderBTN from "@/components/Buttons/CashierUnderBTN.vue";
+// import CashierUnderBTN from "@/components/Buttons/CashierUnderBTN.vue";
 import BillCardUsed from "@/components/Cards/BillCardUsed.vue";
 export default {
+  created() {
+    this.$store.dispatch("resetValueUserBillInfo");
+  },
   data() {
     return {
-      status: "statistic",
+      status: "history",
+      idBill: "",
+      date: "",
     };
   },
   components: {
     SSCashierTemplate,
-    CashierUnderBTN,
+    // CashierUnderBTN,
     BillCardUsed,
   },
   methods: {
-    getTurnOverToday() {},
-    getTurnOverMonth() {},
-    getTurnOverByDay() {},
-    getTurnOverFDTD() {},
-    seachBIllByIDCS() {},
-    seachBIllByDateCS() {},
+    // getTurnOverToday() {},
+    // getTurnOverMonth() {},
+    // getTurnOverByDay() {},
+    // getTurnOverFDTD() {},
+    seachBIllByIDCS() {
+      //lich su tim kiem theo id
+    },
+    seachBIllByDateCS() {
+      //lich su tim kiem theo ngay
+    },
   },
 };
 </script>

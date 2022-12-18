@@ -18,14 +18,14 @@
           class="sttPNameCTN"
           :style="{ background: this.getColor(product) }"
         >
-          <h1>{{ product.name }}</h1>
+          <h1>{{ product.nameProduct }}</h1>
         </div>
         <h1 class="STTquantity">{{ product.quantity }}</h1>
-        <div v-if="product.pos" class="sttPIDCTN">
-          <h1 :style="{ color: product.pos.color }" class="letter">
-            {{ product.pos.letter }}
+        <div v-if="product.position" class="sttPIDCTN">
+          <h1 :style="{ color: product.colorPos }" class="letter">
+            {{ product.position }}
           </h1>
-          <h1 class="number">{{ product.pos.number }}</h1>
+          <!-- <h1 class="number">{{ product.pos.number }}</h1> -->
         </div>
       </div>
     </div>
@@ -41,6 +41,7 @@ export default {
   },
   methods: {
     toggleOpen() {
+      this.$store.dispatch("getCurrProStatus");
       this.isOpenSTTFood = !this.isOpenSTTFood;
     },
   },
@@ -53,12 +54,16 @@ export default {
     },
     getColor() {
       return (product) => {
-        return product.status === "doing"
+        return product.statusProduct === "doing"
           ? "var(--stt-yellow)"
           : "var(--stt-green)";
       };
     },
   },
+  // created(){
+  //   this.$store.dispatch("getCurrProStatus");
+
+  // }
 };
 </script>
 

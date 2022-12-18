@@ -83,10 +83,18 @@
     </BaseModel>
   </Teleport>
   <Teleport to="body">
-    <BaseModel v-if="this.isSuccessPayment">
+    <BaseModel v-if="this.isSuccessPayment === true">
       <SuccessCard @onClickSuccessBTN="onClickSuccessBTN">
         <h1>Đặt Món Thành Công!</h1>
       </SuccessCard>
+    </BaseModel>
+    <BaseModel
+      v-if="this.isSuccessPayment === false"
+      @closeModel="onClickSuccessBTN"
+    >
+      <ErrorCard>
+        <h1>Đặt Món Thất Bại!</h1>
+      </ErrorCard>
     </BaseModel>
   </Teleport>
 </template>

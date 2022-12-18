@@ -33,8 +33,8 @@
       <div class="section-cards">
         <div class="ctn-cards">
           <food-card
-            v-for="drink in products"
-            :key="drink.id"
+            v-for="(drink, idx) in this.products"
+            :key="idx"
             :quantity="currSelected(drink.id)"
             @resetQuantity="resetQuantity(drink.id)"
             @icrQuantity="icrQuantity(drink.id)"

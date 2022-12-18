@@ -4,13 +4,13 @@
       <div class="CETOPbtns">
         <button
           :class="{ active: this.status === 'Import' }"
-          @click="this.status = 'Import'"
+          @click="changeToImport"
         >
           <h1>Nhập Kho</h1>
         </button>
         <button
           :class="{ active: this.status === 'Export' }"
-          @click="this.status = 'Export'"
+          @click="changeToExport"
         >
           <h1>Xuất Kho</h1>
         </button>
@@ -25,14 +25,23 @@
       </div>
     </div>
 
-    <div class="CEunder" v-if="this.ProductHistoryCE !== 0">
+    <div class="CEunder">
       <div v-for="(product, idx) in ProductHistoryCE" :key="idx" class="CECard">
         <h1>Tên: {{ product.name }}</h1>
         <h1>({{ changeToNameType(product.type) }})</h1>
         <h1>SL: {{ product.quantity }}</h1>
-        <h1>Tổng tiền: {{ product.totalCost }}</h1>
-        <h1>Nguồn: {{ product.source }}</h1>
-        <h1>{{ converDate(product.date) }}</h1>
+        <h1 v-if="this.status === 'Import' && this.isDataLoaded">
+          Tổng tiền: {{ product.totalCost }}
+        </h1>
+        <h1 v-if="this.status === 'Import' && this.isDataLoaded">
+          Nguồn: {{ product.source }}
+        </h1>
+        <h1 v-if="this.status === 'Import' && this.isDataLoaded">
+          {{ converDate(product.date) }}
+        </h1>
+        <h1 v-if="this.status === 'Export' && this.isDataLoaded">
+          {{ converDate(product.time) }}
+        </h1>
       </div>
     </div>
   </div>
@@ -43,19 +52,33 @@ export default {
   data() {
     return {
       status: "Import",
+      isDataLoaded: false,
       date: "",
       data: [],
     };
   },
   methods: {
-    searchIEByDate() {
-      this.$store
+    changeToImport() {
+      this.status = "Import";
+      this.$store.dispatch("resetHistoryIE");
+      this.isDataLoaded = false;
+    },
+    changeToExport() {
+      this.status = "Export";
+      this.$store.dispatch("resetHistoryIE");
+
+      this.isDataLoaded = false;
+    },
+
+    async searchIEByDate() {
+      await this.$store
         .dispatch("searchHistoryIE", {
           status: this.status,
           date: this.date,
         })
         .then(() => {
           // this.data = arr;
+          this.isDataLoaded = true;
         })
         .catch((err) => {
           console.log(err);

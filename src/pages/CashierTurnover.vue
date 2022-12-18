@@ -41,14 +41,14 @@
 
       <div class="CTMENUUnder">
         <div class="Turnover">
-          <h1>15000000đ</h1>
+          <h1>{{ this.TurnOver }}</h1>
         </div>
 
         <div class="btnTurnover">
-          <button>
+          <button @click="getTurnOverToday">
             <h1>Doanh Thu Hôm Nay</h1>
           </button>
-          <button>
+          <button @click="getTurnOverThisMonth">
             <h1>Doanh Thu Tháng Này</h1>
           </button>
         </div>
@@ -57,19 +57,19 @@
           <h1>Doanh Thu:</h1>
           <div class="CTItem">
             <label for="">Vào Ngày:</label>
-            <input type="date" />
-            <div class="iconSearch">
+            <input v-model="this.certainDate" type="date" />
+            <div @click="getTurnoverAtDate" class="iconSearch">
               <i class="fa fa-search" aria-hidden="true"></i>
             </div>
           </div>
           <div class="CTItem">
             <label for="">Từ Ngày:</label>
-            <input type="date" />
+            <input v-model="this.startDate" type="date" />
 
             <label for="">Đến Ngày:</label>
-            <input type="date" />
+            <input v-model="this.endDate" type="date" />
 
-            <div class="iconSearch">
+            <div @click="getTurnoverFromTo" class="iconSearch">
               <i class="fa fa-search" aria-hidden="true"></i>
             </div>
           </div>
@@ -92,6 +92,9 @@ export default {
   data() {
     return {
       isOpenMenu: false,
+      certainDate: "",
+      startDate: "",
+      endDate: "",
     };
   },
   computed: {
@@ -101,8 +104,26 @@ export default {
     isAdmin() {
       return this.$store.state.account.role === "admin";
     },
+    TurnOver() {
+      return this.$store.state.TurnOver;
+    },
   },
   methods: {
+    getTurnoverFromTo() {
+      const start = this.startDate;
+      const end = this.endDate;
+      this.$store.dispatch("getTurnoverFromTo", { start, end });
+    },
+    getTurnoverAtDate() {
+      this.$store.dispatch("getTurnoverAtDate", { date: this.certainDate });
+    },
+    getTurnOverThisMonth() {
+      this.$store.dispatch("getTurnOverThisMonth");
+    },
+    getTurnOverToday() {
+      this.$store.dispatch("getTurnOverToday");
+    },
+
     goToCashierDelivery(event) {
       event.preventDefault();
       this.$router.push("/cashierdelivery");

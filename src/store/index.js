@@ -19,6 +19,8 @@ const store = createStore({
         noGas: 0,
       },
 
+      TurnOver: 0,
+
       //Bills after user search by date #REQUEST TO GET
       UserBillInfo: [],
 
@@ -27,10 +29,13 @@ const store = createStore({
       //IDBill wait for this payment #REQUEST TO GET
       idBill: "ID1234",
 
+      currTimeUserBill: "",
+
+      isCancelledBill: false,
+
       //ACCOUNT info after login (not include password!) #REQUEST TO GET
       account: {
         // id: "ACCOUNT123",
-        // password: "123",
         // fullName: "Luffy Chan",
         // email: "LuffyChan@gmail.com",
         // img: "avt.jpg",
@@ -72,302 +77,14 @@ const store = createStore({
 
       //All the product will be sold today! #REQUEST TO GET
       products: [
-        {
-          id: "r1",
-          type: "rice",
-          img: "comchien.jpg",
-          total: 10,
-          name: "Cơm Chiên",
-          price: 25000,
-        },
-        {
-          id: "r2",
-          type: "rice",
-          img: "comchien.jpg",
-          total: 20,
-          name: "Cơm Hải Sản",
-          price: 35000,
-        },
-        {
-          id: "r3",
-          type: "rice",
-          img: "comchien.jpg",
-          total: 20,
-          name: "Cơm Nấm",
-          price: 25000,
-        },
-        {
-          id: "r4",
-          type: "rice",
-          img: "comchien.jpg",
-          total: 20,
-          name: "Cơm Tấm",
-          price: 25000,
-        },
-        {
-          id: "r5",
-          type: "rice",
-          img: "comchien.jpg",
-          total: 20,
-          name: "Cơm Gà Chiên",
-          price: 25000,
-        },
-        {
-          id: "r6",
-          type: "rice",
-          img: "comchien.jpg",
-          total: 20,
-          name: "Cơm Gà Xé",
-          price: 25000,
-        },
-        {
-          id: "r7",
-          type: "rice",
-          img: "comchien.jpg",
-          total: 20,
-          name: "Cơm Thập Cẩm",
-          price: 25000,
-        },
-        {
-          id: "r8",
-          type: "rice",
-          img: "comchien.jpg",
-          total: 20,
-          name: "Cơm Báo Đen",
-          price: 25000,
-        },
-        {
-          id: "n1",
-          type: "noodles",
-          img: "noodles.jpg",
-          total: 20,
-          name: "Mì xào bò",
-          price: 35000,
-        },
-        {
-          id: "n2",
-          type: "noodles",
-          img: "noodles.jpg",
-          total: 20,
-          name: "Mì xào heo",
-          price: 35000,
-        },
-        {
-          id: "n3",
-          type: "noodles",
-          img: "noodles.jpg",
-          total: 20,
-          name: "Mì xào gà",
-          price: 35000,
-        },
-        {
-          id: "n4",
-          type: "noodles",
-          img: "noodles.jpg",
-          total: 20,
-          name: "Mì hảo hảo",
-          price: 35000,
-        },
-        {
-          id: "n5",
-          type: "noodles",
-          img: "noodles.jpg",
-          total: 20,
-          name: "Mì xào gà",
-          price: 35000,
-        },
-        {
-          id: "n6",
-          type: "noodles",
-          img: "noodles.jpg",
-          total: 20,
-          name: "Mì trứng",
-          price: 35000,
-        },
-        {
-          id: "n7",
-          type: "noodles",
-          img: "noodles.jpg",
-          total: 20,
-          name: "Mì trộn",
-          price: 35000,
-        },
-        {
-          id: "n8",
-          type: "noodles",
-          img: "noodles.jpg",
-          total: 20,
-          name: "Mì xào cỏ",
-          price: 35000,
-        },
-        {
-          id: "n9",
-          type: "noodles",
-          img: "noodles.jpg",
-          total: 20,
-          name: "Mì xào cần",
-          price: 35000,
-        },
-        {
-          id: "c1",
-          type: "cake",
-          img: "cake.jpg",
-          total: 20,
-          name: "Bánh mì ngọt",
-          price: 15000,
-        },
-        {
-          id: "c2",
-          type: "cake",
-          img: "cake.jpg",
-          total: 20,
-          name: "Bánh mì mặn",
-          price: 15000,
-        },
-        {
-          id: "c3",
-          type: "cake",
-          img: "cake.jpg",
-          total: 20,
-          name: "Bánh mì lợ",
-          price: 15000,
-        },
-        {
-          id: "c4",
-          type: "cake",
-          img: "cake.jpg",
-          total: 20,
-          name: "Bánh mì trứng",
-          price: 15000,
-        },
-        {
-          id: "c5",
-          type: "cake",
-          img: "cake.jpg",
-          total: 20,
-          name: "Bánh mì xíu",
-          price: 15000,
-        },
-        {
-          id: "c6",
-          type: "cake",
-          img: "cake.jpg",
-          total: 20,
-          name: "Bánh mì que",
-          price: 15000,
-        },
-        {
-          id: "c7",
-          type: "cake",
-          img: "cake.jpg",
-          total: 20,
-          name: "Bánh mì",
-          price: 15000,
-        },
-        {
-          id: "c8",
-          type: "cake",
-          img: "cake.jpg",
-          total: 20,
-          name: "Bánh mì sữa",
-          price: 15000,
-        },
-        {
-          id: "g1",
-          type: "gas",
-          img: "cocacola.jpg",
-          total: 20,
-          name: "Coca Cola",
-          price: 10000,
-        },
-        {
-          id: "g2",
-          type: "gas",
-          img: "cocacola.jpg",
-          total: 20,
-          name: "Pepsi",
-          price: 10000,
-        },
-        {
-          id: "g3",
-          type: "gas",
-          img: "cocacola.jpg",
-          total: 20,
-          name: "Fanta",
-          price: 10000,
-        },
-        {
-          id: "g4",
-          type: "gas",
-          img: "cocacola.jpg",
-          total: 20,
-          name: "Seven up",
-          price: 10000,
-        },
-        {
-          id: "g5",
-          type: "gas",
-          img: "cocacola.jpg",
-          total: 20,
-          name: "Bia Sài Gòn",
-          price: 10000,
-        },
-        {
-          id: "g6",
-          type: "gas",
-          img: "cocacola.jpg",
-          total: 20,
-          name: "Sting",
-          price: 10000,
-        },
-        {
-          id: "ng1",
-          type: "noGas",
-          img: "nogas.jpg",
-          total: 20,
-          name: "Trà Xanh",
-          price: 10000,
-        },
-        {
-          id: "ng2",
-          type: "noGas",
-          img: "nogas.jpg",
-          total: 20,
-          name: "Nutriboots",
-          price: 10000,
-        },
-        {
-          id: "ng3",
-          type: "noGas",
-          img: "nogas.jpg",
-          total: 20,
-          name: "Tăng Lực",
-          price: 10000,
-        },
-        {
-          id: "ng4",
-          type: "noGas",
-          img: "nogas.jpg",
-          total: 20,
-          name: "Bí Đao",
-          price: 10000,
-        },
-        {
-          id: "ng5",
-          type: "noGas",
-          img: "nogas.jpg",
-          total: 20,
-          name: "Chanh Muối",
-          price: 10000,
-        },
-        {
-          id: "ng6",
-          type: "noGas",
-          img: "nogas.jpg",
-          total: 20,
-          name: "Trà Đào",
-          price: 10000,
-        },
+        // {
+        //   id: "ng6",
+        //   type: "noGas",
+        //   img: "nogas.jpg",
+        //   total: 20,
+        //   name: "Trà Đào",
+        //   price: 10000,
+        // },
       ],
 
       //DATATEST ALL THE products be choosed! #REQUEST TO GET
@@ -382,6 +99,16 @@ const store = createStore({
       //Products in schedule #REQUEST TO GET
       //NOTYPE
       productsSchedule: [
+        {
+          day: 0,
+          products: {
+            rice: [],
+            noodles: [],
+            cake: [],
+            gas: [],
+            noGas: [],
+          },
+        },
         {
           day: 1,
           products: [
@@ -727,7 +454,7 @@ const store = createStore({
       openLoginForm: false, //check to Open login form
       isValidPayMent: true, //check to valid payment
       isLogin: false, //check LOGIN
-      isSuccessPayment: false, //check to alert success or fail of payment
+      isSuccessPayment: "none", //check to alert success or fail of payment
 
       //Time set to wait user accept or deny pay
       timeWaitingBill: 10,
@@ -822,6 +549,7 @@ const store = createStore({
       state.ProductsAdminBill = [];
       getters.getProductSelected().forEach((product) => {
         let obj = {};
+        obj.id = product.id;
         obj.name = product.name;
         obj.quantity = state.qSelected[product.id];
         obj.total = obj.quantity * product.price;
@@ -1081,9 +809,9 @@ const store = createStore({
 
           state.isLogin = true;
         })
-        .catch((err) => {
+        .catch(() => {
           // msg = "fail";
-          console.log("that bai", err);
+          // console.log("that bai", err);
         });
 
       // return msg;
@@ -1195,6 +923,8 @@ const store = createStore({
         });
 
       state.isLogin = false;
+
+      router.push("/");
     },
     //START USER CHANGE INFO USER======
     async changeUserName({ commit, state }, newName) {
@@ -1270,15 +1000,51 @@ const store = createStore({
       commit;
       state.UserBillInfo = [];
     },
-    searchBillByDate({ commit, state }, { year, month, day }) {
+    async searchBillByDate({ commit, state }, { date }) {
       commit;
       state;
       state.UserBillInfo = [];
-      state.USERBILLS.forEach((el) => {
-        if (el.day === day && el.month === month && el.year === year) {
-          state.UserBillInfo.push(el);
-        }
-      });
+      // state.USERBILLS.forEach((el) => {
+      //   if (el.day === day && el.month === month && el.year === year) {
+      //     state.UserBillInfo.push(el);
+      //   }
+      // });
+
+      const accessToken = Cookies.get("accessToken");
+
+      const config = {
+        headers: {
+          Authorization: "Bearer " + accessToken,
+          "x-access-token": accessToken,
+        },
+      };
+
+      const data = {
+        date,
+      };
+
+      await axios
+        .post(
+          "https://back-end-can-teen-manage-25.vercel.app/api/v1/user/getHistoryBill",
+          data,
+          config
+        )
+        .then((rs) => {
+          // console.log("bill da mua", rs);
+          state.UserBillInfo = rs.data.data;
+          state.UserBillInfo.forEach((billEl) => {
+            billEl["idPositions"] = [];
+            billEl.product.forEach((posBill) => {
+              billEl["idPositions"].push(posBill.position);
+            });
+          });
+
+          // console.log("state.UserBillInfo: ", state.UserBillInfo);
+          // state.UserBillInfo   ["idPositions"] = []
+        })
+        .catch((err) => {
+          console.log(err);
+        });
     },
     //START USER ADDMONEY TO ACCOUNT====
     async addMoney({ commit, state }, cardCode) {
@@ -1331,7 +1097,7 @@ const store = createStore({
       commit;
       state.showScreenBill = false;
     },
-    showUserPayment({ commit, state }) {
+    async showUserPayment({ commit, state }) {
       commit;
       if (!state.isLogin) {
         state.openLoginForm = true;
@@ -1340,63 +1106,168 @@ const store = createStore({
       if (Object.keys(state.qSelected).length === 0) {
         return;
       }
-      state.showScreenBill = true;
 
       if (state.NumberValidIDPOS === 0) {
         return;
       }
-      state.isPrintBill = true;
+
+      const accessToken = Cookies.get("accessToken");
+
+      const config = {
+        headers: {
+          Authorization: "Bearer " + accessToken,
+          "x-access-token": accessToken,
+        },
+      };
+
+      const objSell = JSON.parse(JSON.stringify(state.qSelected));
+
+      let productSell = [];
+
+      const keysObjSell = Object.keys(objSell);
+      const valuesObjSell = Object.values(objSell);
+
+      for (let i = 0; i < keysObjSell.length; i++) {
+        const temp = {
+          id: keysObjSell[i],
+          number: valuesObjSell[i],
+        };
+        productSell.push(temp);
+      }
+
+      let today = new Date();
+      let buyTime =
+        today.getHours() +
+        ":" +
+        today.getMinutes() +
+        " " +
+        today.getFullYear() +
+        "-" +
+        (today.getMonth() + 1) +
+        "-" +
+        today.getDate();
+
+      const data = {
+        buyTime,
+        product: productSell,
+      };
+
+      // state.showScreenBill = true;
+      // state.isPrintBill = true;
+      // let flag;
+
+      state.idValidPosition = [];
+
+      await axios
+        .post(
+          "https://back-end-can-teen-manage-25.vercel.app/api/v1/user/createOnlineBill",
+          data,
+          config
+        )
+        .then((rs) => {
+          // console.log("ket qua tra ve", rs.data.data);
+          store.state.isCancelledBill = true;
+          const data = rs.data.data;
+
+          data.product.forEach((e) => {
+            state.idValidPosition.push(e.position);
+          });
+
+          state.currTimeUserBill = data.time;
+          state.showScreenBill = true;
+          state.isPrintBill = true;
+
+          state.idBill = data.idBill;
+        })
+        .catch((err) => {
+          console.log("that bai ", err);
+        });
+
       state.TimeOutFn = setTimeout(() => {
+        store.state.isCancelledBill = true;
+        store.dispatch("cancelUserPayment");
         state.isPrintBill = false;
       }, state.timeWaitingBill * 1000);
     },
-    doUserPayment({ commit, state }, { currTime }) {
+    async doUserPayment({ commit, state }, { currTime }) {
       commit;
-      let newBill = {};
-      newBill["idPositions"] = [];
-      state.idValidPosition.forEach((pos) => {
-        newBill.idPositions.push(pos);
-      });
-      newBill["time"] = currTime.split(" ")[0];
-      newBill["day"] = currTime.split(" ")[1].split("/")[0];
-      newBill["month"] = currTime.split(" ")[1].split("/")[1];
-      newBill["year"] = currTime.split(" ")[1].split("/")[2];
-      newBill["userName"] = state.account.fullName;
-      newBill["userID"] = state.account.id;
-      newBill["billID"] = state.idBill;
-      newBill["products"] = [];
+      state;
+      currTime;
+      // let newBill = {};
+      // newBill["idPositions"] = [];
+      // state.idValidPosition.forEach((pos) => {
+      //   newBill.idPositions.push(pos);
+      // });
+      // newBill["time"] = currTime.split(" ")[0];
+      // newBill["day"] = currTime.split(" ")[1].split("/")[0];
+      // newBill["month"] = currTime.split(" ")[1].split("/")[1];
+      // newBill["year"] = currTime.split(" ")[1].split("/")[2];
+      // newBill["userName"] = state.account.fullName;
+      // newBill["userID"] = state.account.id;
+      // newBill["billID"] = state.idBill;
+      // newBill["products"] = [];
 
-      this.getters.getProductSelected().forEach((product) => {
-        const qtt = state.qSelected[product.id];
-        let obj = {};
-        obj.name = product.name;
-        obj.quantity = qtt;
-        obj.cost = qtt * product.price;
-        newBill.products.push(obj);
-      });
-      newBill["totalCost"] = state.totalCost;
-      //add new bill after success
-      state.USERBILLS.push(newBill);
+      // this.getters.getProductSelected().forEach((product) => {
+      //   const qtt = state.qSelected[product.id];
+      //   let obj = {};
+      //   obj.name = product.name;
+      //   obj.quantity = qtt;
+      //   obj.cost = qtt * product.price;
+      //   newBill.products.push(obj);
+      // });
+      // newBill["totalCost"] = state.totalCost;
+      // //add new bill after success
+      // state.USERBILLS.push(newBill);
+
       //add to doing products:
-      let indexPOS = 0;
-      this.getters.getProductSelected().forEach((product) => {
-        let obj = {};
-        obj.status = "doing";
-        obj.name = product.name;
-        obj.quantity = state.qSelected[product.id];
-        if (
-          product.type === "rice" ||
-          product.type === "noodles" ||
-          product.type === "cake"
-        ) {
-          obj.pos = state.idValidPosition[indexPOS];
-          state.idValidPosition[indexPOS].status = "used";
-          indexPOS++;
-        }
-        state.PRODUCTBOUGHT.push(obj);
-      });
+      // let indexPOS = 0;
+      // this.getters.getProductSelected().forEach((product) => {
+      //   let obj = {};
+      //   obj.status = "doing";
+      //   obj.name = product.name;
+      //   obj.quantity = state.qSelected[product.id];
+      //   if (
+      //     product.type === "rice" ||
+      //     product.type === "noodles" ||
+      //     product.type === "cake"
+      //   ) {
+      //     obj.pos = state.idValidPosition[indexPOS];
+      //     state.idValidPosition[indexPOS].status = "used";
+      //     indexPOS++;
+      //   }
+      //   state.PRODUCTBOUGHT.push(obj);
+
+      const accessToken = Cookies.get("accessToken");
+
+      const config = {
+        headers: {
+          Authorization: "Bearer " + accessToken,
+          "x-access-token": accessToken,
+        },
+      };
+
+      const data = {
+        idBill: state.idBill,
+        confirm: true,
+      };
+
+      await axios
+        .post(
+          "https://back-end-can-teen-manage-25.vercel.app/api/v1/user/confirmBill",
+          data,
+          config
+        )
+        .then(() => {
+          state.isSuccessPayment = true;
+          state.account.money -= state.totalCost;
+        })
+        .catch(() => {
+          state.isSuccessPayment = false;
+        });
+      state.isCancelledBill = false;
+
       //reset======================
-      state.account.money -= state.totalCost;
+
       const arrIDSelected = Object.keys(state.qSelected);
       arrIDSelected.forEach((id) => {
         this.getters.getProduct(id).total -= state.qSelected[id];
@@ -1411,18 +1282,50 @@ const store = createStore({
       state.showScreenBill = false;
       clearTimeout(state.TimeOutFn);
       state.isPrintBill = false;
-      state.isSuccessPayment = true;
     },
-    cancelUserPayment({ commit, state }) {
+    async cancelUserPayment({ commit, state }) {
       commit;
       state;
       if (state.TimeOutFn) {
         clearTimeout(state.TimeOutFn);
       }
+
+      if (state.isCancelledBill) {
+        const accessToken = Cookies.get("accessToken");
+
+        const config = {
+          headers: {
+            Authorization: "Bearer " + accessToken,
+            "x-access-token": accessToken,
+          },
+        };
+
+        const data = {
+          idBill: state.idBill,
+          confirm: false,
+        };
+
+        // console.log("du lieu data khi huy: ", data);
+
+        await axios
+          .post(
+            "https://back-end-can-teen-manage-25.vercel.app/api/v1/user/confirmBill",
+            data,
+            config
+          )
+          .then(() => {
+            // console.log("da huy vi tri cho", rs);
+          })
+          .catch((err) => {
+            console.log("bi loi huy vi tri", err);
+          });
+        state.isCancelledBill = false;
+        return;
+      }
     },
     resetIsSuccessPayment({ commit, state }) {
       commit;
-      state.isSuccessPayment = false;
+      state.isSuccessPayment = "rong";
     },
     resetValidPayment({ commit, state }) {
       commit;
@@ -1463,14 +1366,50 @@ const store = createStore({
     },
 
     //CASHIER PAYMENT=========================
-    doAdminPayment({ commit, state }) {
+    async doAdminPayment({ commit, state }) {
       commit;
-      return new Promise((resolve, reject) => {
-        if (state.ProductsAdminBill.length !== 0) {
-          const arrIDSelected = Object.keys(state.qSelected);
-          arrIDSelected.forEach((id) => {
-            this.getters.getProduct(id).total -= state.qSelected[id];
-          });
+      state;
+
+      // console.log("san pham ban: ", state.ProductsAdminBill);
+
+      const accessToken = Cookies.get("accessToken");
+
+      const config = {
+        headers: {
+          Authorization: "Bearer " + accessToken,
+          "x-access-token": accessToken,
+        },
+      };
+
+      const objSell = JSON.parse(JSON.stringify(state.ProductsAdminBill));
+
+      let productSell = [];
+
+      objSell.forEach((e) => {
+        const temp = {
+          id: e.id,
+          number: e.quantity,
+        };
+
+        productSell.push(temp);
+      });
+
+      const data = {
+        product: productSell,
+      };
+
+      let flag;
+      await axios
+        .post(
+          "https://back-end-can-teen-manage-25.vercel.app/api/v1/cashier/createBill",
+          data,
+          config
+        )
+        .then(() => {
+          // console.log("Ban thanh cong: ", rs);
+
+          store.dispatch("getAllTodayProducts");
+
           state.qTypeSelected.rice = 0;
           state.qTypeSelected.noodles = 0;
           state.qTypeSelected.cake = 0;
@@ -1478,11 +1417,31 @@ const store = createStore({
           state.qTypeSelected.noGas = 0;
           state.qSelected = {};
           state.totalCost = 0;
-          resolve("Success");
-        } else {
-          reject("Fail");
-        }
-      });
+          flag = "success";
+        })
+        .catch((err) => {
+          console.log("thanh toan that bai! ", err);
+          flag = "fail";
+        });
+      return flag;
+      // return new Promise((resolve, reject) => {
+      //   if (state.ProductsAdminBill.length !== 0) {
+      //     const arrIDSelected = Object.keys(state.qSelected);
+      //     arrIDSelected.forEach((id) => {
+      //       this.getters.getProduct(id).total -= state.qSelected[id];
+      //     });
+      //     state.qTypeSelected.rice = 0;
+      //     state.qTypeSelected.noodles = 0;
+      //     state.qTypeSelected.cake = 0;
+      //     state.qTypeSelected.gas = 0;
+      //     state.qTypeSelected.noGas = 0;
+      //     state.qSelected = {};
+      //     state.totalCost = 0;
+      //     resolve("Success");
+      //   } else {
+      //     reject("Fail");
+      //   }
+      // });
     },
 
     //CASHIER UPDATE SCHEDULE=================
@@ -1587,6 +1546,8 @@ const store = createStore({
     async getProductImported({ commit, state }) {
       commit;
       state;
+
+      state.productImported = [];
       const accessToken = Cookies.get("accessToken");
 
       const config = {
@@ -1599,7 +1560,9 @@ const store = createStore({
       await axios
         .post(
           "https://back-end-can-teen-manage-25.vercel.app/api/v1/cashier/inventory",
-          {},
+          {
+            dummytext: "huyhaha",
+          },
           config
         )
         .then((rs) => {
@@ -1684,10 +1647,18 @@ const store = createStore({
       date;
     },
 
+    resetHistoryIE({ commit, state }) {
+      commit;
+      state;
+      state.ProductHistoryCE = [];
+    },
+
     //CASHIER SEARCH HISTORY PRODUCT IE
     async searchHistoryIE({ commit, state }, { status, date }) {
       commit;
       state;
+
+      state.ProductHistoryCE = [];
 
       const accessToken = Cookies.get("accessToken");
 
@@ -1699,7 +1670,7 @@ const store = createStore({
       };
 
       if (!date) {
-        date = undefined;
+        date = "undefined";
       }
 
       let data = {
@@ -1721,14 +1692,469 @@ const store = createStore({
       await axios
         .post(urlPath, data, config)
         .then((rs) => {
-          // console.log("data history", rs);
+          console.log("data history", rs);
           // store.dispatch("getProductImported");
-          console.log("du lieu ve:", rs);
           state.ProductHistoryCE = rs.data.products;
         })
         .catch((err) => {
           console.log(err);
         });
+    },
+
+    async setUpDelivery({ commit, state }, { letters, color, numPerColor }) {
+      commit;
+      state;
+
+      const accessToken = Cookies.get("accessToken");
+
+      const config = {
+        headers: {
+          Authorization: "Bearer " + accessToken,
+          "x-access-token": accessToken,
+        },
+      };
+      let data = {
+        letter: letters,
+        color,
+        numPerColor,
+      };
+
+      // data = JSON.parse(JSON.stringify(data));
+
+      await axios
+        .post(
+          "https://back-end-can-teen-manage-25.vercel.app/api/v1/cashier/createPosition",
+          data,
+          config
+        )
+        .then(() => {
+          // store.dispatch("getProductImported");
+        })
+        .catch((err) => {
+          console.log(err);
+        });
+    },
+
+    async getTurnOverToday({ commit, state }) {
+      commit;
+      state;
+
+      const accessToken = Cookies.get("accessToken");
+
+      const config = {
+        headers: {
+          Authorization: "Bearer " + accessToken,
+          "x-access-token": accessToken,
+        },
+      };
+      // data = JSON.parse(JSON.stringify(data));
+
+      await axios
+        .post(
+          "https://back-end-can-teen-manage-25.vercel.app/api/v1/cashier/getTodayRevenue",
+          {},
+          config
+        )
+        .then((rs) => {
+          // store.dispatch("getProductImported");
+          // console.log("ressult gui ve: ", rs);
+          state.TurnOver = rs.data.revenue;
+        })
+        .catch((err) => {
+          console.log(err);
+        });
+    },
+
+    async getTurnOverThisMonth({ commit, state }) {
+      commit;
+      state;
+
+      const accessToken = Cookies.get("accessToken");
+
+      const config = {
+        headers: {
+          Authorization: "Bearer " + accessToken,
+          "x-access-token": accessToken,
+        },
+      };
+      // data = JSON.parse(JSON.stringify(data));
+
+      await axios
+        .post(
+          "https://back-end-can-teen-manage-25.vercel.app/api/v1/cashier/getMonthRevenue",
+          {},
+          config
+        )
+        .then((rs) => {
+          // store.dispatch("getProductImported");
+          // console.log("ressult gui ve: ", rs);
+          state.TurnOver = rs.data.revenue;
+        })
+        .catch((err) => {
+          console.log(err);
+        });
+    },
+
+    async getTurnoverAtDate({ commit, state }, { date }) {
+      commit;
+      state;
+      const accessToken = Cookies.get("accessToken");
+
+      const config = {
+        headers: {
+          Authorization: "Bearer " + accessToken,
+          "x-access-token": accessToken,
+        },
+      };
+
+      const data = {
+        start: date,
+        end: date,
+      };
+
+      await axios
+        .post(
+          "https://back-end-can-teen-manage-25.vercel.app/api/v1/cashier/getRevenueInPeriodTime",
+          data,
+          config
+        )
+        .then((rs) => {
+          // store.dispatch("getProductImported");
+          state.TurnOver = rs.data.revenue;
+        })
+        .catch((err) => {
+          console.log(err);
+        });
+    },
+
+    async getTurnoverFromTo({ commit, state }, { start, end }) {
+      commit;
+      state;
+      const accessToken = Cookies.get("accessToken");
+
+      const config = {
+        headers: {
+          Authorization: "Bearer " + accessToken,
+          "x-access-token": accessToken,
+        },
+      };
+
+      const data = {
+        start,
+        end,
+      };
+
+      await axios
+        .post(
+          "https://back-end-can-teen-manage-25.vercel.app/api/v1/cashier/getRevenueInPeriodTime",
+          data,
+          config
+        )
+        .then((rs) => {
+          // store.dispatch("getProductImported");
+          state.TurnOver = rs.data.revenue;
+        })
+        .catch((err) => {
+          console.log(err);
+        });
+    },
+
+    async getAllTodayProducts({ commit, state }) {
+      commit;
+      state;
+      // const accessToken = Cookies.get("accessToken");
+
+      const config = {
+        headers: {
+          // Authorization: "Bearer " + accessToken,
+          // "x-access-token": accessToken,
+        },
+      };
+
+      await axios
+        .get(
+          "https://back-end-can-teen-manage-25.vercel.app/api/v1/auth/",
+          {},
+          config
+        )
+        .then((rs) => {
+          state.RiceProduct = [];
+          rs.data.data.rice.forEach((el) => {
+            const objtemp = {
+              id: el.id,
+              type: "rice",
+              img: el.img,
+              total: el.quantity,
+              name: el.name,
+              price: el.price,
+            };
+            state.RiceProduct.push(objtemp);
+          });
+
+          state.NoodlesProduct = [];
+          rs.data.data.noodles.forEach((el) => {
+            const objtemp = {
+              id: el.id,
+              type: "noodles",
+              img: el.img,
+              total: el.quantity,
+              name: el.name,
+              price: el.price,
+            };
+            state.NoodlesProduct.push(objtemp);
+          });
+
+          state.GasProduct = [];
+          rs.data.data.gas.forEach((el) => {
+            const objtemp = {
+              id: el.id,
+              type: "gas",
+              img: el.img,
+              total: el.quantity,
+              name: el.name,
+              price: el.price,
+            };
+            state.GasProduct.push(objtemp);
+          });
+
+          state.NoGasProduct = [];
+          rs.data.data.noGas.forEach((el) => {
+            const objtemp = {
+              id: el.id,
+              type: "noGas",
+              img: el.img,
+              total: el.quantity,
+              name: el.name,
+              price: el.price,
+            };
+            state.NoGasProduct.push(objtemp);
+          });
+
+          state.CakeProduct = [];
+          rs.data.data.cake.forEach((el) => {
+            const objtemp = {
+              id: el.id,
+              type: "cake",
+              img: el.img,
+              total: el.quantity,
+              name: el.name,
+              price: el.price,
+            };
+            state.CakeProduct.push(objtemp);
+          });
+
+          state.products = [
+            ...state.RiceProduct,
+            ...state.NoodlesProduct,
+            ...state.CakeProduct,
+            ...state.GasProduct,
+            ...state.NoGasProduct,
+          ];
+        })
+        .catch((err) => {
+          console.log(err);
+        });
+    },
+
+    async getCurrProStatus({ commit, state }) {
+      commit;
+      state;
+      const accessToken = Cookies.get("accessToken");
+
+      const config = {
+        headers: {
+          Authorization: "Bearer " + accessToken,
+          "x-access-token": accessToken,
+        },
+      };
+
+      await axios
+        .post(
+          "https://back-end-can-teen-manage-25.vercel.app/api/v1/user/uncompleteBill",
+          {},
+          config
+        )
+        .then((rs) => {
+          // state.productImported = rs.data;
+          // console.log("gia tri tra ve, ", rs);
+          const data = rs.data.billUncomplete.result;
+
+          state.PRODUCTBOUGHT = [];
+          data.forEach((billEl) => {
+            billEl.data.forEach((e) => {
+              state.PRODUCTBOUGHT.push(e);
+            });
+          });
+
+          // console.log(state.PRODUCTBOUGHT);
+        })
+        .catch((err) => {
+          console.log(err);
+        });
+    },
+
+    async getMoneyUsedInMonth({ commit, state }) {
+      commit;
+      state;
+      const accessToken = Cookies.get("accessToken");
+
+      const config = {
+        headers: {
+          Authorization: "Bearer " + accessToken,
+          "x-access-token": accessToken,
+        },
+      };
+
+      await axios
+        .post(
+          "https://back-end-can-teen-manage-25.vercel.app/api/v1/user/getTotalMoneySpentInMonth",
+          {},
+          config
+        )
+        .then((rs) => {
+          // state.productImported = rs.data;
+          // console.log("gia tri tra ve, ", rs);
+          // console.log("ket qua tra ve:", rs);
+
+          state.moneyUsedInMonth = rs.data.money;
+
+          // console.log(state.PRODUCTBOUGHT);
+        })
+        .catch((err) => {
+          console.log(err);
+        });
+    },
+
+    async getDoingBills({ commit, state }) {
+      commit;
+      state;
+
+      state.UserBillInfo = [];
+
+      const accessToken = Cookies.get("accessToken");
+
+      const config = {
+        headers: {
+          Authorization: "Bearer " + accessToken,
+          "x-access-token": accessToken,
+        },
+      };
+
+      await axios
+        .post(
+          "https://back-end-can-teen-manage-25.vercel.app/api/v1/cashier/getUnCompletedBill",
+          {},
+          config
+        )
+        .then((rs) => {
+          // state.moneyUsedInMonth = rs.data.money;
+          // console.log("hoa don chua hoan thanh", rs);
+
+          state.UserBillInfo = rs.data.data;
+          state.UserBillInfo.forEach((billEl) => {
+            billEl["idPositions"] = [];
+            billEl.product.forEach((posBill) => {
+              billEl["idPositions"].push(posBill.position);
+            });
+          });
+          // console.log(state.PRODUCTBOUGHT);
+        })
+        .catch((err) => {
+          console.log("Loi khi lay hoa don chua hoan thanh", err);
+        });
+    },
+
+    async getDoneBills({ commit, state }) {
+      commit;
+      state;
+
+      state.UserBillInfo = [];
+
+      const accessToken = Cookies.get("accessToken");
+
+      const config = {
+        headers: {
+          Authorization: "Bearer " + accessToken,
+          "x-access-token": accessToken,
+        },
+      };
+
+      await axios
+        .post(
+          "https://back-end-can-teen-manage-25.vercel.app/api/v1/cashier/getCompletedBill",
+          {},
+          config
+        )
+        .then((rs) => {
+          // state.moneyUsedInMonth = rs.data.money;
+          // console.log("hoa don chua hoan thanh", rs);
+          state.UserBillInfo = rs.data.data;
+          state.UserBillInfo.forEach((billEl) => {
+            billEl["idPositions"] = [];
+            billEl.product.forEach((posBill) => {
+              billEl["idPositions"].push(posBill.position);
+            });
+          });
+
+          // console.log(state.PRODUCTBOUGHT);
+        })
+        .catch((err) => {
+          console.log("Loi khi lay hoa don chua hoan thanh", err);
+        });
+    },
+
+    async searchByBIllID({ commit, state }, { status, id }) {
+      commit;
+      state;
+
+      state.UserBillInfo = [];
+
+      const accessToken = Cookies.get("accessToken");
+
+      const config = {
+        headers: {
+          Authorization: "Bearer " + accessToken,
+          "x-access-token": accessToken,
+        },
+      };
+
+      const data = {
+        status,
+        id,
+      };
+
+      // console.log("data gui len", data);
+
+      await axios
+        .post(
+          "https://back-end-can-teen-manage-25.vercel.app/api/v1/cashier/getBillByID",
+          data,
+          config
+        )
+        .then((rs) => {
+          // state.moneyUsedInMonth = rs.data.money;
+          // console.log("hoa don chua hoan thanh", rs);
+
+          // console.log("ket qua tra ve : ", rs);
+
+          state.UserBillInfo = rs.data.data;
+          state.UserBillInfo.forEach((billEl) => {
+            billEl["idPositions"] = [];
+            billEl.product.forEach((posBill) => {
+              billEl["idPositions"].push(posBill.position);
+            });
+          });
+
+          // console.log(state.PRODUCTBOUGHT);
+        })
+        .catch((err) => {
+          console.log("Loi khi lay hoa don theo id", err);
+        });
+    },
+
+    resetValueUserBillInfo({ commit, state }) {
+      commit;
+      state.UserBillInfo = [];
     },
 
     //ASSISTANT CHECKPRODUCT

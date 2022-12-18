@@ -24,7 +24,7 @@
           <button
             :class="{ active: this.statusSell === 'online' }"
             class="online"
-            @click="this.statusSell = 'online'"
+            @click="changetoOnline"
           >
             <h1>ONLINE</h1>
           </button>
@@ -98,8 +98,8 @@
             <div class="ctn-cards">
               <food-card
                 class="cashier"
-                v-for="food in products"
-                :key="food.id"
+                v-for="(food, idx) in this.products"
+                :key="idx"
                 :quantity="currSelected(food.id)"
                 @resetQuantity="resetQuantity(food.id)"
                 @icrQuantity="icrQuantity(food.id)"
@@ -129,14 +129,14 @@
           <div class="mainListBTNS">
             <div class="section-btns">
               <button
-                @click="this.onlineStatus = 'doing'"
+                @click="getDoingBills"
                 class="doing"
                 :class="{ active: this.onlineStatus === 'doing' }"
               >
                 <h1>Chưa Hoàn Thành</h1>
               </button>
               <button
-                @click="this.onlineStatus = 'done'"
+                @click="getDoneBills"
                 class="done"
                 :class="{ active: this.onlineStatus === 'done' }"
               >
@@ -145,16 +145,20 @@
             </div>
             <div class="searchBillOnlineCTN">
               <label for="">Tìm Kiếm:</label>
-              <input type="text" placeholder="Mã hoá đơn" />
+              <input
+                v-model="this.idBillSearch"
+                type="text"
+                placeholder="Mã hoá đơn"
+              />
               <div @click="searchByBIllID" class="searchICON">
                 <i class="fa fa-search" aria-hidden="true"></i>
               </div>
             </div>
           </div>
           <div class="mainListSearch">
-            <h1>Số lượng: 3</h1>
+            <h1>Số lượng: {{ this.UserBillInfo.length }}</h1>
             <BillCardDoing v-if="this.onlineStatus === 'doing'"></BillCardDoing>
-            <BillCardDone v-if="this.onlineStatus === 'done'"></BillCardDone>
+            <BillCardDoing v-if="this.onlineStatus === 'done'"></BillCardDoing>
           </div>
         </div>
       </div>
@@ -237,7 +241,7 @@ import BaseModel from "@/components/Models/BaseModel.vue";
 import SuccessCard from "@/components/Cards/SuccessCard.vue";
 import ErrorCard from "@/components/Cards/ErrorCard.vue";
 import BillCardDoing from "@/components/Cards/BillCardDoing.vue";
-import BillCardDone from "@/components/Cards/BillCardDone.vue";
+// import BillCardDone from "@/components/Cards/BillCardDone.vue";
 export default {
   components: {
     ErrorPage,
@@ -248,7 +252,7 @@ export default {
     SuccessCard,
     ErrorCard,
     BillCardDoing,
-    BillCardDone,
+    // BillCardDone,
   },
   data() {
     return {
@@ -259,10 +263,24 @@ export default {
       isPayMentSuccess: false,
       isPayMentError: false,
 
+      idBillSearch: "",
+
       onlineStatus: "doing",
     };
   },
   methods: {
+    changetoOnline() {
+      this.statusSell = "online";
+      this.$store.dispatch("getDoingBills");
+    },
+    getDoingBills() {
+      this.onlineStatus = "doing";
+      this.$store.dispatch("getDoingBills");
+    },
+    getDoneBills() {
+      this.onlineStatus = "done";
+      this.$store.dispatch("getDoneBills");
+    },
     goToCashierDelivery(event) {
       event.preventDefault();
       this.$router.push("/cashierdelivery");
@@ -283,7 +301,12 @@ export default {
       event.preventDefault();
       this.$router.push("/cashierturnover");
     },
-    searchByBIllID() {},
+    searchByBIllID() {
+      this.$store.dispatch("searchByBIllID", {
+        status: this.onlineStatus,
+        id: this.idBillSearch,
+      });
+    },
     onSellClick() {
       if (this.BillProducts.length !== 0) {
         this.showCashierBill = true;
@@ -294,16 +317,15 @@ export default {
       this.isPayMentSuccess = false;
       this.isPayMentError = false;
     },
-    doAdminPayment(event) {
+    async doAdminPayment(event) {
       event.preventDefault();
-      this.$store
-        .dispatch("doAdminPayment")
-        .then(() => {
-          this.isPayMentSuccess = true;
-        })
-        .catch(() => {
-          this.isPayMentError = true;
-        });
+      const rs = await this.$store.dispatch("doAdminPayment");
+
+      if (rs === "success") {
+        this.isPayMentSuccess = true;
+      } else {
+        this.isPayMentError = true;
+      }
     },
     logout() {
       this.$store.dispatch("logout");
@@ -324,6 +346,10 @@ export default {
     },
   },
   computed: {
+    UserBillInfo() {
+      return this.$store.state.UserBillInfo;
+    },
+
     totalCost() {
       return this.$store.state.totalCost;
     },
@@ -338,7 +364,15 @@ export default {
     },
 
     products() {
-      return this.$store.getters.getTypeArr(this.status);
+      const objectType = {
+        rice: "RiceProduct",
+        noodles: "NoodlesProduct",
+        gas: "GasProduct",
+        noGas: "NoGasProduct",
+        cake: "CakeProduct",
+      };
+
+      return this.$store.state[objectType[this.status]];
     },
     currSelected() {
       return (id) => {
@@ -348,6 +382,9 @@ export default {
     quantity() {
       return (val) => this.$store.state.qTypeSelected[val];
     },
+  },
+  created() {
+    this.$store.dispatch("getAllTodayProducts");
   },
 };
 </script>
