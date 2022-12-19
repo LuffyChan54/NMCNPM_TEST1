@@ -2181,11 +2181,20 @@ const store = createStore({
           "x-access-token": accessToken,
         },
       };
+      const today = new Date();
+      const getDateVal =
+        today.getDate() < 10 ? "0" + today.getDate() : today.getDate();
       state.isLoading = true;
+
+      const date =
+        today.getFullYear() + "-" + (today.getMonth() + 1) + "-" + getDateVal;
+
       await axios
         .post(
           "https://back-end-can-teen-manage-25.vercel.app/api/v1/cashier/getUnCompletedBill",
-          {},
+          {
+            date,
+          },
           config
         )
         .then((rs) => {
@@ -2226,14 +2235,30 @@ const store = createStore({
           "x-access-token": accessToken,
         },
       };
+
+      const today = new Date();
+      const getDateVal =
+        today.getDate() < 10 ? "0" + today.getDate() : today.getDate();
+      state.isLoading = true;
+
+      const date =
+        today.getFullYear() + "-" + (today.getMonth() + 1) + "-" + getDateVal;
+
+      // console.log("date gui len: ", date);
+
+      const data = {
+        date,
+      };
+
       state.isLoading = true;
       await axios
         .post(
           "https://back-end-can-teen-manage-25.vercel.app/api/v1/cashier/getCompletedBill",
-          {},
+          data,
           config
         )
         .then((rs) => {
+          // console.log("gia tri gui ve ", rs);
           state.isLoading = false;
 
           // state.moneyUsedInMonth = rs.data.money;
