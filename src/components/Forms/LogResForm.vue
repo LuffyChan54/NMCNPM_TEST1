@@ -15,7 +15,7 @@
     <div class="ruler"></div>
     <div class="inputCTN">
       <label for="inputEmail">Email</label>
-      <input v-model="this.inputEmail" id="inputEmail" type="email" />
+      <input v-model="this.inputEmail" id="inputEmail" name="" type="email" />
     </div>
     <div v-if="this.status === 'register'" class="inputCTN">
       <label for="inputFullName">Họ Tên</label>
@@ -23,7 +23,12 @@
     </div>
     <div v-if="this.status !== 'forgetPW'" class="inputCTN">
       <label for="inputPassword">Mật Khẩu</label>
-      <input v-model="this.inputPW" id="inputPassword" type="password" />
+      <input
+        v-model="this.inputPW"
+        required
+        id="inputPassword"
+        type="password"
+      />
     </div>
     <div v-if="this.status === 'register'" class="inputCTN">
       <label for="inputPasswordAgain">Xác Nhận Mật Khẩu</label>
@@ -95,6 +100,14 @@
     </p>
 
     <p
+      v-if="!this.isValidEmail"
+      style="color: var(--stt-red)"
+      class="subTitleForgetPW"
+    >
+      Email không hợp lệ
+    </p>
+
+    <p
       v-if="
         this.registerFlag &&
         this.statusRegister &&
@@ -153,6 +166,8 @@ export default {
       statusRegister: true,
       checkConfirmPW: true,
       rememberMe: "",
+
+      isValidEmail: true,
     };
   },
   components: {
@@ -161,11 +176,21 @@ export default {
   methods: {
     onChangeBTN(event, val) {
       event.preventDefault();
+      this.isValidEmail = true;
+
       this.$emit("onChangeBTN", val);
     },
 
     async login(event) {
       event.preventDefault();
+
+      const regexp = /^[a-zA-Z0-9._-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,6}$/;
+
+      if (!regexp.test(String(this.inputEmail).toLowerCase())) {
+        this.isValidEmail = false;
+        return;
+      }
+
       const resultLogin = await this.$store.dispatch("login", {
         email: this.inputEmail,
         pw: this.inputPW,
@@ -186,9 +211,21 @@ export default {
     },
     register(event) {
       event.preventDefault();
+
+      const regexp = /^[a-zA-Z0-9._-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,6}$/;
+
+      if (!regexp.test(String(this.inputEmail).toLowerCase())) {
+        this.isValidEmail = false;
+        return;
+      }
+
       if (this.inputPW !== this.inputConfirmPW) {
+        this.isValidEmail = true;
+
         this.checkConfirmPW = false;
       } else {
+        this.isValidEmail = true;
+
         this.$store
           .dispatch("register", {
             email: this.inputEmail,

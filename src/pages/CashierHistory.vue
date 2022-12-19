@@ -103,6 +103,7 @@ export default {
     },
     seachBIllByDateCS() {
       //lich su tim kiem theo ngay
+      // console.log("this date", this.date);
       this.$store.dispatch("searchBillByDayCashier", { date: this.date });
     },
   },

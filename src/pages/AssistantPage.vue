@@ -9,14 +9,14 @@
         <div class="ASBTNS">
           <button
             :class="{ active: this.status === 'bill' }"
-            @click="this.status = 'bill'"
+            @click="changeToBill"
           >
             <h1>Hoá đơn</h1>
           </button>
 
           <button
             :class="{ active: this.status === 'position' }"
-            @click="this.status = 'position'"
+            @click="changeToPosAss"
           >
             <h1>Vị trí</h1>
           </button>
@@ -24,13 +24,17 @@
 
         <div class="ASsearch" v-if="this.status === 'bill'">
           <label for="">Nhập mã hoá đơn</label>
-          <input type="text" />
-          <div class="ASsearchIcon">
+          <input v-model="this.idBill" type="text" />
+          <div @click="searchDoingBillByID" class="ASsearchIcon">
             <i class="fa fa-search" aria-hidden="true"></i>
           </div>
         </div>
 
-        <div class="ASinfoTotal" v-if="this.status === 'bill'">
+        <div
+          @click="getAllDoingBillAssistant"
+          class="ASinfoTotal"
+          v-if="this.status === 'bill'"
+        >
           <h1>Tất cả ({{ this.ASSISTANTBILLS.length }})</h1>
         </div>
 
@@ -42,24 +46,24 @@
           >
             <h1>{{ bill.idBill }}</h1>
             <button
-              v-for="(product, idex) in bill.products"
+              v-for="(product, idex) in bill.dataProduct"
               :key="idex"
               :style="{
                 background:
-                  product.status === 'done'
+                  product.statusProduct === 'done'
                     ? 'var(--stt-green)'
                     : 'var(--stt-yellow)',
               }"
               class="ASbtnCheck"
-              @click="checkProductDone($event, bill.idBill, product.id)"
+              @click="checkProductDone($event, bill.idBill, product.idProduct)"
             >
-              <h1>{{ product.name }}</h1>
+              <h1>{{ product.nameProduct }}</h1>
               <h1>{{ product.quantity }}</h1>
               <div class="ASBillPos">
-                <h1 :style="{ color: product.idPos.color }" class="letter">
-                  {{ product.idPos.letter }}
+                <h1 :style="{ color: product.colorPos }" class="letter">
+                  {{ product.position }}
                 </h1>
-                <h1 class="number">{{ product.idPos.number }}</h1>
+                <!-- <h1 class="number">{{ product.idPos.number }}</h1> -->
               </div>
             </button>
           </div>
@@ -105,7 +109,19 @@
             </div>
           </div>
         </div>
-        <button @click="updatePosEmpty" class="ASaccept">
+        <button
+          v-if="this.status === 'bill'"
+          @click="updateBill"
+          class="ASaccept"
+        >
+          <h1>Xác Nhận</h1>
+        </button>
+
+        <button
+          v-if="this.status === 'position'"
+          @click="updatePosEmpty"
+          class="ASaccept"
+        >
           <h1>Xác Nhận</h1>
         </button>
       </div>
@@ -118,6 +134,9 @@
 import ErrorPage from "./ErrorPage.vue";
 import Container from "@/components/Containers/Container.vue";
 export default {
+  created() {
+    this.$store.dispatch("getAllDoingBillAssistant");
+  },
   data() {
     return {
       status: "bill",
@@ -125,6 +144,7 @@ export default {
       targetPos: "",
       indexCheckColor: "",
       ArrPos: [],
+      idBill: "",
     };
   },
   components: {
@@ -146,6 +166,20 @@ export default {
     },
   },
   methods: {
+    searchDoingBillByID() {
+      this.$store.dispatch("searchDoingBillByID", { idBill: this.idBill });
+    },
+    changeToPosAss() {
+      this.status = "position";
+      this.$store.dispatch("getAllColorPos");
+    },
+    changeToBill() {
+      this.status = "bill";
+      this.$store.dispatch("getAllDoingBillAssistant");
+    },
+    getAllDoingBillAssistant() {
+      this.$store.dispatch("getAllDoingBillAssistant");
+    },
     logout() {
       this.$store.dispatch("logout");
       this.$router.push("/");
@@ -154,8 +188,15 @@ export default {
       event;
       this.ArrPos.splice(index, 1);
     },
-    updatePosEmpty() {
-      console.log(this.ArrPos);
+    updateBill() {
+      this.$store.dispatch("updateBill");
+    },
+    async updatePosEmpty() {
+      // console.log(this.ArrPos);
+      await this.$store.dispatch("updatePosEmpty", {
+        listPosition: this.ArrPos,
+      });
+      this.ArrPos = [];
     },
     pickColor(event, idx, color) {
       event.preventDefault();

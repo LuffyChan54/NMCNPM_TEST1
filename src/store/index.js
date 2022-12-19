@@ -406,40 +406,10 @@ const store = createStore({
       ],
 
       //BILL IN ASSISTANT REQUEST TO GET
-      ASSISTANTBILLS: [
-        {
-          idBill: "HD1234",
-          products: [
-            {
-              id: "R1",
-              name: "Cơm chiên",
-              quantity: 2,
-              status: "doing",
-              idPos: {
-                id: "A7",
-                letter: "A",
-                number: 7,
-                color: "#198754",
-              },
-            },
-            {
-              id: "R2",
-              name: "Cơm xào thịt",
-              quantity: 12,
-              status: "done",
-              idPos: {
-                id: "A9",
-                letter: "A",
-                number: 9,
-                color: "#198754",
-              },
-            },
-          ],
-        },
-      ],
+      ASSISTANTBILLS: [],
 
       //ASSISTANT REQUEST TO GET COLORS;
-      colors: ["#285430", "#F49D1A", "#497174", "#50577A", "#FF6464"],
+      colors: [],
 
       //PRODUCTS IMPORTED CASHIER #WILL BE DELETE
       productImported: {
@@ -1182,6 +1152,10 @@ const store = createStore({
       }
 
       let today = new Date();
+
+      const getDateVal =
+        today.getDate() < 10 ? "0" + today.getDate() : today.getDate();
+
       let buyTime =
         today.getHours() +
         ":" +
@@ -1191,7 +1165,7 @@ const store = createStore({
         "-" +
         (today.getMonth() + 1) +
         "-" +
-        today.getDate();
+        getDateVal;
 
       const data = {
         buyTime,
@@ -1454,6 +1428,8 @@ const store = createStore({
       });
 
       let today = new Date();
+      const getDateVal =
+        today.getDate() < 10 ? "0" + today.getDate() : today.getDate();
       let buyTime =
         today.getHours() +
         ":" +
@@ -1463,12 +1439,14 @@ const store = createStore({
         "-" +
         (today.getMonth() + 1) +
         "-" +
-        today.getDate();
+        getDateVal;
 
       const data = {
         product: productSell,
         buyTime,
       };
+
+      // console.log("data gui len", data);
 
       let flag;
       state.isLoading = true;
@@ -1891,6 +1869,18 @@ const store = createStore({
     async getTurnOverThisMonth({ commit, state }) {
       commit;
       state;
+      let today = new Date();
+
+      let start = new Date(today.getFullYear() + "-" + (today.getMonth() + 1));
+      start = start.getTime();
+      let end = new Date(
+        today.getFullYear() +
+          "-" +
+          (today.getMonth() + 1) +
+          "-" +
+          today.getDate()
+      );
+      end = end.getTime();
 
       const accessToken = Cookies.get("accessToken");
 
@@ -1905,7 +1895,10 @@ const store = createStore({
       await axios
         .post(
           "https://back-end-can-teen-manage-25.vercel.app/api/v1/cashier/getMonthRevenue",
-          {},
+          {
+            start,
+            end,
+          },
           config
         )
         .then((rs) => {
@@ -2432,17 +2425,195 @@ const store = createStore({
 
     //ASSISTANT CHECKPRODUCT
 
+    async getAllDoingBillAssistant({ commit, state }) {
+      commit;
+      state;
+      const accessToken = Cookies.get("accessToken");
+
+      const config = {
+        headers: {
+          Authorization: "Bearer " + accessToken,
+          "x-access-token": accessToken,
+        },
+      };
+      state.ASSISTANTBILLS = [];
+
+      state.isLoading = true;
+      await axios
+        .post(
+          "https://back-end-can-teen-manage-25.vercel.app/api/v1/position/getListBillUncomplete",
+          {},
+          config
+        )
+        .then((rs) => {
+          state.isLoading = false;
+          state.ASSISTANTBILLS = rs.data.data;
+        })
+        .catch((err) => {
+          state.isLoading = false;
+          console.log("loi khi lay hoa don doing ", err);
+        });
+    },
+
     checkProductDone({ commit, state }, { idBill, idProduct }) {
       commit;
       state.ASSISTANTBILLS.forEach((el) => {
         if (el.idBill === idBill) {
-          el.products.forEach((e) => {
-            if (e.id === idProduct) {
-              e.status = "done";
+          el.dataProduct.forEach((e) => {
+            if (e.idProduct === idProduct) {
+              e.statusProduct = e.statusProduct === "done" ? "doing" : "done";
             }
           });
         }
       });
+    },
+
+    async getAllColorPos({ commit, state }) {
+      commit;
+      state;
+      const accessToken = Cookies.get("accessToken");
+
+      const config = {
+        headers: {
+          Authorization: "Bearer " + accessToken,
+          "x-access-token": accessToken,
+        },
+      };
+
+      state.isLoading = true;
+      await axios
+        .post(
+          "https://back-end-can-teen-manage-25.vercel.app/api/v1/position/getPositionTableColor",
+          {},
+          config
+        )
+        .then((rs) => {
+          state.isLoading = false;
+          state.colors = rs.data.colors;
+        })
+        .catch((err) => {
+          state.isLoading = false;
+          console.log("loi khi update hoa don", err);
+        });
+    },
+
+    async updatePosEmpty({ commit, state }, { listPosition }) {
+      commit;
+      state;
+      const accessToken = Cookies.get("accessToken");
+
+      const config = {
+        headers: {
+          Authorization: "Bearer " + accessToken,
+          "x-access-token": accessToken,
+        },
+      };
+
+      // console.log("data gui len: ", listbill);
+
+      const data = {
+        listPosition,
+      };
+
+      state.isLoading = true;
+      await axios
+        .post(
+          "https://back-end-can-teen-manage-25.vercel.app/api/v1/position/setEmptyPosition",
+          data,
+          config
+        )
+        .then(() => {
+          state.isLoading = false;
+        })
+        .catch((err) => {
+          state.isLoading = false;
+          console.log("loi khi free vi tri", err);
+        });
+    },
+
+    async searchDoingBillByID({ commit, state }, { idBill }) {
+      commit;
+      state;
+      const accessToken = Cookies.get("accessToken");
+
+      const config = {
+        headers: {
+          Authorization: "Bearer " + accessToken,
+          "x-access-token": accessToken,
+        },
+      };
+
+      const data = {
+        idBill,
+      };
+      state.ASSISTANTBILLS = [];
+      state.isLoading = true;
+      await axios
+        .post(
+          "https://back-end-can-teen-manage-25.vercel.app/api/v1/position/getBillUncompleteByID",
+          data,
+          config
+        )
+        .then((rs) => {
+          state.isLoading = false;
+          state.ASSISTANTBILLS = rs.data.data;
+        })
+        .catch((err) => {
+          state.isLoading = false;
+          console.log("loi khi free vi tri", err);
+        });
+    },
+
+    async updateBill({ commit, state }) {
+      commit;
+      state;
+      const accessToken = Cookies.get("accessToken");
+
+      const config = {
+        headers: {
+          Authorization: "Bearer " + accessToken,
+          "x-access-token": accessToken,
+        },
+      };
+
+      let listBill = [];
+
+      state.ASSISTANTBILLS.forEach((bill) => {
+        const updateBill = {
+          idBill: bill.idBill,
+          products: [],
+        };
+
+        bill.dataProduct.forEach((idb) => {
+          if (idb.statusProduct === "done") {
+            updateBill.products.push(idb.idProduct);
+          }
+        });
+        listBill.push(updateBill);
+      });
+
+      // console.log("data gui len: ", listbill);
+
+      const data = {
+        listBill,
+      };
+
+      state.isLoading = true;
+      await axios
+        .post(
+          "https://back-end-can-teen-manage-25.vercel.app/api/v1/position/setStatusProduct",
+          data,
+          config
+        )
+        .then(() => {
+          // state.isLoading = false;
+          store.dispatch("getAllDoingBillAssistant");
+          // state.ASSISTANTBILLS = rs.data.data;
+        })
+        .catch((err) => {
+          state.isLoading = false;
+          console.log("loi khi update hoa don", err);
+        });
     },
   },
 });
