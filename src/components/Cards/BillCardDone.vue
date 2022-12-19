@@ -220,7 +220,7 @@ export default {
 .id-wrapper {
   width: 100%;
   display: grid;
-  justify-content: center;
+  /* justify-content: center; */
   grid-auto-flow: column;
   gap: 1rem;
   overflow-x: auto;

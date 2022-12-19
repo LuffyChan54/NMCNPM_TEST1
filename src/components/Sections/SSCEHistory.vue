@@ -121,7 +121,8 @@ export default {
 }
 .CECard {
   display: grid;
-  grid-template-columns: 1fr 1.5fr 0.5fr 1fr 1fr 1fr;
+  gap: 1rem;
+  grid-template-columns: 1.5fr 1fr 1fr 1fr 1.5fr 1fr;
   background: var(--white);
   border-radius: var(--radius);
   padding: 0.5rem 1rem;

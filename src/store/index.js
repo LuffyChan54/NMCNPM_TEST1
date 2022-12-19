@@ -1045,7 +1045,7 @@ const store = createStore({
 
       const accessToken = Cookies.get("accessToken");
 
-      console.log("access token ", accessToken);
+      // console.log("access token ", accessToken);
 
       const config = {
         headers: {
@@ -1453,8 +1453,21 @@ const store = createStore({
         productSell.push(temp);
       });
 
+      let today = new Date();
+      let buyTime =
+        today.getHours() +
+        ":" +
+        today.getMinutes() +
+        " " +
+        today.getFullYear() +
+        "-" +
+        (today.getMonth() + 1) +
+        "-" +
+        today.getDate();
+
       const data = {
         product: productSell,
+        buyTime,
       };
 
       let flag;
@@ -1527,6 +1540,7 @@ const store = createStore({
 
       const data = { ...currObj };
 
+      state.isLoading = true;
       // let flag;
       await axios
         .post(
@@ -1534,8 +1548,12 @@ const store = createStore({
           data,
           config
         )
-        .then(() => {})
-        .catch(() => {});
+        .then(() => {
+          state.isLoading = false;
+        })
+        .catch(() => {
+          state.isLoading = false;
+        });
 
       store.dispatch("cashierGetSchedule");
     },
@@ -1555,6 +1573,7 @@ const store = createStore({
           "x-access-token": accessToken,
         },
       };
+      state.isLoading = true;
       await axios
         .post(
           "https://back-end-can-teen-manage-25.vercel.app/api/v1/cashier/allProduct",
@@ -1562,9 +1581,13 @@ const store = createStore({
           config
         )
         .then((rs) => {
+          state.isLoading = false;
+
           state.productsTypedSche = rs.data.data;
         })
-        .catch(() => {});
+        .catch(() => {
+          state.isLoading = false;
+        });
     },
 
     //CASHIER UPDATE PRODUCT IMPORTED
@@ -1585,6 +1608,7 @@ const store = createStore({
       };
 
       data = JSON.parse(JSON.stringify(data));
+      state.isLoading = true;
 
       await axios
         .post(
@@ -1592,10 +1616,14 @@ const store = createStore({
           data,
           config
         )
-        .then((rs) => {
-          console.log(rs);
+        .then(() => {
+          state.isLoading = false;
+
+          // console.log(rs);
         })
         .catch((err) => {
+          state.isLoading = false;
+
           console.log(err);
         });
 
@@ -1618,6 +1646,7 @@ const store = createStore({
           "x-access-token": accessToken,
         },
       };
+      state.isLoading = true;
 
       await axios
         .post(
@@ -1628,9 +1657,13 @@ const store = createStore({
           config
         )
         .then((rs) => {
+          state.isLoading = false;
+
           state.productImported = rs.data;
         })
         .catch((err) => {
+          state.isLoading = false;
+
           console.log(err);
         });
     },
@@ -1653,6 +1686,7 @@ const store = createStore({
       };
 
       data = JSON.parse(JSON.stringify(data));
+      state.isLoading = true;
 
       await axios
         .post(
@@ -1661,9 +1695,13 @@ const store = createStore({
           config
         )
         .then(() => {
+          state.isLoading = false;
+
           store.dispatch("getProductImported");
         })
         .catch((err) => {
+          state.isLoading = false;
+
           console.log(err);
         });
     },
@@ -1686,6 +1724,7 @@ const store = createStore({
       };
 
       data = JSON.parse(JSON.stringify(data));
+      state.isLoading = true;
 
       await axios
         .post(
@@ -1694,9 +1733,13 @@ const store = createStore({
           config
         )
         .then(() => {
+          state.isLoading = false;
+
           store.dispatch("getProductImported");
         })
         .catch((err) => {
+          state.isLoading = false;
+
           console.log(err);
         });
     },
@@ -1741,7 +1784,7 @@ const store = createStore({
 
       data = JSON.parse(JSON.stringify(data));
 
-      console.log("data gui len", data);
+      // console.log("data gui len", data);
 
       let urlPath;
 
@@ -1752,16 +1795,21 @@ const store = createStore({
         urlPath =
           "https://back-end-can-teen-manage-25.vercel.app/api/v1/cashier/exportHistory";
       }
+      state.isLoading = true;
 
       await axios
         .post(urlPath, data, config)
         .then((rs) => {
+          state.isLoading = false;
+
           // console.log("data history", rs);
           // store.dispatch("getProductImported");
           state.ProductHistoryCE = rs.data.products;
           return;
         })
         .catch((err) => {
+          state.isLoading = false;
+
           console.log(err);
           return;
         });
@@ -1786,7 +1834,7 @@ const store = createStore({
       };
 
       // data = JSON.parse(JSON.stringify(data));
-
+      state.isLoading = true;
       await axios
         .post(
           "https://back-end-can-teen-manage-25.vercel.app/api/v1/cashier/createPosition",
@@ -1794,9 +1842,13 @@ const store = createStore({
           config
         )
         .then(() => {
+          state.isLoading = false;
+
           // store.dispatch("getProductImported");
         })
         .catch((err) => {
+          state.isLoading = false;
+
           console.log(err);
         });
     },
@@ -1814,6 +1866,7 @@ const store = createStore({
         },
       };
       // data = JSON.parse(JSON.stringify(data));
+      state.isLoading = true;
 
       await axios
         .post(
@@ -1822,11 +1875,15 @@ const store = createStore({
           config
         )
         .then((rs) => {
+          state.isLoading = false;
+
           // store.dispatch("getProductImported");
           // console.log("ressult gui ve: ", rs);
           state.TurnOver = rs.data.revenue;
         })
         .catch((err) => {
+          state.isLoading = false;
+
           console.log(err);
         });
     },
@@ -1844,7 +1901,7 @@ const store = createStore({
         },
       };
       // data = JSON.parse(JSON.stringify(data));
-
+      state.isLoading = true;
       await axios
         .post(
           "https://back-end-can-teen-manage-25.vercel.app/api/v1/cashier/getMonthRevenue",
@@ -1852,11 +1909,15 @@ const store = createStore({
           config
         )
         .then((rs) => {
+          state.isLoading = false;
+
           // store.dispatch("getProductImported");
           // console.log("ressult gui ve: ", rs);
           state.TurnOver = rs.data.revenue;
         })
         .catch((err) => {
+          state.isLoading = false;
+
           console.log(err);
         });
     },
@@ -1877,7 +1938,7 @@ const store = createStore({
         start: date,
         end: date,
       };
-
+      state.isLoading = true;
       await axios
         .post(
           "https://back-end-can-teen-manage-25.vercel.app/api/v1/cashier/getRevenueInPeriodTime",
@@ -1885,10 +1946,14 @@ const store = createStore({
           config
         )
         .then((rs) => {
+          state.isLoading = false;
+
           // store.dispatch("getProductImported");
           state.TurnOver = rs.data.revenue;
         })
         .catch((err) => {
+          state.isLoading = false;
+
           console.log(err);
         });
     },
@@ -1909,7 +1974,7 @@ const store = createStore({
         start,
         end,
       };
-
+      state.isLoading = true;
       await axios
         .post(
           "https://back-end-can-teen-manage-25.vercel.app/api/v1/cashier/getRevenueInPeriodTime",
@@ -1918,9 +1983,13 @@ const store = createStore({
         )
         .then((rs) => {
           // store.dispatch("getProductImported");
+          state.isLoading = false;
+
           state.TurnOver = rs.data.revenue;
         })
         .catch((err) => {
+          state.isLoading = false;
+
           console.log(err);
         });
     },
@@ -2037,7 +2106,7 @@ const store = createStore({
           "x-access-token": accessToken,
         },
       };
-
+      state.isLoading = true;
       await axios
         .post(
           "https://back-end-can-teen-manage-25.vercel.app/api/v1/user/uncompleteBill",
@@ -2045,6 +2114,8 @@ const store = createStore({
           config
         )
         .then((rs) => {
+          state.isLoading = false;
+
           // state.productImported = rs.data;
           // console.log("gia tri tra ve, ", rs);
           const data = rs.data.billUncomplete.result;
@@ -2059,6 +2130,8 @@ const store = createStore({
           // console.log(state.PRODUCTBOUGHT);
         })
         .catch((err) => {
+          state.isLoading = false;
+
           console.log(err);
         });
     },
@@ -2115,7 +2188,7 @@ const store = createStore({
           "x-access-token": accessToken,
         },
       };
-
+      state.isLoading = true;
       await axios
         .post(
           "https://back-end-can-teen-manage-25.vercel.app/api/v1/cashier/getUnCompletedBill",
@@ -2123,6 +2196,8 @@ const store = createStore({
           config
         )
         .then((rs) => {
+          state.isLoading = false;
+
           // state.moneyUsedInMonth = rs.data.money;
           // console.log("hoa don chua hoan thanh", rs);
 
@@ -2130,12 +2205,16 @@ const store = createStore({
           state.UserBillInfo.forEach((billEl) => {
             billEl["idPositions"] = [];
             billEl.product.forEach((posBill) => {
-              billEl["idPositions"].push(posBill.position);
+              if (posBill.position !== {}) {
+                billEl["idPositions"].push(posBill.position);
+              }
             });
           });
           // console.log(state.PRODUCTBOUGHT);
         })
         .catch((err) => {
+          state.isLoading = false;
+
           console.log("Loi khi lay hoa don chua hoan thanh", err);
         });
     },
@@ -2154,7 +2233,7 @@ const store = createStore({
           "x-access-token": accessToken,
         },
       };
-
+      state.isLoading = true;
       await axios
         .post(
           "https://back-end-can-teen-manage-25.vercel.app/api/v1/cashier/getCompletedBill",
@@ -2162,6 +2241,8 @@ const store = createStore({
           config
         )
         .then((rs) => {
+          state.isLoading = false;
+
           // state.moneyUsedInMonth = rs.data.money;
           // console.log("hoa don chua hoan thanh", rs);
           state.UserBillInfo = rs.data.data;
@@ -2175,6 +2256,8 @@ const store = createStore({
           // console.log(state.PRODUCTBOUGHT);
         })
         .catch((err) => {
+          state.isLoading = false;
+
           console.log("Loi khi lay hoa don chua hoan thanh", err);
         });
     },
@@ -2200,7 +2283,7 @@ const store = createStore({
       };
 
       // console.log("data gui len", data);
-
+      state.isLoading = true;
       await axios
         .post(
           "https://back-end-can-teen-manage-25.vercel.app/api/v1/cashier/getBillByID",
@@ -2208,6 +2291,70 @@ const store = createStore({
           config
         )
         .then((rs) => {
+          state.isLoading = false;
+
+          // state.moneyUsedInMonth = rs.data.money;
+          // console.log("hoa don chua hoan thanh", rs);
+
+          // console.log("ket qua tra ve : ", rs);
+
+          state.UserBillInfo = rs.data.data;
+          state.UserBillInfo.forEach((billEl) => {
+            billEl["idPositions"] = [];
+            billEl.product.forEach((posBill) => {
+              billEl["idPositions"].push(posBill.position);
+            });
+          });
+
+          // console.log(state.PRODUCTBOUGHT);
+        })
+        .catch(() => {
+          state.isLoading = false;
+
+          // console.log("Loi khi lay hoa don theo id", err);
+        });
+    },
+
+    resetIsFullPos({ commit, state }) {
+      commit;
+      state.isFullPos = false;
+    },
+
+    resetValueUserBillInfo({ commit, state }) {
+      commit;
+      state.UserBillInfo = [];
+    },
+
+    async seachBIllByIDCS({ commit, state }, { id }) {
+      commit;
+      state;
+      state.UserBillInfo = [];
+
+      const accessToken = Cookies.get("accessToken");
+
+      const config = {
+        headers: {
+          Authorization: "Bearer " + accessToken,
+          "x-access-token": accessToken,
+        },
+      };
+
+      const data = {
+        id,
+        // status: "done",
+      };
+
+      // console.log("data gui len", data);
+      state.isLoading = true;
+      await axios
+        .post(
+          "https://back-end-can-teen-manage-25.vercel.app/api/v1/cashier/getHistoryBillByID",
+          data,
+          config
+        )
+        .then((rs) => {
+          state.isLoading = false;
+
           // state.moneyUsedInMonth = rs.data.money;
           // console.log("hoa don chua hoan thanh", rs);
 
@@ -2224,18 +2371,63 @@ const store = createStore({
           // console.log(state.PRODUCTBOUGHT);
         })
         .catch((err) => {
-          console.log("Loi khi lay hoa don theo id", err);
+          console.log("loi khi lay hd theo id: ", err);
+          state.isLoading = false;
+
+          // console.log("Loi khi lay hoa don theo id", err);
         });
     },
 
-    resetIsFullPos({ commit, state }) {
-      commit;
-      state.isFullPos = false;
-    },
-
-    resetValueUserBillInfo({ commit, state }) {
+    async searchBillByDayCashier({ commit, state }, { date }) {
       commit;
       state.UserBillInfo = [];
+
+      const accessToken = Cookies.get("accessToken");
+
+      const config = {
+        headers: {
+          Authorization: "Bearer " + accessToken,
+          "x-access-token": accessToken,
+        },
+      };
+
+      const data = {
+        date,
+        // status: "done",
+      };
+
+      // console.log("data gui len", data);
+      state.isLoading = true;
+      await axios
+        .post(
+          "https://back-end-can-teen-manage-25.vercel.app/api/v1/cashier/getBillByDate",
+          data,
+          config
+        )
+        .then((rs) => {
+          state.isLoading = false;
+
+          // state.moneyUsedInMonth = rs.data.money;
+          // console.log("hoa don chua hoan thanh", rs);
+
+          // console.log("ket qua tra ve : ", rs);
+
+          state.UserBillInfo = rs.data.data;
+          state.UserBillInfo.forEach((billEl) => {
+            billEl["idPositions"] = [];
+            billEl.product.forEach((posBill) => {
+              billEl["idPositions"].push(posBill.position);
+            });
+          });
+
+          // console.log(state.PRODUCTBOUGHT);
+        })
+        .catch((err) => {
+          console.log("loi khi lay hd theo id: ", err);
+          state.isLoading = false;
+
+          // console.log("Loi khi lay hoa don theo id", err);
+        });
     },
 
     //ASSISTANT CHECKPRODUCT

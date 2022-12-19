@@ -98,10 +98,12 @@ export default {
     // getTurnOverByDay() {},
     // getTurnOverFDTD() {},
     seachBIllByIDCS() {
+      this.$store.dispatch("seachBIllByIDCS", { id: this.idBill });
       //lich su tim kiem theo id
     },
     seachBIllByDateCS() {
       //lich su tim kiem theo ngay
+      this.$store.dispatch("searchBillByDayCashier", { date: this.date });
     },
   },
 };

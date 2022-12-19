@@ -269,6 +269,7 @@ export default {
   color: var(--dark);
 }
 .CASHIERMENU {
+  z-index: 1000;
   position: absolute;
   top: 0;
   left: 0;
