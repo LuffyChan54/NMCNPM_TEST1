@@ -399,6 +399,7 @@ export default {
   width: 100%;
   display: grid;
   grid-auto-flow: column;
+  overflow-x: auto;
   grid-auto-columns: 30%;
   gap: 2rem;
 }
