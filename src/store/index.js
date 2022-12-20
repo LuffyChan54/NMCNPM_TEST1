@@ -2,6 +2,9 @@ import { createStore } from "vuex";
 import axios from "axios";
 import Cookies from "js-cookie";
 
+import { storage } from "../configs/firebase";
+import { ref, uploadBytes, getDownloadURL } from "firebase/storage";
+
 import router from "@/router";
 
 const store = createStore({
@@ -737,6 +740,47 @@ const store = createStore({
     },
   },
   actions: {
+    setIsLoading({ commit, state }) {
+      state.isLoading = true;
+    },
+    resetIsLoading({ commit, state }) {
+      state.isLoading = false;
+    },
+
+    async changeAvatarUser({ commit, state }, { url }) {
+      commit;
+      state;
+      const accessToken = Cookies.get("accessToken");
+
+      const config = {
+        headers: {
+          Authorization: "Bearer " + accessToken,
+          "x-access-token": accessToken,
+        },
+      };
+
+      const data = {
+        image: url,
+      };
+
+      state.isLoading = true;
+      await axios
+        .post(
+          "https://back-end-can-teen-manage-25.vercel.app/api/v1/user/changeImage",
+          data,
+          config
+        )
+        .then((rs) => {
+          // console.log("gia tri tra ve khi thay doi avatar", rs);
+          state.account.image = url;
+          state.isLoading = false;
+        })
+        .catch((err) => {
+          state.isLoading = false;
+          console.log(err);
+        });
+    },
+
     //START USER CASHIER ASSISTANT LOGIN==================
     async login({ commit, state }, { email, pw, rememberMe }) {
       commit;
@@ -779,7 +823,7 @@ const store = createStore({
           state.account["fullName"] = rs.data.data.user.username;
           state.account["email"] = rs.data.data.user.email;
           state.account["money"] = +rs.data.data.user.property;
-          state.account["img"] = "avt.jpg";
+          state.account["image"] = rs.data.data.user.image;
           state.account["role"] = objectType[rs.data.data.user.roleID];
 
           router.push("/");
@@ -1513,12 +1557,27 @@ const store = createStore({
       };
 
       newObj.products = [...newObj.products.rice, ...newObj.products.noodles];
+      state.isLoading = true;
+
+      for (let idex in newObj.products) {
+        let pro = newObj.products[idex];
+        if (pro.id === "new") {
+          const storageRef = ref(storage, "ImageFood/" + pro.FileImg.name);
+          await uploadBytes(storageRef, pro.FileImg).then(async () => {
+            await getDownloadURL(storageRef).then((url) => {
+              state.isLoading = false;
+              newObj.products[idex].img = url;
+            });
+          });
+        }
+      }
 
       const currObj = JSON.parse(JSON.stringify(newObj));
 
       const data = { ...currObj };
 
       state.isLoading = true;
+
       // let flag;
       await axios
         .post(

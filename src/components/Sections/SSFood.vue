@@ -51,10 +51,7 @@
             @dcrQuantity="dcrQuantity(food.id)"
           >
             <template #img>
-              <img
-                :src="require(`../../assets/imgs/${food.img}`)"
-                :alt="food.name"
-              />
+              <img :src="food.img" :alt="food.name" />
             </template>
             <template #h1Name>
               <h1>{{ food.name }}</h1>

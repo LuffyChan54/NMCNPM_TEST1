@@ -1,11 +1,7 @@
 <template>
   <div @click="toggleSubMenuAccount" class="accountCTN">
     <div class="imgAccountCTN">
-      <img
-        :src="require(`../../assets/imgs/${avatar}`)"
-        alt="avatar"
-        class="imgAccount"
-      />
+      <img :src="this.avatar" alt="avatar" class="imgAccount" />
     </div>
     <div v-if="this.isDropMenu" class="dropDownAcc">
       <div @click="gotoInfopage" class="accMenuTitle">
@@ -30,7 +26,7 @@ export default {
   },
   computed: {
     avatar() {
-      return this.$store.state.account.img;
+      return this.$store.state.account.image;
     },
   },
   methods: {
@@ -104,8 +100,13 @@ export default {
 }
 
 .imgAccountCTN > img {
-  width: 8rem;
+  /* width: 8rem;
   height: auto;
+  object-fit: cover; */
   object-fit: cover;
+  inline-size: 100%;
+  height: auto;
+  height: 100%;
+  object-position: center;
 }
 </style>

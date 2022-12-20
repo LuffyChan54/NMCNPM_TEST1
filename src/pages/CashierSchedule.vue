@@ -98,9 +98,12 @@
         <div class="ANP-title">
           <h1>Thông Tin</h1>
         </div>
-        <div class="formAddNewItem">
+        <div class="formAddNewItem addImgCTN">
           <label for="">Hình Ảnh:</label>
-          <input type="image" src="" alt="" />
+          <input @change="upLoadFoodImg" type="file" src="" />
+          <div class="imgFoodCtn">
+            <img :src="this.formAddNewInfo.img" alt="FoodImage" />
+          </div>
         </div>
         <div class="formAddNewItem">
           <label for="">Tên Món:</label>
@@ -169,7 +172,8 @@ export default {
       formAddNewInfo: {
         id: "new",
         name: "",
-        img: "comchien.jpg",
+        img: "",
+        FileImg: "",
         type: "",
         price: 0,
         total: 0,
@@ -182,14 +186,26 @@ export default {
     },
   },
   methods: {
+    upLoadFoodImg(e) {
+      // this.AddFoodImg
+      this.formAddNewInfo.FileImg = e.target.files[0];
+      const reader = new FileReader();
+      reader.onload = (e2) => {
+        this.formAddNewInfo.img = e2.target.result;
+      };
+
+      reader.readAsDataURL(e.target.files[0]);
+    },
+
     resetFormInfo() {
       this.formAddNewInfo.id = "new";
       this.formAddNewInfo.name = "";
-      this.formAddNewInfo.img = "comchien.jpg";
+      this.formAddNewInfo.img = "";
       this.formAddNewInfo.type = "";
       this.formAddNewInfo.price = 0;
       this.formAddNewInfo.total = 0;
 
+      this.AddFoodImg = "#";
       this.isOpenAddNew = false;
       this.sendObj = false;
     },
@@ -199,8 +215,14 @@ export default {
         this.formAddNewInfo.name !== "" &&
         this.formAddNewInfo.price !== 0 &&
         this.formAddNewInfo.total !== 0 &&
-        this.formAddNewInfo.type !== ""
+        this.formAddNewInfo.type !== "" &&
+        this.formAddNewInfo.img
       ) {
+        // console.log(
+        //   "CashierSchedule.vue imgFile: ",
+        //   this.formAddNewInfo.FileImg
+        // );
+
         this.isUpload = false;
         this.sendObj = true;
       }
@@ -225,6 +247,26 @@ export default {
   justify-content: space-between;
   align-items: center;
   gap: 2rem;
+}
+
+.addImgCTN input {
+  width: 17rem;
+  font-size: 1rem !important;
+}
+
+.addImgCTN .imgFoodCtn {
+  overflow: hidden;
+  border-radius: var(--radius);
+  height: 10rem;
+  width: 10rem;
+}
+
+.imgFoodCtn img {
+  inline-size: 100%;
+  object-fit: cover;
+  aspect-ratio: 16/12;
+  height: 100%;
+  object-position: center;
 }
 
 .formAddNewItem label {

@@ -6,7 +6,7 @@
     <div class="CSCardCTN">
       <div v-for="(product, idx) in currProducts" :key="idx" class="CSCard">
         <div class="CSCardimgCTN">
-          <img :src="require(`../../assets/imgs/${product.img}`)" />
+          <img :src="product.img" />
         </div>
         <div class="CSCardContent">
           <div class="CSCardItem">
