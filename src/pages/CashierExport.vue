@@ -64,9 +64,16 @@
                 <label for="">Giá 1 Sản Phẩm:</label>
                 <input v-model="product.price" type="number" />
               </div>
-              <div class="CTInfoItem">
-                <label for="">Hình Ảnh:</label>
-                <input type="image" />
+              <div class="CTInfoItem ImageUploadInputCTN">
+                <label for="productImage">Hình Ảnh:</label>
+                <input
+                  @change="uploadImage($event, product)"
+                  name="productImage"
+                  type="file"
+                />
+                <div class="uploadImgCTN">
+                  <img :src="product.img" alt="product.name" />
+                </div>
               </div>
               <div class="CTInfoItem">
                 <label for="">Loại:</label>
@@ -119,7 +126,8 @@ export default {
           quantity: "",
           totalCost: "",
           price: "",
-          img: "comchien.jpg",
+          img: "#",
+          FileImg: "",
           type: "",
         },
       ],
@@ -132,6 +140,16 @@ export default {
     SSinventory,
   },
   methods: {
+    uploadImage(e, product) {
+      product.FileImg = e.target.files[0];
+
+      const reader = new FileReader();
+      reader.onload = (e2) => {
+        product.img = e2.target.result;
+      };
+
+      reader.readAsDataURL(product.FileImg);
+    },
     importProducts(event) {
       event.preventDefault();
       this.ImportProduct.forEach((product) => {
@@ -150,7 +168,7 @@ export default {
         totalCost: "",
         status: "import",
         price: "",
-        img: "comchien.jpg",
+        img: "",
         type: "",
       };
       this.ImportProduct.push(obj);
@@ -294,5 +312,28 @@ export default {
   flex-direction: column;
   justify-content: center;
   gap: 1.5rem;
+}
+
+.ImageUploadInputCTN {
+  align-items: center;
+}
+
+.ImageUploadInputCTN input {
+  width: 10rem;
+  font-size: 1rem;
+}
+
+.uploadImgCTN {
+  width: 5rem;
+  height: 5rem;
+  border-radius: var(--radius);
+  overflow: hidden;
+}
+
+.uploadImgCTN img {
+  height: 100%;
+  inline-size: 100%;
+  object-fit: cover;
+  aspect-ratio: 16/12;
 }
 </style>

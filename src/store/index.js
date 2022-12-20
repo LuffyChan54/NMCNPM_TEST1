@@ -1644,8 +1644,22 @@ const store = createStore({
         product: newArrProduct,
       };
 
-      data = JSON.parse(JSON.stringify(data));
       state.isLoading = true;
+
+      for (let idx in data.product) {
+        let pro = data.product[idx];
+
+        const storageRef = ref(storage, "product/" + pro.FileImg.name);
+        await uploadBytes(storageRef, pro.FileImg).then(async () => {
+          await getDownloadURL(storageRef).then((url) => {
+            data.product[idx].img = url;
+          });
+        });
+      }
+
+      data = JSON.parse(JSON.stringify(data));
+
+      console.log("data import", data);
 
       await axios
         .post(

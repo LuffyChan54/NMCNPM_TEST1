@@ -17,7 +17,7 @@
           <button
             :class="{ active: this.statusSell === 'offline' }"
             class="offline"
-            @click="this.statusSell = 'offline'"
+            @click="changetoOffline"
           >
             <h1>OFFLINE</h1>
           </button>
@@ -266,6 +266,11 @@ export default {
     };
   },
   methods: {
+    changetoOffline() {
+      this.statusSell = "offline";
+      this.$store.dispatch("getAllTodayProducts");
+    },
+
     changetoOnline() {
       this.statusSell = "online";
       this.$store.dispatch("getDoingBills");
@@ -381,6 +386,9 @@ export default {
     },
   },
   created() {
+    this.$store.dispatch("getAllTodayProducts");
+  },
+  mounted() {
     this.$store.dispatch("getAllTodayProducts");
   },
 };
