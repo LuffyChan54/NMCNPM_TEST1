@@ -239,6 +239,7 @@ export default {
           })
           .catch((err) => {
             this.statusRegister = false;
+            this.$store.dispatch("resetIsLoading");
             console.log("That bai", err);
           });
       }
